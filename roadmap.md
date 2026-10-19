@@ -603,10 +603,10 @@ Kubernetes 深入、Service Mesh、云原生全家桶。
 
 ```mermaid
 flowchart BT
-    L1["L1 记忆<br/>能说出名词和步骤"]
-    L2["L2 因果<br/>能回答为什么、不这样会怎样"]
-    L3["L3 迁移<br/>换个场景或技术还能用"]
-    L4["L4 改造<br/>能改代码、排故障、做取舍"]
+    L1["L1 记忆<br/>能说出步骤"]
+    L2["L2 因果<br/>能解释为什么"]
+    L3["L3 迁移<br/>能换场景类比"]
+    L4["L4 改造<br/>能改造与排错"]
     L1 --> L2 --> L3 --> L4
     classDef top fill:#fdf1ef,stroke:#b3392b,stroke-width:2px,color:#1a1b1e
     class L4 top
@@ -632,7 +632,7 @@ flowchart BT
 
 ```mermaid
 flowchart LR
-    A["① 复习<br/>10 分钟"] --> B["② 读<br/>30 分钟"] --> C["③ 写代码<br/>30 分钟"] --> D["④ 问 AI<br/>15 分钟"] --> E["⑤ 复盘<br/>5 分钟"]
+    A["① 复习 10 分"] --> B["② 读 30 分"] --> C["③ 写代码 30 分"] --> D["④ 问 AI 15 分"] --> E["⑤ 复盘 5 分"]
     E -.->|第二天| A
 ```
 
