@@ -4,9 +4,9 @@
 
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#参与改进)
-[![在线阅读](https://img.shields.io/badge/%E5%9C%A8%E7%BA%BF%E9%98%85%E8%AF%BB-GitHub%20Pages-blue)](https://chenguanji0711.github.io/cs-learning-roadmap/)
+[![在线阅读](https://img.shields.io/badge/%E5%9C%A8%E7%BA%BF%E9%98%85%E8%AF%BB-GitHub%20Pages-blue)](https://chenguanji0711.github.io/java-to-ai-roadmap/)
 
-**👉 在线阅读：[chenguanji0711.github.io/cs-learning-roadmap](https://chenguanji0711.github.io/cs-learning-roadmap/)**
+**👉 在线阅读：[chenguanji0711.github.io/java-to-ai-roadmap](https://chenguanji0711.github.io/java-to-ai-roadmap/)**
 
 ---
 
@@ -48,19 +48,19 @@
 
 | 章节 | 你会得到 |
 |---|---|
-| [0. 对号入座](https://chenguanji0711.github.io/cs-learning-roadmap/#sec-1) | 确认这是不是写给你的 |
-| [1. 五分钟读完](https://chenguanji0711.github.io/cs-learning-roadmap/#sec-2) | 终点 / 路线 / 时间 / 验收，一屏看完 |
-| [2. 这份东西的来历](https://chenguanji0711.github.io/cs-learning-roadmap/#sec-3) | 参考了哪篇文章、我改了什么、**明确不采纳什么** |
-| [3. 盖楼的比喻](https://chenguanji0711.github.io/cs-learning-roadmap/#sec-4) | 九阶段对应盖楼九步，一次记住 |
-| [4. 为什么顺序不能反](https://chenguanji0711.github.io/cs-learning-roadmap/#sec-5) | 依赖关系图 + 三个"反了会怎样"的反例 |
-| [5. 你需要多久](https://chenguanji0711.github.io/cs-learning-roadmap/#sec-6) | 甘特图：主线与并行轨 |
-| [6. 九个阶段](https://chenguanji0711.github.io/cs-learning-roadmap/#sec-7) | P0–P8：为什么学 / 学什么 / 别碰什么 / 出门考 / 资源 |
-| [7. 名词人话表](https://chenguanji0711.github.io/cs-learning-roadmap/#sec-8) | JVM、B+ 树、RAG、embedding……一句人话 |
-| [8. 怎么和 AI 学](https://chenguanji0711.github.io/cs-learning-roadmap/#sec-9) | 8 个可直接复制的对话模板 + 防幻觉三条规则 |
-| [9. 怎么算真学会](https://chenguanji0711.github.io/cs-learning-roadmap/#sec-10) | 掌握四级（L1 记忆 → L4 改造）+ 三个自检动作 |
-| [10. 每天 90 分钟](https://chenguanji0711.github.io/cs-learning-roadmap/#sec-11) | 闭环图、5 行日志、周课/月课、断更恢复 |
-| [11. 三张清单](https://chenguanji0711.github.io/cs-learning-roadmap/#sec-12) | 必学 / 选学 / 不必学，**可打勾** |
-| [12. 七个坑](https://chenguanji0711.github.io/cs-learning-roadmap/#sec-13) | 每个坑的"自救"办法 |
+| [0. 对号入座](https://chenguanji0711.github.io/java-to-ai-roadmap/#sec-1) | 确认这是不是写给你的 |
+| [1. 五分钟读完](https://chenguanji0711.github.io/java-to-ai-roadmap/#sec-2) | 终点 / 路线 / 时间 / 验收，一屏看完 |
+| [2. 这份东西的来历](https://chenguanji0711.github.io/java-to-ai-roadmap/#sec-3) | 参考了哪篇文章、我改了什么、**明确不采纳什么** |
+| [3. 盖楼的比喻](https://chenguanji0711.github.io/java-to-ai-roadmap/#sec-4) | 九阶段对应盖楼九步，一次记住 |
+| [4. 为什么顺序不能反](https://chenguanji0711.github.io/java-to-ai-roadmap/#sec-5) | 依赖关系图 + 三个"反了会怎样"的反例 |
+| [5. 你需要多久](https://chenguanji0711.github.io/java-to-ai-roadmap/#sec-6) | 甘特图：主线与并行轨 |
+| [6. 九个阶段](https://chenguanji0711.github.io/java-to-ai-roadmap/#sec-7) | P0–P8：为什么学 / 学什么 / 别碰什么 / 出门考 / 资源 |
+| [7. 名词人话表](https://chenguanji0711.github.io/java-to-ai-roadmap/#sec-8) | JVM、B+ 树、RAG、embedding……一句人话 |
+| [8. 怎么和 AI 学](https://chenguanji0711.github.io/java-to-ai-roadmap/#sec-9) | 8 个可直接复制的对话模板 + 防幻觉三条规则 |
+| [9. 怎么算真学会](https://chenguanji0711.github.io/java-to-ai-roadmap/#sec-10) | 掌握四级（L1 记忆 → L4 改造）+ 三个自检动作 |
+| [10. 每天 90 分钟](https://chenguanji0711.github.io/java-to-ai-roadmap/#sec-11) | 闭环图、5 行日志、周课/月课、断更恢复 |
+| [11. 三张清单](https://chenguanji0711.github.io/java-to-ai-roadmap/#sec-12) | 必学 / 选学 / 不必学，**可打勾** |
+| [12. 七个坑](https://chenguanji0711.github.io/java-to-ai-roadmap/#sec-13) | 每个坑的"自救"办法 |
 
 ---
 
@@ -87,7 +87,7 @@
 
 | 你想要 | 打开 |
 |---|---|
-| **读**（推荐，有配色、图示、可交互） | [`index.html`](index.html) 或 [在线版](https://chenguanji0711.github.io/cs-learning-roadmap/) |
+| **读**（推荐，有配色、图示、可交互） | [`index.html`](index.html) 或 [在线版](https://chenguanji0711.github.io/java-to-ai-roadmap/) |
 | **改 / 复制片段 / 发公众号** | [`roadmap.md`](roadmap.md)（GitHub 会渲染彩色提示框、表格与复选框） |
 | **打印 / 离线 / 丢进 iPad** | [`roadmap.pdf`](roadmap.pdf)（38 页） |
 | **查细节（更密的参考手册）** | [`handbook.md`](handbook.md) |
