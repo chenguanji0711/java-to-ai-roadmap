@@ -143,6 +143,23 @@ That article is written from a **job-hunt sprint** perspective (3–6 months to 
 
 ---
 
+## Install as an app / read offline
+
+`index.html` itself is still a **single file with zero external dependencies**. Two tiny PWA files make it installable:
+
+| File | Purpose |
+|---|---|
+| `manifest.json` | Lets the browser treat it as an app, installable to the home screen |
+| `sw.js` | Service worker — caches the page so it opens with no network |
+
+- **iPhone**: open in Safari → Share → **Add to Home Screen**
+- **Android**: open in Chrome → menu → **Install app**
+- **Desktop Chrome / Edge**: click the install icon in the address bar
+
+> You can delete both files; you just lose the "installable app" part.
+
+---
+
 ## Contributing
 
 - Dead links, outdated versions, factual mistakes → open an Issue
