@@ -22,8 +22,8 @@ import html
 import re
 import sys
 
-SRC = "roadmap.md"
-OUT = "index.html"
+SRC = sys.argv[1] if len(sys.argv) > 1 else "roadmap.md"
+OUT = sys.argv[2] if len(sys.argv) > 2 else "index.html"
 
 # ---------------------------------------------------------------- 图示
 
@@ -391,6 +391,23 @@ if cur_phase:
 
 body = "\n".join(x for x in out if x)
 
+# 在三张清单标题后插入「进度统计 / 导入导出」工具条
+TOOLBAR = """<div class="ck-tools" id="ck-tools">
+  <div class="ck-tools-h">📊 已完成 <b id="ck-count">0</b> / <b id="ck-total">0</b> 项 · 勾选会自动保存在本机浏览器</div>
+  <div class="ck-bar"><i id="ck-fill"></i></div>
+  <div class="ck-btns">
+    <button type="button" id="ck-export">导出进度</button>
+    <button type="button" id="ck-import">导入</button>
+    <input type="file" id="ck-file" accept=".json,application/json" hidden>
+    <button type="button" id="ck-reset">重置</button>
+  </div>
+  <div class="ck-tip">换电脑 / 换浏览器时：先「导出」，在新设备上「导入」，勾选不会丢。</div>
+</div>"""
+
+_m = re.search(r'<h2 id="sec-\d+">(?:(?!</h2>).)*三张清单(?:(?!</h2>).)*</h2>', body, re.S)
+if _m:
+    body = body[:_m.end()] + TOOLBAR + body[_m.end():]
+
 # TOC
 toc_html = ['<div class="toc-title">目录</div><ul class="toc-list">']
 open_sub = False
@@ -610,7 +627,7 @@ li.task .cb{flex:0 0 16px;height:16px;margin-top:7px;border:1.5px solid var(--mu
 .dgm .dash{stroke:var(--muted);stroke-width:1.5;fill:none;stroke-dasharray:5 4}
 .dgm .arhead{fill:var(--red)}
 .dgm-wrap::after{content:"← 左右滑动可看全图 →";display:none;text-align:center;font-size:12px;color:var(--muted);margin-top:8px}
-@media(max-width:720px){.dgm-wrap::after{display:block}}
+.dgm-wrap.scrollable::after{display:block}
 .dgm-wrap figcaption{margin-top:14px;font-size:13.5px;color:var(--muted);text-align:center;line-height:1.7}
 .dgm-wrap figcaption b{color:var(--red)}
 
@@ -654,12 +671,51 @@ li.task .cb{flex:0 0 16px;height:16px;margin-top:7px;border:1.5px solid var(--mu
 footer{max-width:760px;margin:0 auto;padding:0 24px 80px;color:var(--muted);font-size:13px;line-height:1.9}
 footer a{color:var(--muted)}
 
+,
+/* ---------- 移动端细化 ---------- */
+body{padding-bottom:env(safe-area-inset-bottom)}
+@media(max-width:720px){
+  .hero{padding:44px 18px 28px}
+  .layout{padding:22px 16px 90px}
+  .phase{padding:18px 16px 4px}
+  .content h2{margin-top:48px}
+  blockquote.pullquote{font-size:19.5px}
+  .callout{padding:14px 14px}
+  .toc-mobile summary{background:var(--card)}
+  /* 触摸目标放大 */
+  li.task label{padding:5px 0}
+  li.task .cbt{flex:0 0 22px;height:22px;margin-top:3px;border-width:1.8px}
+  li.task input:checked + .cbt::after{left:6px;top:2px;width:6px;height:11px}
+  /* 横向滚动容器给出手势提示 */
+  .table-wrap::after{content:"← 左右滑动 →";display:none;text-align:center;font-size:11px;
+    color:var(--muted);padding:5px 0 3px}
+  .table-wrap.scrollable::after{display:block}
+  .codeblock .copy{opacity:1}
+}
+
+/* ---------- 进度工具条 ---------- */
+.ck-tools{margin:22px 0 26px;padding:18px 20px;border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--card);box-shadow:var(--shadow)}
+.ck-tools-h{font-size:14px;color:var(--ink-2);margin-bottom:10px}
+.ck-tools-h b{color:var(--red);font-size:16px;font-variant-numeric:tabular-nums}
+.ck-bar{height:8px;border-radius:99px;background:var(--line-2);overflow:hidden;margin-bottom:14px}
+.ck-bar i{display:block;height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,var(--red),var(--amber));transition:width .35s ease}
+.ck-btns{display:flex;flex-wrap:wrap;gap:8px}
+.ck-btns button{font-size:13px;padding:7px 14px;border-radius:9px;border:1px solid var(--line);
+  background:var(--paper);color:var(--ink-2);cursor:pointer;transition:.15s}
+.ck-btns button:hover{color:var(--red);border-color:var(--red)}
+.ck-btns button:active{transform:translateY(1px)}
+.ck-tip{font-size:12px;color:var(--muted);margin-top:10px}
+
 @media print{
   .toc,.toc-mobile,.totop,.progress,.copy,.toc-note{display:none!important}
   body{background:#fff;font-size:12pt}
   .layout{display:block;padding:0}
   .phase,.dgm-wrap,.table-wrap,.callout{break-inside:avoid;box-shadow:none}
-  .content h2{break-after:avoid}
+  .content h2,.content h3,.content h4{break-after:avoid-page}
+  .ck-tools{display:none!important}
+  figure,.codeblock,.callout,.table-section{break-inside:avoid}
 }
 """
 
@@ -681,6 +737,16 @@ function onScroll(){
 }
 document.addEventListener('scroll',onScroll,{passive:true});onScroll();
 totop.onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
+/* 仅在内容真正溢出时显示横滑提示 */
+function markScrollable(){
+  document.querySelectorAll('.table-wrap, .dgm-wrap').forEach(function(w){
+    w.classList.toggle('scrollable', w.scrollWidth > w.clientWidth + 4);
+  });
+}
+markScrollable();
+window.addEventListener('resize', markScrollable);
+window.addEventListener('load', markScrollable);
+
 const KEY='cs-roadmap-checks';
 let saved={};
 try{saved=JSON.parse(localStorage.getItem(KEY)||'{}');}catch(e){saved={};}
@@ -702,6 +768,55 @@ document.querySelectorAll('.codeblock').forEach(box=>{
     setTimeout(()=>btn.textContent='复制',1600);
   };
 });
+
+/* ---------- 进度统计 / 导入导出 ---------- */
+const ckCount=document.getElementById('ck-count');
+const ckTotal=document.getElementById('ck-total');
+const ckFill=document.getElementById('ck-fill');
+function refreshCk(){
+  if(!ckTotal) return;
+  const total=boxes.length, done=boxes.filter(b=>b.checked).length;
+  ckCount.textContent=done; ckTotal.textContent=total;
+  ckFill.style.width=(total?done/total*100:0)+'%';
+}
+refreshCk();
+boxes.forEach(cb=>cb.addEventListener('change',refreshCk));
+const expBtn=document.getElementById('ck-export');
+if(expBtn){
+  expBtn.onclick=()=>{
+    const data={project:'java-to-ai-roadmap',version:1,exportedAt:new Date().toISOString(),checked:saved};
+    const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='cs-roadmap-progress-'+new Date().toISOString().slice(0,10)+'.json';
+    a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+    expBtn.textContent='已导出 ✓'; setTimeout(()=>expBtn.textContent='导出进度',1600);
+  };
+  const fileInput=document.getElementById('ck-file');
+  document.getElementById('ck-import').onclick=()=>fileInput.click();
+  fileInput.onchange=async()=>{
+    const f=fileInput.files[0]; if(!f) return;
+    try{
+      const j=JSON.parse(await f.text());
+      const c=j.checked||j.saved||{};
+      Object.keys(saved).forEach(k=>delete saved[k]);
+      Object.assign(saved,c);
+      try{localStorage.setItem(KEY,JSON.stringify(saved));}catch(e){}
+      boxes.forEach(cb=>{cb.checked=!!saved[cb.dataset.k];});
+      refreshCk();
+      const b=document.getElementById('ck-import');
+      b.textContent='已导入 ✓'; setTimeout(()=>b.textContent='导入',1600);
+    }catch(e){ alert('导入失败：文件格式不对'); }
+    fileInput.value='';
+  };
+  document.getElementById('ck-reset').onclick=()=>{
+    if(!confirm('确定清空所有打勾记录？此操作不可撤销。')) return;
+    Object.keys(saved).forEach(k=>delete saved[k]);
+    try{localStorage.removeItem(KEY);}catch(e){}
+    boxes.forEach(cb=>{cb.checked=false;});
+    refreshCk();
+  };
+}
 """
 
 HERO = """

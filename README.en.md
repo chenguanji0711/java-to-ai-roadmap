@@ -95,7 +95,7 @@ The one line to remember: **each layer's "why" lives in the layer beneath it.**
 | **Look up details** | [`handbook.md`](handbook.md) — the denser reference manual |
 
 > `index.html` is a **single file with zero external dependencies**: CSS, JS and SVG are all inlined, so it works offline.
-> Checklist progress is stored in `localStorage` — tick items, close, reopen, still there.
+> Checklist progress is stored in `localStorage` — tick items, close, reopen, still there. **Export / import as JSON** to move progress between devices.
 
 ---
 

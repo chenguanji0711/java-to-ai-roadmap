@@ -95,7 +95,7 @@
 | **查细节（更密的参考手册）** | [`handbook.md`](handbook.md) |
 
 > `index.html` 是**单文件、零外部依赖**的：CSS、JS、SVG 全部内联，断网也能看。
-> 清单打勾会存在浏览器本地（localStorage），关掉再打开还在。
+> 清单打勾会存在浏览器本地（localStorage），关掉再打开还在；**支持「导出 / 导入」JSON，换电脑、换浏览器都不丢进度**。
 
 ---
 
@@ -169,6 +169,7 @@ python3 tools/build_html.py     # roadmap.md  ->  index.html
 - 脚本只依赖 Python 标准库，`mermaid` 代码块会被替换成项目自带的内联 SVG（保证单文件离线可用）
 - PDF 用浏览器打印：打开 `index.html` → 文件 → 打印 → 存为 PDF（打印样式已适配，会隐藏目录与按钮）
 - 想加新图：在 `tools/build_html.py` 的 `code_block()` 里加一条分支，同时保证 GitHub 上 Mermaid 也能渲染
+- 清单区顶部的「导出 / 导入 / 重置」按钮就写在 `tools/build_html.py` 的 `TOOLBAR` 常量里
 
 ---
 
