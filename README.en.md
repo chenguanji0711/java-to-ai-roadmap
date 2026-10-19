@@ -12,6 +12,23 @@
 
 ---
 
+## Two editions — pick by your situation
+
+| | Long edition (default) | Intern sprint edition |
+|---|---|---|
+| Goal | Ship a system and explain your trade-offs | **Pass resume screening + technical interviews** |
+| Timeline | 20–26 months | **8 / 16 / 24 weeks** |
+| For | Beginners building a foundation | Anyone applying to internships in the next 3 months |
+| Entry | [index.html](index.html) / [online](https://chenguanji0711.github.io/java-to-ai-roadmap/) | [intern.html](intern.html) / [online](https://chenguanji0711.github.io/java-to-ai-roadmap/intern.html) |
+| PDF | [roadmap.pdf](roadmap.pdf) (35 pp) | [intern.pdf](intern.pdf) (21 pp) |
+
+> The sprint edition is **not** an abridged long edition — it swaps the judging criteria.
+> It drops long-horizon material (computer organization, JVM tuning, distributed systems, microservice stacks)
+> and adds what only exists in 2026: how AI-assisted coding is actually evaluated, and how resume screening works.
+> You can switch between the two from the top of either page.
+
+---
+
 ## Who is this for
 
 If three or more of these sound familiar, this repo is for you:
