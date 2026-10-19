@@ -1,0 +1,940 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#fbf9f4">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<meta name="apple-mobile-web-app-title" content="学习地图">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%97%BA%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<title>2026 实习冲刺版 · 把所学变成面试证据</title>
+<meta name="description" content="一份能陪你走两年的计算机学习路径：从零基础到能用 Java 做 AI 应用。含依赖关系图、阶段验收标准、AI 对话模板、每日闭环与可勾选清单。">
+<style>
+:root{
+  --paper:#fbf9f4; --card:#ffffff; --ink:#1a1b1e; --ink-2:#3d4046; --muted:#6b7280;
+  --line:#e8e3d9; --line-2:#f0ece3;
+  --red:#b3392b; --red-soft:#fdf1ef;
+  --blue:#1d4ed8; --blue-soft:#eff4ff;
+  --green:#0f766e; --green-soft:#ecfdf5;
+  --amber:#b45309; --amber-soft:#fff8ec;
+  --purple:#6d28d9; --purple-soft:#f5f1ff;
+  --hl:#ffe9a8;
+  --shadow:0 1px 2px rgba(24,20,12,.04),0 10px 30px -18px rgba(24,20,12,.18);
+  --radius:14px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#131416; --card:#1b1d20; --ink:#e9e7e3; --ink-2:#c6c4bf; --muted:#9aa0a8;
+    --line:#2b2e33; --line-2:#24272b;
+    --red:#e8837a; --red-soft:#2a1c1a;
+    --blue:#93b4ff; --blue-soft:#18203a;
+    --green:#5eead4; --green-soft:#112622;
+    --amber:#f0b463; --amber-soft:#2a2116;
+    --purple:#c4b5fd; --purple-soft:#211a35;
+    --hl:#5a4a1c;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px -18px rgba(0,0,0,.8);
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",sans-serif;
+  font-size:17px;line-height:1.9;-webkit-font-smoothing:antialiased;
+}
+.progress{position:fixed;top:0;left:0;right:0;height:3px;background:transparent;z-index:99}
+.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--amber))}
+
+/* ---------- 版本导航 ---------- */
+.edition-nav{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 18px;padding:4px;
+  border:1px solid var(--line);border-radius:999px;background:var(--card);width:fit-content;
+  box-shadow:var(--shadow);font-size:13px}
+.edition-nav a{text-decoration:none;color:var(--muted);padding:6px 14px;border-radius:999px;transition:.15s}
+.edition-nav a:hover{color:var(--red)}
+.edition-nav a.on{background:var(--red);color:#fff;font-weight:600}
+
+/* ---------- hero ---------- */
+.hero{
+  padding:72px 24px 40px;max-width:900px;margin:0 auto;text-align:left;
+  border-bottom:1px solid var(--line-2);
+}
+.kicker{display:inline-block;font-size:13px;letter-spacing:.18em;color:var(--red);
+  border:1px solid var(--red);border-radius:999px;padding:3px 12px;margin-bottom:22px}
+.hero h1{font-size:clamp(30px,5vw,52px);line-height:1.22;margin:0 0 14px;letter-spacing:-.02em;font-weight:800}
+.hero h1 em{font-style:normal;background:linear-gradient(transparent 62%,var(--hl) 62%)}
+.hero .sub{font-size:clamp(16px,2vw,20px);color:var(--ink-2);margin:0 0 26px;line-height:1.7}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.chip{font-size:13px;color:var(--muted);background:var(--card);border:1px solid var(--line);
+  border-radius:999px;padding:4px 12px;box-shadow:var(--shadow)}
+.hero blockquote{margin:0;padding:18px 22px;border-left:4px solid var(--red);
+  background:var(--red-soft);border-radius:0 var(--radius) var(--radius) 0;
+  font-family:Georgia,"Songti SC",serif;font-size:18px;color:var(--ink-2)}
+
+/* ---------- layout ---------- */
+.layout{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:40px;padding:40px 24px 120px}
+@media(min-width:1080px){ .layout{grid-template-columns:230px minmax(0,760px);justify-content:center} }
+.toc{display:none}
+@media(min-width:1080px){
+  .toc{display:block;position:sticky;top:24px;align-self:start;max-height:calc(100vh - 48px);overflow:auto;
+    font-size:13.5px;line-height:1.65;padding-right:8px}
+}
+.toc-title{font-weight:700;font-size:12px;letter-spacing:.16em;color:var(--muted);
+  text-transform:uppercase;margin-bottom:12px}
+.toc-list,.toc-list ul{list-style:none;margin:0;padding:0}
+.toc-list ul{margin-left:10px;border-left:1px solid var(--line);padding-left:9px;display:block;font-size:12.5px;margin-top:2px;margin-bottom:6px}
+.toc-list li{margin:2px 0}
+.toc-list a{color:var(--muted);text-decoration:none;display:block;padding:2px 6px;border-radius:6px}
+.toc-list a:hover{color:var(--ink);background:var(--line-2)}
+.toc-list a.on{color:var(--red);font-weight:600;background:var(--red-soft)}
+
+/* ---------- content ---------- */
+.content{max-width:760px;min-width:0}
+.content h2{
+  font-size:clamp(23px,3vw,30px);line-height:1.35;margin:64px 0 18px;font-weight:800;letter-spacing:-.01em;
+  padding-top:22px;border-top:1px solid var(--line-2);scroll-margin-top:24px;
+}
+.content h2:first-of-type{border-top:0;margin-top:8px}
+.h2-num{color:var(--red);font-variant-numeric:tabular-nums;margin-right:.35em;font-weight:800}
+.content h3{font-size:20px;margin:38px 0 12px;font-weight:700;scroll-margin-top:24px}
+.content h4{font-size:17px;margin:26px 0 10px;color:var(--ink-2)}
+.content p{margin:0 0 18px;color:var(--ink-2)}
+.content strong{font-weight:700;color:var(--ink);background:linear-gradient(transparent 62%,var(--hl) 62%);padding:0 1px}
+.content em{font-style:normal;color:var(--red);font-weight:600}
+.content a{color:var(--blue);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--blue) 30%,transparent);overflow-wrap:break-word}
+.content a:hover{border-bottom-color:var(--blue)}
+.content ul,.content ol{margin:0 0 18px;padding-left:22px}
+.content li{margin:7px 0;color:var(--ink-2)}
+.content li::marker{color:var(--red)}
+.content hr{border:0;height:1px;background:var(--line-2);margin:40px 0}
+
+/* 阶段卡片 */
+.phase{margin:26px 0;padding:22px 24px 8px;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--radius);box-shadow:var(--shadow)}
+.phase h3{margin:0 0 14px;display:flex;align-items:center;gap:12px;font-size:21px}
+.p-badge{display:inline-flex;align-items:center;justify-content:center;min-width:52px;height:30px;padding:0 10px;
+  border-radius:8px;background:var(--red);color:#fff;font-size:14px;font-weight:800;letter-spacing:.04em}
+.phase ul{padding-left:20px}
+
+/* 引用 */
+blockquote.quote{margin:24px 0;padding:16px 20px;border-left:4px solid var(--line);
+  background:var(--line-2);border-radius:0 10px 10px 0;color:var(--ink-2);font-size:16px}
+blockquote.pullquote{margin:30px 0;padding:0 0 0 22px;border-left:5px solid var(--red);
+  font-family:Georgia,"Songti SC","Songti TC",serif;font-size:22px;line-height:1.6;color:var(--ink);font-weight:600}
+blockquote.pullquote strong{background:none}
+blockquote.ending{margin:28px 0 44px;padding:30px 32px;border:1px solid var(--line);
+  border-left:5px solid var(--red);border-radius:var(--radius);
+  background:linear-gradient(180deg,var(--red-soft),var(--card));
+  font-family:Georgia,"Songti SC","Songti TC",serif;font-size:19px;line-height:1.9;
+  color:var(--ink);box-shadow:var(--shadow)}
+blockquote.ending strong{background:none;font-size:22px;display:inline-block;margin-bottom:6px}
+
+/* 提示框 */
+.callout{display:flex;gap:14px;margin:22px 0;padding:16px 18px;border-radius:var(--radius);
+  border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow);align-items:flex-start}
+.callout .c-ico{font-size:20px;line-height:1.4}
+.callout .c-label{display:block;font-size:12px;letter-spacing:.12em;color:var(--muted);margin-bottom:2px}
+.callout.note{background:var(--blue-soft);border-color:color-mix(in srgb,var(--blue) 25%,var(--line))}
+.callout.tip{background:var(--green-soft);border-color:color-mix(in srgb,var(--green) 25%,var(--line))}
+.callout.imp{background:var(--purple-soft);border-color:color-mix(in srgb,var(--purple) 25%,var(--line))}
+.callout.warn{background:var(--amber-soft);border-color:color-mix(in srgb,var(--amber) 25%,var(--line))}
+.callout.danger{background:var(--red-soft);border-color:color-mix(in srgb,var(--red) 30%,var(--line))}
+
+/* 小标题 */
+.content h4.sub{font-size:15.5px;letter-spacing:.02em;font-weight:700;color:var(--ink);
+  margin:30px 0 10px;padding:2px 0 2px 11px;border-left:3px solid var(--red);line-height:1.5}
+.content h4.sub strong{background:none}
+
+/* 可打勾清单 */
+li.task{list-style:none;margin-left:-20px}
+li.task label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;user-select:none}
+li.task input{position:absolute;opacity:0;width:0;height:0}
+li.task .cbt{flex:0 0 18px;height:18px;margin-top:5px;border:1.6px solid var(--muted);
+  border-radius:5px;background:var(--card);position:relative;transition:.16s}
+li.task label:hover .cbt{border-color:var(--red)}
+li.task input:checked + .cbt{background:var(--red);border-color:var(--red)}
+li.task input:checked + .cbt::after{content:"";position:absolute;left:5px;top:1.5px;width:5px;height:9px;
+  border:solid #fff;border-width:0 2px 2px 0;transform:rotate(43deg)}
+li.task input:checked ~ .ctxt{color:var(--muted);text-decoration:line-through}
+.toc-note{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:11.5px;
+  color:var(--muted);line-height:1.6}
+
+/* 手机目录 */
+.toc-mobile{display:block;margin:0 0 10px}
+@media(min-width:1080px){.toc-mobile{display:none}}
+.toc-mobile summary{cursor:pointer;font-size:14px;color:var(--ink-2);padding:12px 16px;
+  border:1px solid var(--line);border-radius:12px;background:var(--card);box-shadow:var(--shadow)}
+.toc-mobile[open] summary{border-radius:12px 12px 0 0}
+.toc-mobile .toc-list{font-size:14px;padding:12px 16px 16px;border:1px solid var(--line);
+  border-top:0;border-radius:0 0 12px 12px;background:var(--card)}
+
+/* 表格 */
+.table-wrap{overflow-x:auto;margin:20px 0;border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--card);box-shadow:var(--shadow)}
+table.table{width:100%;border-collapse:collapse;font-size:15.5px}
+table.table th{background:var(--line-2);text-align:left;font-weight:700;padding:12px 14px;color:var(--ink);
+  border-bottom:1px solid var(--line);white-space:nowrap}
+table.table td{padding:11px 14px;border-bottom:1px solid var(--line-2);color:var(--ink-2);vertical-align:top}
+table.table td:first-child{white-space:nowrap}
+table.table tr:last-child td{border-bottom:0}
+table.table tbody tr:hover{background:color-mix(in srgb,var(--hl) 14%,transparent)}
+table.table-plain td:first-child{white-space:nowrap;color:var(--ink)}
+
+/* 复选框 */
+li.task{list-style:none;margin-left:-20px;display:flex;gap:10px;align-items:flex-start}
+li.task .cb{flex:0 0 16px;height:16px;margin-top:7px;border:1.5px solid var(--muted);border-radius:4px}
+
+/* 代码 */
+.codeblock{position:relative;margin:18px 0}
+.codeblock pre{margin:0;padding:18px 18px;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--radius);overflow-x:auto;box-shadow:var(--shadow)}
+.codeblock code{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:14px;line-height:1.75;
+  color:var(--ink-2);white-space:pre-wrap}
+.codeblock .copy{position:absolute;top:10px;right:10px;font-size:12px;padding:4px 10px;border-radius:8px;
+  border:1px solid var(--line);background:var(--paper);color:var(--muted);cursor:pointer;opacity:0;transition:.2s}
+.codeblock:hover .copy{opacity:1}
+.codeblock .copy:hover{color:var(--red);border-color:var(--red)}
+
+/* 图示 */
+.dgm-wrap{margin:26px 0;padding:24px 18px 14px;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--radius);box-shadow:var(--shadow);overflow-x:auto}
+.dgm{display:block;width:100%;height:auto;min-width:560px}
+.dgm .box{fill:var(--card);stroke:var(--line);stroke-width:1.5}
+.dgm .box-key{stroke:color-mix(in srgb,var(--red) 45%,var(--line));stroke-width:2;
+  fill:color-mix(in srgb,var(--red-soft) 60%,var(--card))}
+.dgm .box-goal{stroke:color-mix(in srgb,var(--amber) 60%,var(--line));stroke-width:2;
+  fill:color-mix(in srgb,var(--amber-soft) 65%,var(--card))}
+.dgm .box-dash{stroke:var(--muted);stroke-dasharray:5 4;fill:transparent}
+.dgm .t1{fill:var(--ink);font-size:14.5px;font-weight:600;text-anchor:middle;
+  font-family:-apple-system,"PingFang SC","Noto Sans SC",sans-serif}
+.dgm .t2{fill:var(--ink-2);font-size:13px;text-anchor:middle;font-family:-apple-system,"PingFang SC",sans-serif}
+.dgm .t3{fill:var(--muted);font-size:11.5px;text-anchor:middle;font-family:-apple-system,"PingFang SC",sans-serif}
+.dgm .arrow{stroke:var(--red);stroke-width:1.8;fill:none}
+.dgm .loopback{stroke:var(--muted);stroke-width:1.6;fill:none;stroke-dasharray:6 4}
+.dgm .dash{stroke:var(--muted);stroke-width:1.5;fill:none;stroke-dasharray:5 4}
+.dgm .arhead{fill:var(--red)}
+.dgm-wrap::after{content:"← 左右滑动可看全图 →";display:none;text-align:center;font-size:12px;color:var(--muted);margin-top:8px}
+.dgm-wrap.scrollable::after{display:block}
+.dgm-wrap figcaption{margin-top:14px;font-size:13.5px;color:var(--muted);text-align:center;line-height:1.7}
+.dgm-wrap figcaption b{color:var(--red)}
+
+/* gantt */
+.gantt{font-size:13px;min-width:560px}
+.g-head,.g-row{display:grid;grid-template-columns:92px 1fr;align-items:center;gap:10px}
+.g-head{margin-bottom:8px}
+.g-scale{display:grid;grid-template-columns:repeat(7,1fr);color:var(--muted);font-size:11px}
+.g-scale i{font-style:normal;text-align:left}
+.g-row{margin:5px 0}
+.g-label{color:var(--ink-2);font-size:12.5px;white-space:nowrap}
+.g-track{position:relative;height:20px;background:var(--line-2);border-radius:6px;
+  background-image:repeating-linear-gradient(90deg,var(--line) 0 1px,transparent 1px 16.66%)}
+.bar{position:absolute;top:0;height:20px;border-radius:6px;display:block}
+.bar-dash{background:repeating-linear-gradient(90deg,color-mix(in srgb,var(--blue) 35%,transparent) 0 6px,transparent 6px 11px);
+  outline:1px dashed color-mix(in srgb,var(--blue) 50%,transparent);outline-offset:-1px}
+.b0{background:var(--muted)}
+.b1{background:var(--green)}
+.b3{background:var(--amber)}
+.b4{background:var(--purple)}
+.b6{background:var(--blue)}
+.b7{background:var(--red)}
+
+/* ladder */
+.ladder{display:flex;flex-direction:column;align-items:center;gap:8px}
+.step{display:flex;align-items:baseline;gap:12px;padding:12px 16px;border-radius:10px;
+  border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow)}
+.step b{font-size:14px;color:var(--red);white-space:nowrap}
+.step span{font-size:13.5px;color:var(--ink-2)}
+.s4{width:56%}.s3{width:72%}.s2{width:88%}.s1{width:100%}
+.s1{background:color-mix(in srgb,var(--line-2) 70%,var(--card))}
+.s4{background:color-mix(in srgb,var(--red-soft) 70%,var(--card))}
+
+/* 回到顶部 */
+.totop{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;
+  border:1px solid var(--line);background:var(--card);color:var(--muted);cursor:pointer;
+  box-shadow:var(--shadow);font-size:18px;opacity:0;pointer-events:none;transition:.25s;z-index:50}
+.totop.on{opacity:1;pointer-events:auto}
+.totop:hover{color:var(--red);border-color:var(--red)}
+
+footer{max-width:760px;margin:0 auto;padding:0 24px 80px;color:var(--muted);font-size:13px;line-height:1.9}
+footer a{color:var(--muted)}
+
+,
+/* ---------- 移动端细化 ---------- */
+body{padding-bottom:env(safe-area-inset-bottom)}
+@media(max-width:720px){
+  .hero{padding:44px 18px 28px}
+  .layout{padding:22px 16px 90px}
+  .phase{padding:18px 16px 4px}
+  .content h2{margin-top:48px}
+  blockquote.pullquote{font-size:19.5px}
+  .callout{padding:14px 14px}
+  .toc-mobile summary{background:var(--card)}
+  /* 触摸目标放大 */
+  li.task label{padding:5px 0}
+  li.task .cbt{flex:0 0 22px;height:22px;margin-top:3px;border-width:1.8px}
+  li.task input:checked + .cbt::after{left:6px;top:2px;width:6px;height:11px}
+  /* 横向滚动容器给出手势提示 */
+  .table-wrap::after{content:"← 左右滑动 →";display:none;text-align:center;font-size:11px;
+    color:var(--muted);padding:5px 0 3px}
+  .table-wrap.scrollable::after{display:block}
+  .codeblock .copy{opacity:1}
+}
+
+/* ---------- 提示词抽屉 ---------- */
+.prompt-fab{position:fixed;right:22px;bottom:76px;z-index:60;display:flex;align-items:center;gap:6px;
+  padding:10px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);
+  color:var(--ink-2);font-size:13px;cursor:pointer;box-shadow:var(--shadow);transition:.2s}
+.prompt-fab:hover{color:var(--red);border-color:var(--red);transform:translateY(-1px)}
+.prompt-fab span{font-weight:600}
+.p-dialog{width:min(760px,94vw);max-height:86vh;padding:0;border:1px solid var(--line);border-radius:16px;
+  background:var(--paper);color:var(--ink);box-shadow:0 24px 70px -20px rgba(0,0,0,.35)}
+.p-dialog::backdrop{background:rgba(20,16,12,.45)}
+.p-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;
+  padding:18px 22px 14px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--paper);z-index:2}
+.p-head b{font-size:16px}
+.p-last{font-size:12px;color:var(--muted);margin-top:4px}
+.p-close{border:0;background:transparent;color:var(--muted);font-size:18px;cursor:pointer;padding:2px 6px;border-radius:6px}
+.p-close:hover{color:var(--red);background:var(--line-2)}
+.p-close:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.p-dialog:focus{outline:none}
+.p-list{padding:14px 22px 6px;overflow-y:auto;max-height:calc(86vh - 140px)}
+.p-card{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:12px;background:var(--card)}
+.p-card-h{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.p-num{width:22px;height:22px;flex:0 0 22px;border-radius:50%;background:var(--red);color:#fff;
+  font-size:12px;display:flex;align-items:center;justify-content:center;font-weight:700}
+.p-title{font-size:14px;font-weight:600;color:var(--ink);line-height:1.45}
+.p-copy{margin-left:auto;font-size:12px;padding:4px 11px;border-radius:7px;border:1px solid var(--line);
+  background:var(--paper);color:var(--muted);cursor:pointer;flex:0 0 auto}
+.p-copy:hover{color:var(--red);border-color:var(--red)}
+.p-topic{width:100%;font-size:12.5px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;
+  background:var(--paper);color:var(--ink);margin-bottom:8px;font-family:inherit}
+.p-topic:focus{outline:none;border-color:var(--red)}
+.p-body{width:100%;overflow:hidden;font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;line-height:1.7;
+  padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink-2);
+  resize:vertical;min-height:74px}
+.p-foot{padding:10px 22px 16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+
+/* ---------- 本周三件事 ---------- */
+.week-card{margin:0 0 34px;padding:20px 22px 16px;border:1px solid var(--line);border-radius:var(--radius);
+  background:linear-gradient(180deg,var(--red-soft),var(--card) 55%);box-shadow:var(--shadow)}
+.wk-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.wk-badge{font-size:12px;font-weight:700;letter-spacing:.06em;color:#fff;background:var(--red);
+  border-radius:999px;padding:3px 10px}
+.wk-phase{font-size:14px;font-weight:700;color:var(--ink)}
+.wk-btn{margin-left:auto;font-size:12px;padding:5px 12px;border-radius:8px;border:1px solid var(--line);
+  background:var(--card);color:var(--muted);cursor:pointer}
+.wk-btn:hover{color:var(--red);border-color:var(--red)}
+.wk-tip{font-size:12.5px;color:var(--muted);margin-bottom:12px}
+.wk-list{list-style:none;margin:0 0 12px;padding:0}
+.wk-list li{margin:9px 0}
+.wk-list li label{display:flex;gap:11px;align-items:flex-start;cursor:pointer;font-size:16px;color:var(--ink)}
+.wk-list li input{position:absolute;opacity:0;width:0;height:0}
+.wk-list .cbt{flex:0 0 20px;height:20px;margin-top:2px;border:1.7px solid var(--muted);border-radius:5px;
+  background:var(--card);position:relative;transition:.16s}
+.wk-list label:hover .cbt{border-color:var(--red)}
+.wk-list input:checked + .cbt{background:var(--red);border-color:var(--red)}
+.wk-list input:checked + .cbt::after{content:"";position:absolute;left:6px;top:2px;width:5px;height:9px;
+  border:solid #fff;border-width:0 2px 2px 0;transform:rotate(43deg)}
+.wk-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding-top:12px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+.wk-foot a{color:var(--blue);text-decoration:none}
+.wk-done{font-size:15px;color:var(--ink);font-weight:600}
+
+/* ---------- 进度工具条 ---------- */
+.ck-tools{margin:22px 0 26px;padding:18px 20px;border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--card);box-shadow:var(--shadow)}
+.ck-tools-h{font-size:14px;color:var(--ink-2);margin-bottom:10px}
+.ck-tools-h b{color:var(--red);font-size:16px;font-variant-numeric:tabular-nums}
+.ck-bar{height:8px;border-radius:99px;background:var(--line-2);overflow:hidden;margin-bottom:14px}
+.ck-bar i{display:block;height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,var(--red),var(--amber));transition:width .35s ease}
+.ck-btns{display:flex;flex-wrap:wrap;gap:8px}
+.ck-btns button{font-size:13px;padding:7px 14px;border-radius:9px;border:1px solid var(--line);
+  background:var(--paper);color:var(--ink-2);cursor:pointer;transition:.15s}
+.ck-btns button:hover{color:var(--red);border-color:var(--red)}
+.ck-btns button:active{transform:translateY(1px)}
+.ck-tip{font-size:12px;color:var(--muted);margin-top:10px}
+
+@page{size:A4;margin:15mm 14mm 16mm}
+@media print{
+  .toc,.toc-mobile,.totop,.progress,.copy,.toc-note{display:none!important}
+  .ck-tools,.week-card,.prompt-fab,.p-dialog{display:none!important}
+  html,body{background:#fff}
+  body{font-size:10.5pt;line-height:1.7}
+  .layout{display:block;padding:0;max-width:none}
+  .content{max-width:none}
+  .content p,.content li{orphans:3;widows:3}
+  /* 每章另起一页，像书一样 */
+  .content h2{break-before:page;break-after:avoid-page;margin-top:0;border-top:0}
+  .content h2:first-of-type{break-before:auto}
+  .content h3,.content h4{break-after:avoid-page}
+  /* 这些块不要被拆开 */
+  .callout,.codeblock,figure,.table-wrap,.ladder,.gantt,blockquote{break-inside:avoid;box-shadow:none}
+  /* 阶段卡片允许跨页，但标题不能孤零零留在页尾 */
+  .phase{break-inside:auto;box-shadow:none;border-color:#e0dcd3}
+  .phase > h3{break-after:avoid-page}
+  .phase ul,.phase ol{break-inside:auto}
+  a{color:inherit;text-decoration:none;border-bottom:0}
+  .dgm-wrap{border-color:#e0dcd3}
+  .callout{border-color:#e0dcd3}
+}
+</style>
+</head>
+<body>
+<div class="progress"><div id="pbar"></div></div>
+
+<header class="hero">
+  <span class="kicker">计算机学习地图 · 实习冲刺版</span>
+  <h1>把所学变成<em>面试证据</em></h1>
+  <p class="sub">Java 后端为主线，AI 应用为加分项：<br><b>8 / 16 / 24 周</b>可执行手册，目标是通过初筛与技术面。</p>
+  <div class="chips">
+    <span class="chip">⏱ 8–24 周，按你的起点选</span>
+    <span class="chip">🎯 目标：简历过筛 + 技术面</span>
+    <span class="chip">📦 每周交三样：代码 · 验证记录 · 讲解</span>
+    <span class="chip">📅 更新于 2026-10-19</span>
+  </div>
+  <blockquote>面试官不关心你用了多少技术，只关心<b>出事时你知不知道往哪看</b>。<br>
+  这份手册只做一件事：把「我学过」变成「我能证明」。</blockquote>
+</header>
+
+<div class="layout">
+<aside class="toc"><div class="toc-title">目录</div><ul class="toc-list"><li><a href="#sec-1">1. 今天开始，用交付物换掉收藏夹</a><ul></ul></li><li><a href="#sec-2">2. 面试官在寻找哪些证据</a><ul></ul></li><li><a href="#sec-3">3. 选一条时间线，每周交三样东西</a><ul></ul></li><li><a href="#sec-4">4. 六个阶段，过出门考再往下走</a><ul><li><a href="#phase-p0">P0 · 写得出，也调得动</a></li><li><a href="#phase-p1">P1 · 集合、算法与并发的为什么</a></li><li><a href="#phase-p2">P2 · MySQL 和 Redis：数据不能靠祈祷</a></li><li><a href="#phase-p3">P3 · HTTP、Spring 与排错</a></li><li><a href="#phase-p4">P4 · AI 应用：先检索，再证明有效</a></li><li><a href="#phase-p5">P5 · 项目交付与面试表达</a></li></ul></li><li><a href="#sec-5">5. 一个项目，讲五分钟，追十轮</a><ul></ul></li><li><a href="#sec-6">6. 一页简历与 JD：关键词必须带证据</a><ul></ul></li><li><a href="#sec-7">7. 面试流程：把时间花在能验证的地方</a><ul></ul></li><li><a href="#sec-8">8. AI 协作：用过工具，也要拥有代码</a><ul></ul></li><li><a href="#sec-9">9. 80／20 清单：投递前的最低证据</a><ul></ul></li><li><a href="#sec-10">10. 常见死法：失败要能定位</a><ul></ul></li><li><a href="#sec-11">11. 版本与来源：让材料可核对</a><ul></ul></li></ul><div class="toc-note">☑️ 清单里打勾会自动保存在本机浏览器<br>🖨️ 可直接打印 / 存为 PDF</div></aside>
+<main class="content">
+<nav class="edition-nav"><a href="./" class="">长线版 · 20–26 个月</a><a href="intern.html" class="on">实习冲刺版 · 8–24 周</a></nav>
+<details class="toc-mobile"><summary>📑 目录（点开）</summary><div class="toc-title">目录</div><ul class="toc-list"><li><a href="#sec-1">1. 今天开始，用交付物换掉收藏夹</a><ul></ul></li><li><a href="#sec-2">2. 面试官在寻找哪些证据</a><ul></ul></li><li><a href="#sec-3">3. 选一条时间线，每周交三样东西</a><ul></ul></li><li><a href="#sec-4">4. 六个阶段，过出门考再往下走</a><ul><li><a href="#phase-p0">P0 · 写得出，也调得动</a></li><li><a href="#phase-p1">P1 · 集合、算法与并发的为什么</a></li><li><a href="#phase-p2">P2 · MySQL 和 Redis：数据不能靠祈祷</a></li><li><a href="#phase-p3">P3 · HTTP、Spring 与排错</a></li><li><a href="#phase-p4">P4 · AI 应用：先检索，再证明有效</a></li><li><a href="#phase-p5">P5 · 项目交付与面试表达</a></li></ul></li><li><a href="#sec-5">5. 一个项目，讲五分钟，追十轮</a><ul></ul></li><li><a href="#sec-6">6. 一页简历与 JD：关键词必须带证据</a><ul></ul></li><li><a href="#sec-7">7. 面试流程：把时间花在能验证的地方</a><ul></ul></li><li><a href="#sec-8">8. AI 协作：用过工具，也要拥有代码</a><ul></ul></li><li><a href="#sec-9">9. 80／20 清单：投递前的最低证据</a><ul></ul></li><li><a href="#sec-10">10. 常见死法：失败要能定位</a><ul></ul></li><li><a href="#sec-11">11. 版本与来源：让材料可核对</a><ul></ul></li></ul><div class="toc-note">☑️ 清单里打勾会自动保存在本机浏览器<br>🖨️ 可直接打印 / 存为 PDF</div></details>
+<section class="week-card" id="week-card" aria-label="本周三件事">
+  <div class="wk-top">
+    <span class="wk-badge" id="wk-week">第 1 周</span>
+    <span class="wk-phase" id="wk-phase">正在读取你的进度…</span>
+    <button type="button" class="wk-btn" id="wk-start">开始记录</button>
+  </div>
+  <div class="wk-tip" id="wk-tip">打开只看这三件。做完，自动换上下一批。</div>
+  <ul class="wk-list" id="wk-list"></ul>
+  <div class="wk-foot">
+    <span id="wk-progress"></span>
+    <a href="#sec-12">完整清单 →</a>
+  </div>
+</section>
+<h2 id="sec-1"><span class="h2-num"></span>1. 今天开始，用交付物换掉收藏夹</h2>
+<p>这节帮你拿回准备方向分：每天结束时，要有代码、测试或一次脱稿讲解留下来。</p>
+<p>“学会”是关教程能改需求，关 AI 能解释，弄坏还能定位。目标是争取初筛和技术面试机会，不承诺录用。</p>
+<p>主线 16 周，零基础选 24 周，有 Java、SQL 和接口经验才选 8 周。阅读约 25–30 分钟，周表随用随查。</p>
+<div class="callout warn"><span class="c-ico">⚠️</span><div class="c-body"><b class="c-label">注意</b>周数是训练预算。每周只有 8 小时就拉长日历，别用看完视频冒充完成。先核对招聘窗口、学历和到岗要求，学习不能替代资格。</div></div>
+<p>暂缓组成原理、CSAPP、MIT 6.1810、CS144；删去 JVM 调参、字节码和类加载全流程；不学一致性算法、DDD、微服务全家桶、K8s、消息队列集群。先交付可靠服务。</p>
+<h2 id="sec-2"><span class="h2-num"></span>2. 面试官在寻找哪些证据</h2>
+<p>这节帮你把“我学过”改成“我能证明”，避免会背概念却接不住追问。</p>
+<p>以下是本文评审判断，不是公司打分表；题目是训练问法，不是真实面经原题。</p>
+<div class="table-wrap"><table class="table"><thead><tr><th>判断</th><th>面试里怎样留下证据</th></tr></thead><tbody><tr><td>能否独立完成小需求</td><td>当场给接口加一个边界校验，解释失败时返回什么。</td></tr><tr><td>是否理解因果</td><td>讲缓存时说出数据库更新后为何可能读到旧值，再给取舍。</td></tr><tr><td>是否拥有项目</td><td>指出自己修过的一个 bug，展示复现条件和回归测试。</td></tr><tr><td>能否合作、承担责任</td><td>不会时说明已知边界和验证步骤，不把 AI 或队友当挡箭牌。</td></tr></tbody></table></div>
+<p><strong>面试间里的一幕</strong>：候选人把 <code>HashMap</code> 的扩容讲得很熟，我随口问“你往里面放自定义对象，取出来却是 null，为什么”。他卡住了三秒，说“可能是版本问题”。</p>
+<p>不是他不会——是他背的是<strong>结论</strong>，没碰过<strong>因果</strong>。我当场让他写 <code>equals</code> 和 <code>hashCode</code>，写完他自己笑了：“原来必须一起重写。”</p>
+<p>这也是本文的取舍标准：<strong>凡是只能背、不能当场验证的，优先级都往后放。</strong></p>
+<figure class="dgm-wrap"><svg viewBox="0 0 520 370" class="dgm" role="img" aria-label="流程示意图">
+<defs><marker id="arc" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="arhead"/></marker></defs>
+<rect class="box" x="60" y="18" width="400" height="46" rx="10"/>
+<text class="t1" x="260" y="47">写出 Java 小程序</text>
+<rect class="box" x="60" y="90" width="400" height="46" rx="10"/>
+<text class="t1" x="260" y="119">用算法解释效率</text>
+<rect class="box" x="60" y="162" width="400" height="46" rx="10"/>
+<text class="t1" x="260" y="191">让数据和接口可靠</text>
+<rect class="box" x="60" y="234" width="400" height="46" rx="10"/>
+<text class="t1" x="260" y="263">用测试证明项目</text>
+<rect class="box" x="60" y="306" width="400" height="46" rx="10"/>
+<text class="t1" x="260" y="335">把证据写进简历</text>
+<line class="arrow" x1="260" y1="64" x2="260" y2="86" marker-end="url(#arc)"/>
+<line class="arrow" x1="260" y1="136" x2="260" y2="158" marker-end="url(#arc)"/>
+<line class="arrow" x1="260" y1="208" x2="260" y2="230" marker-end="url(#arc)"/>
+<line class="arrow" x1="260" y1="280" x2="260" y2="302" marker-end="url(#arc)"/>
+</svg></figure>
+<h2 id="sec-3"><span class="h2-num"></span>3. 选一条时间线，每周交三样东西</h2>
+<p>这节帮你拿执行分：周末用可运行成果验收，不用学习时长安慰自己。</p>
+<p>每周交代码、验证记录、录音。题量是新题预算，另复做错题，记录边界、复杂度与错误原因。卡住 20 分钟可看提示，隔天关答案重写。</p>
+<p>没完成交付就顺延，先砍美化、多框架和 Agent 扩展。项目可复现、简历不虚构后，就小批投递，按反馈调整。</p>
+<figure class="dgm-wrap"><svg viewBox="0 0 520 370" class="dgm" role="img" aria-label="流程示意图">
+<defs><marker id="arc" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="arhead"/></marker></defs>
+<rect class="box" x="60" y="18" width="400" height="46" rx="10"/>
+<text class="t1" x="260" y="47">核对基础与每周时间</text>
+<rect class="box" x="60" y="90" width="400" height="46" rx="10"/>
+<text class="t1" x="260" y="119">选八周或十六周或二十四周</text>
+<rect class="box" x="60" y="162" width="400" height="46" rx="10"/>
+<text class="t1" x="260" y="191">每周交代码与验证与讲解</text>
+<rect class="box" x="60" y="234" width="400" height="46" rx="10"/>
+<text class="t1" x="260" y="263">出门考决定继续或补课</text>
+<rect class="box" x="60" y="306" width="400" height="46" rx="10"/>
+<text class="t1" x="260" y="335">投递与复盘并行</text>
+<line class="arrow" x1="260" y1="64" x2="260" y2="86" marker-end="url(#arc)"/>
+<line class="arrow" x1="260" y1="136" x2="260" y2="158" marker-end="url(#arc)"/>
+<line class="arrow" x1="260" y1="208" x2="260" y2="230" marker-end="url(#arc)"/>
+<line class="arrow" x1="260" y1="280" x2="260" y2="302" marker-end="url(#arc)"/>
+</svg></figure>
+<h3 id="8-周版-已有基础-每周约-25-30-小时">8 周版：已有基础，每周约 25–30 小时</h3>
+<p>这档帮你补证据缺口；写不出循环统计、SQL 查询和接口，就换较长档。</p>
+<div class="table-wrap"><table class="table"><thead><tr><th>周</th><th>本周必须交付</th></tr></thead><tbody><tr><td>1</td><td>写文件词频统计，补空文件测试；做 8 道数组／哈希题；录 3 分钟集合选型。</td></tr><tr><td>2</td><td>写有界线程池实验、复现计数竞争；做 8 道链表／栈题；解释一次拒绝任务。</td></tr><tr><td>3</td><td>给资料表造数据、比较索引前后计划，复现事务回滚；做 8 道二分题；讲扫描差异。</td></tr><tr><td>4</td><td>交付带登录、权限、分页的资料 API，复现并修复事务失效；做 8 道树题；画请求链路。</td></tr><tr><td>5</td><td>加缓存并测试过期、停机、重复提交；做 6 道堆／窗口题；录 5 分钟项目介绍。</td></tr><tr><td>6</td><td>AI 方向做带引用的检索问答和 20 条评测；后端方向做等量接口故障用例；做 6 道搜索题。</td></tr><tr><td>7</td><td>从空环境复现项目，写一页简历，小批投递；做 6 道动态规划题；模拟面试一次。</td></tr><tr><td>8</td><td>按反馈修两项最大短板；限时重做 8 道错题；再模拟两次并更新投递记录。</td></tr></tbody></table></div>
+<h3 id="16-周版-会基本语法-每周约-15-20-小时">16 周版：会基本语法，每周约 15–20 小时</h3>
+<p>这档帮你串联知识，第 7 周起迭代主项目。</p>
+<div class="table-wrap"><table class="table"><thead><tr><th>周</th><th>本周必须交付</th></tr></thead><tbody><tr><td>1</td><td>配好 JDK、Git、Maven；写命令行任务清单和 3 个测试；录一次断点定位。</td></tr><tr><td>2</td><td>加文件保存、接口和异常处理；做 5 道数组题；解释坏输入怎么处理。</td></tr><tr><td>3</td><td>用集合做词频统计，画 HashMap 冲突图；做 6 道哈希题；演示错误键设计。</td></tr><tr><td>4</td><td>写限额线程池实验，复现并修复计数竞争；做 6 道链表／栈题；讲锁与可见性。</td></tr><tr><td>5</td><td>写建表及 8 条查询，比较联合索引；做 5 道二分题；留存执行计划。</td></tr><tr><td>6</td><td>双连接观察隔离、回滚和锁等待；写缓存失效实验；做 5 道窗口题并讲一致性。</td></tr><tr><td>7</td><td>建资料管理 API，带参数校验、分页和错误码；做 5 道树题；画 HTTP 请求路径。</td></tr><tr><td>8</td><td>加登录与所有者权限，复现并修复自调用事务问题；做 5 道树题；交越权测试。</td></tr><tr><td>9</td><td>加缓存，覆盖穿透、击穿、雪崩的缩小实验；做 5 道堆题；说明降级边界。</td></tr><tr><td>10</td><td>加重复提交保护，压测固定读接口；做 5 道搜索题；保留吞吐与延迟原始记录。</td></tr><tr><td>11</td><td>AI 方向做文档切分与检索基线；后端方向修一条慢查询；做 5 道回溯题并讲取舍。</td></tr><tr><td>12</td><td>AI 方向加引用与拒答、完成 20 条评测；后端方向完成 20 条接口边界用例；做 5 道动态规划题。</td></tr><tr><td>13</td><td>复现超时、数据库断连或模型失败，补日志和回归；重做 6 道错题；写故障记录。</td></tr><tr><td>14</td><td>从空环境复现，录 5 分钟项目介绍；重做 6 道错题；写一页简历并开始投递。</td></tr><tr><td>15</td><td>做两次限时面试，修两项共性失分；重做 6 道错题；按 JD 调整简历证据顺序。</td></tr><tr><td>16</td><td>再做两次完整模拟，核对简历每句话；重做 6 道错题；依据回复继续投递。</td></tr></tbody></table></div>
+<h3 id="24-周版-零基础起步-每周约-12-16-小时">24 周版：零基础起步，每周约 12–16 小时</h3>
+<p>这档帮你打基础；第 8 周仍写不出程序，就延长基础段。</p>
+<div class="table-wrap"><table class="table"><thead><tr><th>周</th><th>本周必须交付</th></tr></thead><tbody><tr><td>1</td><td>安装 JDK 和编辑器，运行一个问候程序；改坏再修好；讲清源码如何运行。</td></tr><tr><td>2</td><td>写条件、循环和数组练习共 6 个；手算边界输入；用断点跟踪一次循环。</td></tr><tr><td>3</td><td>写命令行记账器，拆成 3 个方法；加非法金额校验；录 2 分钟数据流。</td></tr><tr><td>4</td><td>把记录改成对象，为保存动作定义接口；替换一种实现；解释对象与接口。</td></tr><tr><td>5</td><td>加列表、去重和分类统计；做 4 道数组题；解释 List、Set、Map 的选择。</td></tr><tr><td>6</td><td>加文件保存和异常处理；写 4 个测试；演示坏文件不让程序直接崩掉。</td></tr><tr><td>7</td><td>用 Git 分支修改统计规则并检查差异；做 4 道哈希题；写复现说明。</td></tr><tr><td>8</td><td>关教程重写小工具核心，给陌生人按说明运行；复做 4 道错题；录 3 分钟讲解。</td></tr><tr><td>9</td><td>做词频统计和 HashMap 冲突实验；做 5 道链表题；画查找过程。</td></tr><tr><td>10</td><td>做计数竞争与有界线程池实验；做 5 道栈题；录锁与 volatile 的差别。</td></tr><tr><td>11</td><td>建资料表并写 8 条 SQL；做 5 道二分题；交索引前后执行计划。</td></tr><tr><td>12</td><td>用两个连接做回滚、隔离和锁等待实验；做 5 道窗口题；解释事务边界。</td></tr><tr><td>13</td><td>写资料查询 API 和分页校验；做 5 道树题；记录请求、响应和状态码。</td></tr><tr><td>14</td><td>加登录、所有者检查与事务；做 5 道树题；交越权和回滚测试。</td></tr><tr><td>15</td><td>加缓存并复现热点失效；做 5 道堆题；说明旧值与数据库压力的取舍。</td></tr><tr><td>16</td><td>加重复提交保护与超时处理；做 5 道搜索题；写一次失败请求的定位记录。</td></tr><tr><td>17</td><td>固定数据量压测一条接口并改一个瓶颈；做 5 道回溯题；保留前后原始数据。</td></tr><tr><td>18</td><td>AI 方向做检索基线；后端方向做故障恢复实验；做 5 道动态规划题并讲替代方案。</td></tr><tr><td>19</td><td>AI 方向加引用、拒答；后端方向补接口边界；各交 20 条用例及失败分类。</td></tr><tr><td>20</td><td>修两类失败，保留一组未参与修改的验收题；重做 6 道错题；讲结果的局限。</td></tr><tr><td>21</td><td>从空环境跑项目，补操作说明和演示；重做 6 道错题；录 5 分钟介绍。</td></tr><tr><td>22</td><td>写一页简历，小批投递；模拟一次并修一个失分点；重做 6 道错题。</td></tr><tr><td>23</td><td>模拟两次，给项目连续追问 10 轮；重做 6 道错题；更新简历和投递记录。</td></tr><tr><td>24</td><td>对照 JD 补最大缺口，再模拟一次；重做 6 道错题；定下后续两周行动。</td></tr></tbody></table></div>
+<h4 class="sub">零基础（24 周档）：每周先做到这个最低标准，再加量</h4>
+<p>上面每一行的第一件事，都可能让你卡住。先照下面这个「最小可运行」标准做出来，再谈优化：</p>
+<div class="table-wrap"><table class="table"><thead><tr><th>第几周</th><th>最小骨架（照这个先跑通）</th></tr></thead><tbody><tr><td>1</td><td>终端里 <code>javac Hello.java &amp;&amp; java Hello</code> 能出结果；再写一个 <code>for</code> 打印 1–10</td></tr><tr><td>2</td><td><code>List&lt;String&gt; names = new ArrayList&lt;&gt;();</code> 增删查一遍，用 <code>System.out</code> 验证</td></tr><tr><td>6</td><td>一张 <code>resource</code> 表 + 一条 <code>SELECT</code>；能说出这行 SQL 走了哪个索引</td></tr><tr><td>12</td><td>接口能返回 JSON：<code>curl localhost:8080/api/resources</code> 拿到 200</td></tr><tr><td>18</td><td>空数据库、按 README 步骤，10 分钟内把项目跑起来</td></tr><tr><td>21</td><td>五分钟讲完项目，录音回放，能听出自己在哪一段心虚</td></tr></tbody></table></div>
+<p>卡住超过 20 分钟就去看提示，<strong>第二天关掉答案重写一遍</strong>——这是本文唯一要求你反复做的事。</p>
+<h2 id="sec-4"><span class="h2-num"></span>4. 六个阶段，过出门考再往下走</h2>
+<p>这节帮你拿基础分：用实验和项目回答问题。</p>
+<section class="phase" id="phase-p0"><h3><span class="p-badge">P0</span>写得出，也调得动</h3>
+<p>这阶段帮你拿编码起步分。<strong>为什么学</strong>：先能改小程序，才不至于照抄框架代码。</p>
+<h4 class="sub">学什么</h4>
+<p><strong>变量</strong>像贴标签的盒子，是保存值的名字。先用循环打印 1 到 10，再改条件，亲眼看输出怎么变。</p>
+<p><strong>对象</strong>像带操作按钮的资料卡，是数据与行为的组合。<code>List&lt;Student&gt;</code> 里塞自定义类，就是最常见的用法。</p>
+<p><strong>接口</strong>像插座规格，是调用约定。换实现不用改调用者——这句话在面试里能顶半页纸。</p>
+<p><strong>异常</strong>像报警，是失败报告机制。写之前先想清楚：哪些输入该拒绝，哪些故障该上抛。</p>
+<p><strong>Git</strong> 像账本，管版本；<strong>Maven</strong> 像装配清单，管依赖与构建；<strong>测试</strong>像验收尺，断言结果符合约定。这三样不用精通，但要跑通一次完整循环。</p>
+<p><strong>面试会怎么问</strong>：① 给记录加一个字段，要改哪里？② 文件不存在怎么处理？③ 接口与实现拆开有什么收益？④ 如何定位这段空指针？</p>
+<p><strong>答不上来会怎样</strong>：现场修改卡住，项目代码难以自证。</p>
+<p><strong>出门考</strong>：不看教程写“文件读入→分类统计→输出”；覆盖空文件、坏数据、重复记录；断点定位一个故意制造的 bug，并讲 3 分钟。</p>
+<p><strong>资源</strong>：<a href="https://dev.java/learn/">dev.java</a> 读语法、对象、异常。</p>
+</section>
+<hr>
+<section class="phase" id="phase-p1"><h3><span class="p-badge">P1</span>集合、算法与并发的为什么</h3>
+<p><strong>面试官问「你 HashMap 里放了自定义对象，为什么取不出来」——这一节就是为这一问准备的。</strong><strong>为什么学</strong>：效率和线程安全会直接影响项目正确性。</p>
+<h4 class="sub">学什么</h4>
+<p><strong>集合</strong>像不同的收纳盒：List 保顺序、Set 去重、Map 按键找值。面试时<strong>先讲选型理由，再讲代价</strong>，别背接口签名。</p>
+<p><strong>HashMap</strong> 像按门牌分区的快递柜，是用散列定位桶的映射。标准答法：先算桶位置，再比较键；冲突要继续找，扩容有成本。</p>
+<p><strong><code>equals</code> 与 <code>hashCode</code></strong> 是一对——<code>equals</code> 相等的键，<code>hashCode</code> 必须相同。键放进去以后再改参与计算的字段，<strong>可能再也找不到它</strong>（上面那幕就是这件事）。别只记“要一起重写”，要能说出为什么。</p>
+<p><strong>复杂度</strong>像估算“人数翻倍后排队要多久”，是规模与计算量的增长关系。先给朴素解，再说怎么减少重复工作；写完补上空输入、重复值、边界三组测试。</p>
+<p><strong>线程</strong>像同时办事的工人，共享内存但各有执行路径。<strong>锁</strong>像厕所门栓，保证临界区互斥；<strong>volatile</strong> 像及时更新的公告栏，管可见性和顺序，但<strong>不能把 <code>count++</code> 变原子</strong>——这句话答错，后面全垮。</p>
+<p><strong>线程池</strong>像有候客区的窗口，复用线程、排队管理任务。沿着“核心线程 → 队列 → 最大线程 → 拒绝策略”回答；无界队列可能把内存吃光。容量按耗时、阻塞比例和实测来定，<strong>不是线程越多越快</strong>。</p>
+<p><strong>面试会怎么问</strong>：① HashMap 冲突后怎么找？② 复合操作用了并发 Map 就安全吗？③ volatile 为什么防不住丢计数？④ 队列满了会怎样？⑤ 这题能少遍历一次吗？</p>
+<p><strong>答不上来会怎样</strong>：缓存键和并发请求讲不清；手撕换边界就出错。</p>
+<p><strong>出门考</strong>：画一次冲突与扩容；复现计数竞争并用锁修好；制造线程池拒绝；30 分钟独立写一道练过的中等题、解释复杂度并补边界测试。</p>
+<p><strong>资源</strong>：<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/concurrent/ThreadPoolExecutor.html">线程池 API</a> 查排队；<a href="https://github.com/krahets/hello-algo">Hello 算法</a> 按周表选题。</p>
+</section>
+<hr>
+<section class="phase" id="phase-p2"><h3><span class="p-badge">P2</span>MySQL 和 Redis：数据不能靠祈祷</h3>
+<p><strong>「这条查询为什么慢？」——学完这节，你能在面试现场打开 EXPLAIN 当场回答。</strong><strong>为什么学</strong>：能返回不代表查得快、写得对。</p>
+<h4 class="sub">学什么</h4>
+<p><strong>索引</strong>像书的目录，用来加速定位。回答时讲<strong>联合索引的列顺序为什么这么排</strong>，再用 <code>EXPLAIN</code> 把扫描行数摆出来——别说“加了索引就快”，那是外行话。</p>
+<p><strong>B+ 树</strong>像多层目录，叶子节点相连，所以范围查询也快；代价是空间和写入维护。</p>
+<p><strong>覆盖索引</strong>像目录里已经把答案写全了，不用再翻正文；<strong>回表</strong>就是拿着主键回去取整条记录。面试官爱听这个对比：“只查索引内的列”和“多查一个非索引列”分别多少行。</p>
+<p><strong>事务</strong>像一次成套转账，要么一起提交、要么一起回滚。<strong>隔离级别</strong>规定并发事务能看见什么。<strong>MVCC</strong> 像文档的历史版本，按可见性规则给你一个“快照”。用两个连接做实验，分清快照读和锁定读——别背“RR 永不幻读”，那句话经不起追问。</p>
+<p>缓存像桌边便签，是数据库之外的快速副本。穿透是查不存在的数据，可用短期空值缓存并限制滥用；击穿是热点失效，可合并并发回源；雪崩是大量缓存同时失效或服务故障，要错开过期并限流降级。</p>
+<p>数据库写完再删缓存仍有竞争窗口，不能承诺强一致。回答要说允许多旧、过期如何兜底；订单状态等关键判断回数据库核实。Redis 停机时全量回源也可能压垮数据库。</p>
+<p><strong>面试会怎么问</strong>：① 联合索引为什么这样排列？② 执行计划怎么看？③ 转账中途失败会怎样？④ 缓存三种故障有什么不同？⑤ 数据更新后仍读到旧值怎么办？</p>
+<p><strong>答不上来会怎样</strong>：优化无依据，重复写入和脏数据兜不住。</p>
+<p><strong>出门考</strong>：造足以比较差异的数据，保留索引前后计划；双连接复现回滚与锁等待；模拟热点失效和 Redis 不可用，验证接口有超时与降级。</p>
+<p><strong>资源</strong>：<a href="https://dev.mysql.com/doc/refman/8.4/en/optimization-indexes.html">MySQL 索引手册</a> 对照自己的 SQL；<a href="https://redis.io/docs/latest/develop/use/keyspace/">Redis 键与过期</a> 用来做失效实验。</p>
+</section>
+<hr>
+<section class="phase" id="phase-p3"><h3><span class="p-badge">P3</span>HTTP、Spring 与排错</h3>
+<p><strong>项目深挖十有八九从「这个接口怎么工作」开始，这节让你能一路讲到数据库。</strong><strong>为什么学</strong>：项目深挖通常从“这个接口怎么工作”展开。</p>
+<h4 class="sub">学什么</h4>
+<p><strong>HTTP</strong> 像业务信件，是应用层的请求/响应协议；<strong>TCP</strong> 像带编号和确认的运输通道，保证可靠有序的字节流。握手负责建连和确认初始序号，挥手关闭两个方向——报文可能合并，这也是为什么抓包时看到的时序和你以为的不一样。</p>
+<p><strong>字节流没有消息边界</strong>，得靠长度或分隔符切分。HTTP 本身无状态，登录靠 Cookie 带会话标识；HTTPS 在中间加一层 TLS 保护传输。</p>
+<p><strong>认证和授权</strong>要分清楚：认证是“你是谁”，授权是“你能看谁的资料”。顺带答一句“超时重试为什么可能重复写”——很多人只会说“要幂等”，说不出为什么。</p>
+<p><strong>IoC</strong> 像食堂统一配餐：容器创建、管理对象并注入依赖。<strong>AOP</strong> 像门口统一查票：在业务调用周围织入通用逻辑。回答时画一条 <code>Controller → Service → 数据库</code>，把校验、事务、异常处理标在正确的位置上。</p>
+<p><strong>事务代理</strong>像必须经过的验票口。默认代理模式下：同类内部自调用会<strong>绕过代理</strong>；吞掉异常可能让代理无法按预期回滚；默认回滚规则也不覆盖所有受检异常。结论：<strong>“加了注解” ≠ “事务生效”</strong>。</p>
+<p><strong>JVM</strong> 像车间：堆里放对象，栈里存调用帧，GC 回收不可达对象。练的是排查路径——CPU 高查忙线程，内存涨查对象保留，响应慢查依赖。<strong>先留证据，再改参数。</strong></p>
+<p><strong>面试会怎么问</strong>：① 请求超时能直接重试吗？② TCP 为什么要确认序号？③ IoC 与自己 new 有何区别？④ 自调用事务为何没生效？⑤ CPU 高时先看什么？</p>
+<p><strong>答不上来会怎样</strong>：能背注解却不能定位异常；权限或事务漏洞会削弱整个项目的可信度。</p>
+<p><strong>出门考</strong>：交付校验、分页、登录和所有者检查；证明用户甲不能读乙的资料；写事务回滚集成测试；用线程转储定位一个自造忙循环。</p>
+<p><strong>资源</strong>：<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP">MDN HTTP</a> 看报文；<a href="https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html">事务注解说明</a> 核对代理与回滚。</p>
+</section>
+<hr>
+<section class="phase" id="phase-p4"><h3><span class="p-badge">P4</span>AI 应用：先检索，再证明有效</h3>
+<p>这阶段帮你避免把“接过模型接口”写成 AI 工程能力。<strong>为什么学</strong>：投 AI 应用岗要证明质量、失败处理和成本控制。</p>
+<h4 class="sub">学什么</h4>
+<p><strong>RAG</strong> 像开卷考试：先检索资料，再让模型照着答。面试要能区分两种失败——<strong>“找错了资料”</strong>和<strong>“资料对了但答错”</strong>，因为改法完全不同。</p>
+<p><strong>Embedding</strong> 像给文本画语义坐标，把内容变成向量。记住一句：<strong>向量相近不等于事实正确</strong>。</p>
+<p><strong>Prompt 工程</strong>像写任务委托书：讲清输入、约束、示例、输出格式，然后用同一批题迭代。面试时展示“我改了什么、同一批题的结果怎么变”，而不是背万能咒语。</p>
+<p><strong>Agent</strong> 像会自己决定下一步的助手：模型参与决定调什么工具、走哪条路。但<strong>固定流程通常更容易测</strong>——所以要能回答“为什么这里真的需要自主选择”，以及步数上限、超时和失败出口在哪。</p>
+<p><strong>MCP</strong> 像统一插口，是连接 AI 应用与工具、资源的协议。它<strong>不自动给权限</strong>，也不是 Agent 的别名。面试要说明：工具参数校验、访问控制、敏感操作二次确认，分别在哪一层做。</p>
+<p><strong>评测</strong>像固定试卷，用同一把尺子比较系统。标 20 条：正常 / 无答案 / 歧义 / 越权 / 诱导指令，各 4 条；记录资料命中、引用支持、是否拒答、耗时。<strong>另外留一批没见过的题做验收</strong>——只优化见过的题，等于背答案。</p>
+<p><strong>面试会怎么问</strong>：① 没检索到和模型胡答怎么区分？② 分块变大有什么代价？③ 引用存在就算答对吗？④ 为什么不用固定流程？⑤ 恶意文档让工具导出数据怎么办？</p>
+<p><strong>答不上来会怎样</strong>：项目像接口包装；“准确率高”没有口径就不构成证据。</p>
+<p><strong>出门考</strong>：同一份非敏感资料跑关键词检索基线与一次改进；保留逐题结果及失败原因；展示无依据拒答和越权阻断。没实调模型时标“模拟响应验证”，不能把它当效果评测。</p>
+<p><strong>资源</strong>：<a href="https://docs.spring.io/spring-ai/reference/getting-started.html">Spring AI</a> 学接入；<a href="https://modelcontextprotocol.io/docs/2026-07-28/learn/architecture">MCP</a> 区分各角色。框架只学一个。</p>
+</section>
+<hr>
+<section class="phase" id="phase-p5"><h3><span class="p-badge">P5</span>项目交付与面试表达</h3>
+<p><strong>面试官不会替你从仓库里找贡献——这节教你把贡献摆到台面上。</strong><strong>为什么学</strong>：面试官不会替你从仓库里找贡献。</p>
+<p><strong>学什么</strong>：复现说明像菜谱，让别人得到同一结果；回归测试像修桥后复检，检查修复是否破坏原行为。回答要串起需求、实现、测试与证据。</p>
+<p><strong>面试会怎么问</strong>：① 哪部分由你负责？② 为什么没选另一种方案？③ 指标如何测？④ 今天需求变了你改哪？⑤ 让别人运行需要几步？</p>
+<p><strong>答不上来会怎样</strong>：技术栈越多，无法自证的漏洞越多。</p>
+<p><strong>出门考</strong>：从空环境按说明运行；5 分钟脱稿介绍；接受第 5 节十轮追问；简历每条都能定位到代码、测试或记录。</p>
+<p><strong>资源</strong>：用 <a href="https://git-scm.com/book/zh/v2">Git Book</a> 整理可读的修改历史。</p>
+</section>
+<hr>
+<h2 id="sec-5"><span class="h2-num"></span>5. 一个项目，讲五分钟，追十轮</h2>
+<h4 class="sub">项目不是讲出来的，是「跑得起来 + 说得清」证明出来的。</h4>
+<p>做“带权限的资料库”：保存、分类、检索资料。后端方向做可靠查询与缓存，AI 方向在同一服务上加带引用问答。</p>
+<p>幂等像快递单号，重扫不应重复发货；定义是重复请求不额外改变结果。回答用户范围内的请求标识、唯一约束、重复响应和过期规则，别只放个内存标记。</p>
+<div class="table-wrap"><table class="table"><thead><tr><th>迭代</th><th>完成标准</th></tr></thead><tbody><tr><td>能用</td><td>资料新增、分页、分类可演示；非法输入有稳定错误响应。</td></tr><tr><td>可靠</td><td>登录、所有者检查、事务和重复提交都有失败测试；日志能关联一次请求。</td></tr><tr><td>可交接</td><td>有启动步骤、配置占位符、测试命令、限制说明和短演示；没有密钥与个人资料。</td></tr></tbody></table></div>
+<p>P95 像排序后靠后的等待时间，是 95% 请求不超过的延迟分位数。报告写机器、数据量、并发、预热、时长和错误率；本机实验别写“生产级”。</p>
+<p>五分钟练习预算：半分钟讲痛点，一分钟画路径，一分半讲难点，一分钟讲测试与指标，一分钟讲局限和下一步。</p>
+<p>十轮追问按因果走：① 谁使用？② 数据怎么存？③ 为什么选这张表？④ 为什么这个索引？⑤ 缓存旧了呢？⑥ 两次提交呢？⑦ 他人越权呢？⑧ 依赖超时呢？⑨ 测试怎么证明？⑩ 不用当前方案还有什么选择？</p>
+<p><strong>面试间里的一幕</strong>：候选人讲了四分钟项目，从「微服务架构」讲到「智能中台」。我插一句：「这个接口慢的时候，你先看什么？」</p>
+<p>他沉默五秒：「看监控。」</p>
+<p>我换个问法：「假设没有监控，你手上只有 EXPLAIN 和日志，你干嘛？」——他答上来了，而且答得很好。可惜前四分钟已经浪费了。</p>
+<p>结论：面试官不关心你用了多少技术，只关心<strong>出事时你知不知道往哪看</strong>。所以叙述顺序应该是：痛点 → 一次真实故障 → 你怎么定位 → 改了什么 → 指标变化。</p>
+<p>反例：“高并发智能中台，性能提升 90%。”却说不出负载与原始数据。改写为“比较资料分页索引前后执行计划，保留复现步骤”，实测后再填结果。</p>
+<h2 id="sec-6"><span class="h2-num"></span>6. 一页简历与 JD：关键词必须带证据</h2>
+<p>这节帮你减少初筛信息缺失，不能绕过资格要求。</p>
+<p>初筛像配零件，判断经历是否符合岗位。学历、专业、毕业时间、实习时长、到岗时间可能是硬条件；关键词帮助检索和阅读，不同团队权重不同，没有保证通过的公式。</p>
+<p>一页按“联系与方向→教育与到岗→经历／项目→技能证据”排。有相关实习优先展示，无实习就突出项目；成绩、排名只写真实相关的，不伪造学历与工作量。</p>
+<div class="codeblock"><button class="copy" aria-label="复制">复制</button><pre><code>姓名｜求职：Java 后端实习｜联系方式
+学校／专业／毕业时间｜可到岗日期／每周天数／连续月数
+项目：服务谁、解决什么问题（两行以内）
+贡献：问题 → 我的动作 → 测试或实测结果 → 证据入口
+技能：能用 HashMap 分析查找，能用 EXPLAIN 验证索引等
+仓库或演示：可访问入口；保留运行说明，不含密钥</code></pre></div>
+<p>反例：“熟悉 Java、MySQL、Redis”。改为“实现用户隔离接口，验证越权、回滚和重复提交”。个人项目别写成企业任职。</p>
+<p>JD 像采购清单，是岗位职责与条件说明。本文无全市场统计，不把某词一概当凑数；看实际交付要求，再看“了解／优先”。</p>
+<div class="table-wrap"><table class="table"><thead><tr><th>关键词</th><th>怎样判断是否要重点准备</th></tr></thead><tbody><tr><td>RAG</td><td>要做知识库就准备切分、召回、引用与失败分析；只列词时问清任务。</td></tr><tr><td>Agent</td><td>要做多步任务就准备状态、失败恢复和上限；解释固定流程是否够用。</td></tr><tr><td>MCP</td><td>要接工具就准备协议角色、权限与参数校验，不堆服务。</td></tr><tr><td>评测</td><td>要改善效果就拿出逐题结果、标注标准与对照。</td></tr><tr><td>Prompt 工程</td><td>要稳定输出就准备格式验证、失败样例与回归，不比谁提示长。</td></tr></tbody></table></div>
+<p>投递记录不是给 HR 看的，是<strong>给你自己复盘用的</strong>。没有记录，你的复盘就只是在猜。</p>
+<div class="table-wrap"><table class="table"><thead><tr><th>日期</th><th>公司/岗位</th><th>简历版本</th><th>结果</th><th>下一步</th></tr></thead><tbody><tr><td>例：10-20</td><td>A 厂 · Java 后端实习</td><td>v2（突出索引优化）</td><td>简历挂</td><td>核对 JD 是否要求学历/到岗</td></tr><tr><td>例：10-23</td><td>B 厂 · AI 应用实习</td><td>v3（突出评测）</td><td>一面挂 · 问倒 RAG</td><td>补「检索失败 vs 生成失败」</td></tr></tbody></table></div>
+<p>投递表记岗位、资格、关键词、简历版本、日期与反馈。没回复先查匹配度；技术面反复失败再分类补课。</p>
+<h2 id="sec-7"><span class="h2-num"></span>7. 面试流程：把时间花在能验证的地方</h2>
+<h4 class="sub">面试只有一小时，这节教你把一小时花在能被验证的地方。</h4>
+<figure class="dgm-wrap"><svg viewBox="0 0 520 370" class="dgm" role="img" aria-label="流程示意图">
+<defs><marker id="arc" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="arhead"/></marker></defs>
+<rect class="box" x="60" y="18" width="400" height="46" rx="10"/>
+<text class="t1" x="260" y="47">资格核对与简历初筛</text>
+<rect class="box" x="60" y="90" width="400" height="46" rx="10"/>
+<text class="t1" x="260" y="119">笔试或技术面</text>
+<rect class="box" x="60" y="162" width="400" height="46" rx="10"/>
+<text class="t1" x="260" y="191">介绍与项目深挖</text>
+<rect class="box" x="60" y="234" width="400" height="46" rx="10"/>
+<text class="t1" x="260" y="263">基础追问与现场编码</text>
+<rect class="box" x="60" y="306" width="400" height="46" rx="10"/>
+<text class="t1" x="260" y="335">反问与后续沟通</text>
+<line class="arrow" x1="260" y1="64" x2="260" y2="86" marker-end="url(#arc)"/>
+<line class="arrow" x1="260" y1="136" x2="260" y2="158" marker-end="url(#arc)"/>
+<line class="arrow" x1="260" y1="208" x2="260" y2="230" marker-end="url(#arc)"/>
+<line class="arrow" x1="260" y1="280" x2="260" y2="302" marker-end="url(#arc)"/>
+</svg></figure>
+<p>实际轮数与顺序因岗位而异，八股与手撕无统一比例。60 分钟模拟可分：介绍 3 分钟、项目 20 分钟、基础 12 分钟、编码 20 分钟、反问 5 分钟。这是练习建议，不是统计。</p>
+<p>介绍讲身份、可实习多久、做过什么、值得追问哪个点。例：“我的资料库处理了重复提交与缓存失效，有失败用例，可以展开。”没做过就别照念。</p>
+<p>八股讲类比、定义和实验；手撕确认输入输出和边界，给朴素解与优化，再编码测试。不确定就提出反例验证，别编结论。</p>
+<p>反问：“实习生前四周交付什么？”“谁负责评审和测试？”“更看重检索效果还是后端可靠性？”让回答帮助你选岗位。</p>
+<h2 id="sec-8"><span class="h2-num"></span>8. AI 协作：用过工具，也要拥有代码</h2>
+<p>这节帮你保住可信度：AI 生成的代码也要能解释。</p>
+<p>Vibe coding 像让助手按口述搭积木，用自然语言推动代码生成。原型可以快；进项目要 review、测试、验证依赖。这是分工建议，不是团队制度统计。</p>
+<p>面试会检查理解与验证。提交的每一行都应能解释目的、输入输出、失败条件与替代方案；不要求背第三方库源码。</p>
+<p><strong>面试官真正怕的不是你用 AI，而是你说不清为什么这么写</strong>——因为那意味着线上出事时，你修不了。</p>
+<p>你定验收→AI 给小步方案→你看 diff→跑测试→独立改需求。Review 像交稿前审阅，核对变化与需求；测试只覆盖设计过的情况，不失败不等于无缺陷。</p>
+<div class="codeblock"><button class="copy" aria-label="复制">复制</button><pre><code>需求：给我的资料接口增加重复提交保护。
+先指出现有调用路径与不确定之处，不要直接大改。
+给两个方案，说明并发、过期和失败重试的差异。
+我选定方案后，只改必要部分，并列出可复现的失败测试。
+不要读取或输出密钥，不要添加未核实的依赖。
+完成后逐段解释；由我独立修改一个边界场景再验收。</code></pre></div>
+<p>问清获准工具、数据能否外发、谁 review、必过测试。内部代码、用户资料与凭据按团队规则处理，提交者仍对缺陷负责。面试用 AI 先获允许。</p>
+<p>被问穿时：“初稿由 AI 生成，我验证了这些路径；这里理解不够，我给一个可解释的简化方案。”面后删掉无法自证的表述，补测试、独立重写核心。</p>
+<h2 id="sec-9"><span class="h2-num"></span>9. 80／20 清单：投递前的最低证据</h2>
+<h4 class="sub">投递前用这张表查一遍短板——它不保证通过，但能告诉你输在哪。</h4>
+<p>验证后才打勾。进度保存在本浏览器，与长线版分开；投递前重新抽测。</p>
+<h4 class="sub">P0 独立编码</h4>
+<ul>
+<li class="task"><label><input type="checkbox" data-k="1"><span class="cbt"></span><span class="ctxt">关教程完成文件统计，能处理坏输入并断点定位。</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="2"><span class="cbt"></span><span class="ctxt">能用 Git 解释一次差异，别人按说明可运行程序。</span></label></li>
+</ul>
+<h4 class="sub">P1 基础推理</h4>
+<ul>
+<li class="task"><label><input type="checkbox" data-k="3"><span class="cbt"></span><span class="ctxt">画 HashMap 查找与冲突，解释集合选型和可变键风险。</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="4"><span class="cbt"></span><span class="ctxt">复现计数竞争与任务拒绝，说明锁、volatile 和队列边界。</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="5"><span class="cbt"></span><span class="ctxt">限时完成数组、链表、树的代表题，并解释复杂度和边界。</span></label></li>
+</ul>
+<h4 class="sub">P2 数据可靠</h4>
+<ul>
+<li class="task"><label><input type="checkbox" data-k="6"><span class="cbt"></span><span class="ctxt">用执行计划证明一次索引选择，双连接验证事务边界。</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="7"><span class="cbt"></span><span class="ctxt">演示缓存三类故障的区别，说明一致性与降级限制。</span></label></li>
+</ul>
+<h4 class="sub">P3 接口可靠</h4>
+<ul>
+<li class="task"><label><input type="checkbox" data-k="8"><span class="cbt"></span><span class="ctxt">讲清 HTTP／TCP 与请求路径，验证事务失效的修复。</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="9"><span class="cbt"></span><span class="ctxt">越权、重复提交、超时都有失败测试和可定位日志。</span></label></li>
+</ul>
+<h4 class="sub">P4 岗位加分</h4>
+<ul>
+<li class="task"><label><input type="checkbox" data-k="10"><span class="cbt"></span><span class="ctxt">AI 方向交引用、拒答与逐题评测；后端方向交故障实验与回归结果。</span></label></li>
+</ul>
+<h4 class="sub">P5 面试证据</h4>
+<ul>
+<li class="task"><label><input type="checkbox" data-k="11"><span class="cbt"></span><span class="ctxt">项目能讲 5 分钟并接十轮追问，指标有原始记录。</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="12"><span class="cbt"></span><span class="ctxt">简历一页且每条可自证，完成至少两次模拟并修复共性问题。</span></label></li>
+</ul>
+<h2 id="sec-10"><span class="h2-num"></span>10. 常见死法：失败要能定位</h2>
+<p>这节帮你止损：把拒绝变成能修的缺口。</p>
+<div class="table-wrap"><table class="table"><thead><tr><th>失败表现</th><th>下次行动</th></tr></thead><tbody><tr><td>学了一堆却没有能运行的项目</td><td>暂停新课，先交一条从请求到数据库的完整路径。</td></tr><tr><td>项目讲架构，追问只说“框架帮我做了”</td><td>选一条请求画调用路径，逐层做一次失败实验。</td></tr><tr><td>刷题只记答案，换输入就错</td><td>先手推边界，再关答案重写；记录识别特征和反例。</td></tr><tr><td>简历写满 AI 名词，没有效果证据</td><td>删除未做内容，补同一题集上的对照与失败样例。</td></tr><tr><td>不会却硬猜，越答越矛盾</td><td>明确已知与未知，提出最小验证步骤。</td></tr></tbody></table></div>
+<h2 id="sec-11"><span class="h2-num"></span>11. 版本与来源：让材料可核对</h2>
+<p>这节帮你避免版本混用；运行依赖以实际项目为准。</p>
+<p>2026-10-19 核验：JDK 25 LTS、Spring Boot 4.1.x、Spring AI 2.0.x、LangChain4j 1.22.x。LTS 是长期支持标记，具体条款看发行版。</p>
+<p>依据为 <a href="https://www.oracle.com/java/technologies/java-se-support-roadmap.html">Oracle 支持路线</a>、<a href="https://github.com/spring-projects/spring-boot/releases/tag/v4.1.1">Boot 4.1.1 发布</a>、<a href="https://github.com/spring-projects/spring-ai/releases/tag/v2.0.1">Spring AI 2.0.1 发布</a>、<a href="https://github.com/langchain4j/langchain4j/releases/tag/1.22.0">LangChain4j 1.22.0 发布</a>。Spring AI 官方入门说明支持 Boot 4.0.x／4.1.x；LangChain4j 部分模块带 beta 后缀，按模块文档选，别统一替换数字。</p>
+<p>本文未实跑这些 Java 组合。建项目时锁定补丁版本、跑最小测试；外链本次 curl 均返回 200，未来可能变化。</p>
+<p><strong>关于这份文档</strong>：主骨架来自飞书《后端学习路线》（花绿青），由本仓库长线版再编。AI 应用开发及求职训练为方法论外推，不是面试题库或录用保证。沿用 CC BY 4.0。</p>
+</main>
+</div>
+
+<button class="totop" aria-label="回到顶部">↑</button>
+<script>
+const pbar=document.getElementById('pbar');
+const totop=document.querySelector('.totop');
+function onScroll(){
+  const h=document.documentElement;
+  const p=h.scrollTop/(h.scrollHeight-h.clientHeight);
+  pbar.style.width=(p*100)+'%';
+  totop.classList.toggle('on',h.scrollTop>600);
+  let cur=null;
+  document.querySelectorAll('.content h2[id]').forEach(el=>{
+    if(el.getBoundingClientRect().top<120) cur=el.id;
+  });
+  document.querySelectorAll('.toc-list a').forEach(a=>{
+    a.classList.toggle('on',a.getAttribute('href')==='#'+cur);
+  });
+}
+document.addEventListener('scroll',onScroll,{passive:true});onScroll();
+totop.onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
+/* ---------- 提示词抽屉 ---------- */
+(function(){
+  var dlg=document.getElementById('prompt-dialog'); if(!dlg) return;
+  var fab=document.getElementById('prompt-fab');
+  var cards=[].slice.call(dlg.querySelectorAll('.p-card'));
+  var orig={};
+  cards.forEach(function(c,i){ orig[i]=c.querySelector('.p-body').value; });
+  var PH=/\[(章节|概念 A|概念 B|概念|主题|结论)\]/g;
+  var lastEl=document.getElementById('p-last');
+
+  function updateLast(){
+    if(!lastEl) return;
+    try{
+      var d=JSON.parse(localStorage.getItem('cs-roadmap-prompt')||'null');
+      if(!d){ lastEl.textContent='点任意卡片的「复制」就能开始，会记住你上次用的模板。'; return; }
+      var days=Math.floor((Date.now()-new Date(d.at).getTime())/86400000);
+      lastEl.textContent='上次使用：'+d.title+'（'+(days<=0?'今天':days+' 天前')+'）';
+    }catch(e){}
+  }
+  updateLast();
+
+  if(fab) fab.addEventListener('click',function(){
+    if(dlg.showModal) dlg.showModal(); else dlg.setAttribute('open','');
+    requestAnimationFrame(function(){
+      cards.forEach(function(c){ fit(c.querySelector('.p-body')); });
+    });
+  });
+  var closeBtn=dlg.querySelector('.p-close');
+  if(closeBtn) closeBtn.addEventListener('click',function(){ dlg.close(); });
+  dlg.addEventListener('click',function(e){ if(e.target===dlg) dlg.close(); });
+
+  function fit(ta){ ta.style.height='auto'; ta.style.height=(ta.scrollHeight+2)+'px'; }
+
+  cards.forEach(function(c,i){
+    var topic=c.querySelector('.p-topic'), ta=c.querySelector('.p-body'), btn=c.querySelector('.p-copy');
+    fit(ta);
+    topic.addEventListener('input',function(){
+      var t=topic.value.trim();
+      ta.value = t ? orig[i].replace(PH,t) : orig[i];
+      fit(ta);
+    });
+    btn.addEventListener('click',function(){
+      var done=function(){
+        try{ localStorage.setItem('cs-roadmap-prompt', JSON.stringify({
+          n:c.dataset.n, title:c.querySelector('.p-title').textContent, at:new Date().toISOString()
+        })); }catch(e){}
+        btn.textContent='已复制 ✓'; updateLast();
+        setTimeout(function(){ btn.textContent='复制'; },1500);
+      };
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(ta.value).then(done, function(){ ta.select(); document.execCommand('copy'); done(); });
+      }else{ ta.select(); document.execCommand('copy'); done(); }
+    });
+  });
+})();
+
+/* ---------- 本周三件事 ---------- */
+(function(){
+  var card=document.getElementById('week-card'); if(!card) return;
+  var listEl=document.getElementById('wk-list');
+  var phaseEl=document.getElementById('wk-phase');
+  var weekEl=document.getElementById('wk-week');
+  var progEl=document.getElementById('wk-progress');
+  var tipEl=document.getElementById('wk-tip');
+  var startBtn=document.getElementById('wk-start');
+  var PLAN_KEY='cs-roadmap-plan';
+  var plan={};
+  try{ plan=JSON.parse(localStorage.getItem(PLAN_KEY)||'{}')||{}; }catch(e){ plan={}; }
+
+  function savePlan(){ try{ localStorage.setItem(PLAN_KEY, JSON.stringify(plan)); }catch(e){} }
+
+  // 收集「清单里的各阶段」：h4.sub 以 P0/P1… 开头，后面跟若干 li.task
+  function collectPhases(){
+    var out=[];
+    document.querySelectorAll('.content h4.sub').forEach(function(h){
+      var t=(h.textContent||'').trim();
+      if(!/^P\d/.test(t)) return;
+      var ins=[], n=h.nextElementSibling;
+      while(n && !/^H[234]$/.test(n.tagName)){
+        if(n.tagName==='UL'){
+          var f=n.querySelectorAll('li.task input[data-k]');
+          for(var i=0;i<f.length;i++) ins.push(f[i]);
+        }
+        n=n.nextElementSibling;
+      }
+      if(ins.length) out.push({name:t, inputs:ins});
+    });
+    return out;
+  }
+
+  function weekNumber(){
+    if(!plan.startedAt) return null;
+    var d=Date.now()-new Date(plan.startedAt).getTime();
+    return Math.max(1, Math.floor(d/604800000)+1);
+  }
+
+  function render(){
+    var phases=collectPhases();
+    var cur=null;
+    for(var i=0;i<phases.length;i++){
+      if(phases[i].inputs.some(function(x){return !x.checked;})){ cur=phases[i]; break; }
+    }
+    if(!phases.length){ phaseEl.textContent='（清单未找到）'; return; }
+
+    var wk=weekNumber();
+    weekEl.textContent = wk ? ('第 '+wk+' 周') : '尚未开始';
+    startBtn.textContent = wk ? '重新开始' : '开始记录';
+
+    if(!cur){
+      phaseEl.textContent='全部完成 🎉';
+      tipEl.textContent='105 项全过了。接下来只剩一件事：把它们变成两个能讲清楚的项目。';
+      listEl.innerHTML='<li class="wk-done">你已走完全部清单</li>';
+      progEl.textContent='';
+      return;
+    }
+    phaseEl.textContent=cur.name;
+    tipEl.textContent = wk ? '本周只做这三件。做完自动换下一批。'
+                           : '点「开始记录」，之后每次打开都会告诉你第几周、这周做什么。';
+
+    var pending=cur.inputs.filter(function(x){return !x.checked;}).slice(0,3);
+    listEl.innerHTML='';
+    pending.forEach(function(src){
+      var lab=src.closest('label');
+      var txt=lab? (lab.querySelector('.ctxt')||{}).textContent||'' : '';
+      var li=document.createElement('li');
+      li.className='task';
+      li.innerHTML='<label><input type="checkbox"><span class="cbt"></span><span class="ctxt"></span></label>';
+      li.querySelector('.ctxt').textContent=txt;
+      li.querySelector('input').addEventListener('change',function(e){
+        src.checked=e.target.checked;
+        src.dispatchEvent(new Event('change',{bubbles:true}));
+        render();
+      });
+      listEl.appendChild(li);
+    });
+    var done=cur.inputs.filter(function(x){return x.checked;}).length;
+    progEl.textContent='本阶段 '+done+' / '+cur.inputs.length+' 项';
+  }
+
+  startBtn.addEventListener('click',function(){
+    if(plan.startedAt && !confirm('重新开始会重置"第 N 周"的计数（勾选进度不受影响），确定吗？')) return;
+    plan.startedAt=new Date().toISOString(); plan.version=1; savePlan(); render();
+  });
+
+  document.addEventListener('change',function(e){
+    if(e.target && e.target.matches && e.target.matches('li.task input[data-k]')) render();
+  });
+
+  render();
+})();
+
+/* 仅在内容真正溢出时显示横滑提示 */
+function markScrollable(){
+  document.querySelectorAll('.table-wrap, .dgm-wrap').forEach(function(w){
+    w.classList.toggle('scrollable', w.scrollWidth > w.clientWidth + 4);
+  });
+}
+markScrollable();
+window.addEventListener('resize', markScrollable);
+window.addEventListener('load', markScrollable);
+
+const KEY='cs-roadmap-checks';
+let saved={};
+try{saved=JSON.parse(localStorage.getItem(KEY)||'{}');}catch(e){saved={};}
+const boxes=[...document.querySelectorAll('li.task input[data-k]')];
+boxes.forEach(cb=>{
+  const k=cb.dataset.k;
+  if(saved[k]) cb.checked=true;
+  cb.addEventListener('change',()=>{
+    saved[k]=cb.checked;
+    try{localStorage.setItem(KEY,JSON.stringify(saved));}catch(e){}
+  });
+});
+/* 注册 Service Worker：装到主屏幕 + 断网可看（file:// 下自动跳过） */
+if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('./sw.js').catch(function(){});
+  });
+}
+
+document.querySelectorAll('.codeblock').forEach(box=>{
+  const btn=box.querySelector('.copy');
+  btn.onclick=async()=>{
+    const t=box.querySelector('code').innerText;
+    try{await navigator.clipboard.writeText(t);btn.textContent='✓ 已复制';}
+    catch(e){btn.textContent='复制失败';}
+    setTimeout(()=>btn.textContent='复制',1600);
+  };
+});
+
+/* ---------- 进度统计 / 导入导出 ---------- */
+const ckCount=document.getElementById('ck-count');
+const ckTotal=document.getElementById('ck-total');
+const ckFill=document.getElementById('ck-fill');
+function refreshCk(){
+  if(!ckTotal) return;
+  const total=boxes.length, done=boxes.filter(b=>b.checked).length;
+  ckCount.textContent=done; ckTotal.textContent=total;
+  ckFill.style.width=(total?done/total*100:0)+'%';
+}
+refreshCk();
+boxes.forEach(cb=>cb.addEventListener('change',refreshCk));
+const expBtn=document.getElementById('ck-export');
+if(expBtn){
+  expBtn.onclick=()=>{
+    const data={project:'java-to-ai-roadmap',version:1,exportedAt:new Date().toISOString(),checked:saved};
+    const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='cs-roadmap-progress-'+new Date().toISOString().slice(0,10)+'.json';
+    a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+    expBtn.textContent='已导出 ✓'; setTimeout(()=>expBtn.textContent='导出进度',1600);
+  };
+  const fileInput=document.getElementById('ck-file');
+  document.getElementById('ck-import').onclick=()=>fileInput.click();
+  fileInput.onchange=async()=>{
+    const f=fileInput.files[0]; if(!f) return;
+    try{
+      const j=JSON.parse(await f.text());
+      const c=j.checked||j.saved||{};
+      Object.keys(saved).forEach(k=>delete saved[k]);
+      Object.assign(saved,c);
+      try{localStorage.setItem(KEY,JSON.stringify(saved));}catch(e){}
+      boxes.forEach(cb=>{cb.checked=!!saved[cb.dataset.k];});
+      refreshCk();
+      const b=document.getElementById('ck-import');
+      b.textContent='已导入 ✓'; setTimeout(()=>b.textContent='导入',1600);
+    }catch(e){ alert('导入失败：文件格式不对'); }
+    fileInput.value='';
+  };
+  document.getElementById('ck-reset').onclick=()=>{
+    if(!confirm('确定清空所有打勾记录？此操作不可撤销。')) return;
+    Object.keys(saved).forEach(k=>delete saved[k]);
+    try{localStorage.removeItem(KEY);}catch(e){}
+    boxes.forEach(cb=>{cb.checked=false;});
+    refreshCk();
+  };
+}
+</script>
+</body>
+</html>

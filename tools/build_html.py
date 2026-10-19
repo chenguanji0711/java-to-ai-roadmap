@@ -185,6 +185,58 @@ def callout(kind, body_lines):
             f'<div class="c-body"><b class="c-label">{label}</b>{body}</div></div>')
 
 
+def render_chain_svg(code):
+    """把 `flowchart TD` + `A[标签] --> B[标签]` 这种简单链路渲染成纵向 SVG。
+
+    返回 None 表示不是这种格式（交给后面的专用图示处理）。
+    这样实习版的小图不需要新增一套构建分支，也不会和长线版的大图混淆。
+    """
+    lines = [l.strip() for l in code.strip().splitlines() if l.strip()]
+    if not lines or not lines[0].startswith("flowchart"):
+        return None
+    pat = re.compile(r'^(\w+)(?:\[(.*?)\])?\s*-->\s*(\w+)(?:\[(.*?)\])?$')
+    order, labels, edges = [], {}, []
+    for ln in lines[1:]:
+        m = pat.match(ln)
+        if not m:
+            return None
+        a, la, b, lb = m.groups()
+        for k, lab in ((a, la), (b, lb)):
+            if k not in labels:
+                labels[k] = ""
+                order.append(k)
+            if lab:
+                labels[k] = lab.strip().strip('"').replace("<br/>", " / ")
+        edges.append((a, b))
+    if not edges or len(order) > 8:
+        return None
+
+    W, BH, GAP, PAD = 520, 46, 26, 18
+    H = PAD * 2 + len(order) * BH + (len(order) - 1) * GAP
+    cx = W // 2
+    y_of = {}
+    parts = ['<figure class="dgm-wrap"><svg viewBox="0 0 %d %d" class="dgm" role="img" '
+             'aria-label="流程示意图">' % (W, H),
+             '<defs><marker id="arc" markerWidth="9" markerHeight="9" refX="7" refY="4" '
+             'orient="auto"><path d="M0,0 L8,4 L0,8 Z" class="arhead"/></marker></defs>']
+    for i, n in enumerate(order):
+        y = PAD + i * (BH + GAP)
+        y_of[n] = y
+        parts.append('<rect class="box" x="%d" y="%d" width="%d" height="%d" rx="10"/>'
+                     % (cx - 200, y, 400, BH))
+        parts.append('<text class="t1" x="%d" y="%d">%s</text>'
+                     % (cx, y + 29, html.escape(labels[n] or n)))
+    for a, b in edges:
+        if a in y_of and b in y_of:
+            y1 = y_of[a] + BH
+            y2 = y_of[b]
+            if y2 > y1:
+                parts.append('<line class="arrow" x1="%d" y1="%d" x2="%d" y2="%d" '
+                             'marker-end="url(#arc)"/>' % (cx, y1, cx, y2 - 4))
+    parts.append('</svg></figure>')
+    return "\n".join(parts)
+
+
 def code_block(lang, code):
     if lang == "mermaid":
         c = code.strip()
@@ -194,6 +246,9 @@ def code_block(lang, code):
             return TREE
         if "① 复习" in c:
             return LOOP_SVG
+        chain = render_chain_svg(c)
+        if chain:
+            return chain
         return DEP_SVG
     if lang == "dep":
         return DEP_SVG
@@ -493,6 +548,14 @@ body{
 }
 .progress{position:fixed;top:0;left:0;right:0;height:3px;background:transparent;z-index:99}
 .progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--amber))}
+
+/* ---------- 版本导航 ---------- */
+.edition-nav{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 18px;padding:4px;
+  border:1px solid var(--line);border-radius:999px;background:var(--card);width:fit-content;
+  box-shadow:var(--shadow);font-size:13px}
+.edition-nav a{text-decoration:none;color:var(--muted);padding:6px 14px;border-radius:999px;transition:.15s}
+.edition-nav a:hover{color:var(--red)}
+.edition-nav a.on{background:var(--red);color:#fff;font-weight:600}
 
 /* ---------- hero ---------- */
 .hero{
@@ -1105,7 +1168,7 @@ WEEK_CARD = """<section class="week-card" id="week-card" aria-label="本周三�
   </div>
 </section>"""
 
-HERO = """
+HERO_LONG = """
 <header class="hero">
   <span class="kicker">计算机学习地图 · 2026 版</span>
   <h1>别收藏<em>第 51 份</em>路线图了</h1>
@@ -1120,6 +1183,34 @@ HERO = """
   这篇只解决三件事——<b>为什么是这个顺序</b>、<b>什么时候算学会了</b>、<b>卡住了怎么办</b>。</blockquote>
 </header>
 """
+
+EDITION = (sys.argv[3] if len(sys.argv) > 3 else "long").strip().lower()
+EDITION_NAV = (
+    '<nav class="edition-nav">'
+    '<a href="./" class="%s">长线版 · 20–26 个月</a>'
+    '<a href="intern.html" class="%s">实习冲刺版 · 8–24 周</a>'
+    '</nav>' % ("on" if EDITION != "intern" else "", "on" if EDITION == "intern" else "")
+)
+
+HERO_INTERN = """
+<header class="hero">
+  <span class="kicker">计算机学习地图 · 实习冲刺版</span>
+  <h1>把所学变成<em>面试证据</em></h1>
+  <p class="sub">Java 后端为主线，AI 应用为加分项：<br><b>8 / 16 / 24 周</b>可执行手册，目标是通过初筛与技术面。</p>
+  <div class="chips">
+    <span class="chip">⏱ 8–24 周，按你的起点选</span>
+    <span class="chip">🎯 目标：简历过筛 + 技术面</span>
+    <span class="chip">📦 每周交三样：代码 · 验证记录 · 讲解</span>
+    <span class="chip">📅 更新于 2026-10-19</span>
+  </div>
+  <blockquote>面试官不关心你用了多少技术，只关心<b>出事时你知不知道往哪看</b>。<br>
+  这份手册只做一件事：把「我学过」变成「我能证明」。</blockquote>
+</header>
+"""
+
+HERO = HERO_INTERN if EDITION == "intern" else HERO_LONG
+PAGE_TITLE = ("2026 实习冲刺版 · 把所学变成面试证据" if EDITION == "intern"
+              else "别收藏第 51 份路线图了 · 计算机学习地图（Java → AI 应用）")
 
 PROMPTS_HTML = _render_prompts(prompts)
 
@@ -1136,7 +1227,7 @@ doc = f"""<!doctype html>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%97%BA%EF%B8%8F%3C/text%3E%3C/svg%3E">
-<title>别收藏第 51 份路线图了 · 计算机学习地图（Java → AI 应用）</title>
+<title>{PAGE_TITLE}</title>
 <meta name="description" content="一份能陪你走两年的计算机学习路径：从零基础到能用 Java 做 AI 应用。含依赖关系图、阶段验收标准、AI 对话模板、每日闭环与可勾选清单。">
 <style>{CSS}</style>
 </head>
@@ -1146,6 +1237,7 @@ doc = f"""<!doctype html>
 <div class="layout">
 <aside class="toc">{toc_html}</aside>
 <main class="content">
+{EDITION_NAV}
 {toc_mobile}
 {WEEK_CARD}
 {body}

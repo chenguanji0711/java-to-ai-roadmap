@@ -49,6 +49,14 @@ body{
 .progress{position:fixed;top:0;left:0;right:0;height:3px;background:transparent;z-index:99}
 .progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--amber))}
 
+/* ---------- 版本导航 ---------- */
+.edition-nav{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 18px;padding:4px;
+  border:1px solid var(--line);border-radius:999px;background:var(--card);width:fit-content;
+  box-shadow:var(--shadow);font-size:13px}
+.edition-nav a{text-decoration:none;color:var(--muted);padding:6px 14px;border-radius:999px;transition:.15s}
+.edition-nav a:hover{color:var(--red)}
+.edition-nav a.on{background:var(--red);color:#fff;font-weight:600}
+
 /* ---------- hero ---------- */
 .hero{
   padding:72px 24px 40px;max-width:900px;margin:0 auto;text-align:left;
@@ -395,6 +403,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
 <div class="layout">
 <aside class="toc"><div class="toc-title">目录</div><ul class="toc-list"><li><a href="#sec-1">0. 先别读，先对号入座</a><ul></ul></li><li><a href="#sec-2">1. 五分钟读完（真的只要五分钟）</a><ul></ul></li><li><a href="#sec-3">2. 先说清楚：这份东西是怎么来的</a><ul></ul></li><li><a href="#sec-4">3. 一个比喻，管住整篇文章：学计算机 = 盖一栋楼</a><ul></ul></li><li><a href="#sec-5">4. 核心：为什么这个顺序不能反</a><ul></ul></li><li><a href="#sec-6">5. 你需要多久（看这张图就行）</a><ul></ul></li><li><a href="#sec-7">6. 九个阶段，一页看完</a><ul><li><a href="#phase-p0">P0 · 学习基建（1–2 周）</a></li><li><a href="#phase-p1">P1 · Java 语言核心（8–10 周）</a></li><li><a href="#phase-p2">P2 · 数据结构与算法（第 3 周启动，跑到底）</a></li><li><a href="#phase-p3">P3 · 操作系统 → 计算机网络（8 周 + 6 周）</a></li><li><a href="#phase-p4">P4 · 数据库（8 周）</a></li><li><a href="#phase-p5">P5 · 软件工程与工程工具（4–6 周，穿插）</a></li><li><a href="#phase-p6">P6 · Java 企业级后端（12–16 周）</a></li><li><a href="#phase-p7">P7 · AI 应用开发（12 周 + 长期）</a></li><li><a href="#phase-p8">P8 · 项目与作品集（与 P6/P7 并行）</a></li></ul></li><li><a href="#sec-8">7. 名词人话表（看不懂术语时回来查）</a><ul></ul></li><li><a href="#sec-9">8. 怎么和 AI 学（这是全篇最值钱的一节）</a><ul></ul></li><li><a href="#sec-10">9. 怎么算"真的学会了"（四级阶梯）</a><ul></ul></li><li><a href="#sec-11">10. 每天 90 分钟，怎么过</a><ul></ul></li><li><a href="#sec-12">11. 三张清单</a><ul></ul></li><li><a href="#sec-13">12. 七个坑（都是我自己踩过的）</a><ul></ul></li><li><a href="#sec-14">13. 今天就能做的三件事</a><ul></ul></li><li><a href="#sec-15">附录 A：版本基线（2026-10 实测）</a><ul></ul></li><li><a href="#sec-16">附录 B：核心链接（全部于 2026-10-19 实测可达）</a><ul></ul></li><li><a href="#sec-17">最后一句</a><ul></ul></li></ul><div class="toc-note">☑️ 清单里打勾会自动保存在本机浏览器<br>🖨️ 可直接打印 / 存为 PDF</div></aside>
 <main class="content">
+<nav class="edition-nav"><a href="./" class="on">长线版 · 20–26 个月</a><a href="intern.html" class="">实习冲刺版 · 8–24 周</a></nav>
 <details class="toc-mobile"><summary>📑 目录（点开）</summary><div class="toc-title">目录</div><ul class="toc-list"><li><a href="#sec-1">0. 先别读，先对号入座</a><ul></ul></li><li><a href="#sec-2">1. 五分钟读完（真的只要五分钟）</a><ul></ul></li><li><a href="#sec-3">2. 先说清楚：这份东西是怎么来的</a><ul></ul></li><li><a href="#sec-4">3. 一个比喻，管住整篇文章：学计算机 = 盖一栋楼</a><ul></ul></li><li><a href="#sec-5">4. 核心：为什么这个顺序不能反</a><ul></ul></li><li><a href="#sec-6">5. 你需要多久（看这张图就行）</a><ul></ul></li><li><a href="#sec-7">6. 九个阶段，一页看完</a><ul><li><a href="#phase-p0">P0 · 学习基建（1–2 周）</a></li><li><a href="#phase-p1">P1 · Java 语言核心（8–10 周）</a></li><li><a href="#phase-p2">P2 · 数据结构与算法（第 3 周启动，跑到底）</a></li><li><a href="#phase-p3">P3 · 操作系统 → 计算机网络（8 周 + 6 周）</a></li><li><a href="#phase-p4">P4 · 数据库（8 周）</a></li><li><a href="#phase-p5">P5 · 软件工程与工程工具（4–6 周，穿插）</a></li><li><a href="#phase-p6">P6 · Java 企业级后端（12–16 周）</a></li><li><a href="#phase-p7">P7 · AI 应用开发（12 周 + 长期）</a></li><li><a href="#phase-p8">P8 · 项目与作品集（与 P6/P7 并行）</a></li></ul></li><li><a href="#sec-8">7. 名词人话表（看不懂术语时回来查）</a><ul></ul></li><li><a href="#sec-9">8. 怎么和 AI 学（这是全篇最值钱的一节）</a><ul></ul></li><li><a href="#sec-10">9. 怎么算"真的学会了"（四级阶梯）</a><ul></ul></li><li><a href="#sec-11">10. 每天 90 分钟，怎么过</a><ul></ul></li><li><a href="#sec-12">11. 三张清单</a><ul></ul></li><li><a href="#sec-13">12. 七个坑（都是我自己踩过的）</a><ul></ul></li><li><a href="#sec-14">13. 今天就能做的三件事</a><ul></ul></li><li><a href="#sec-15">附录 A：版本基线（2026-10 实测）</a><ul></ul></li><li><a href="#sec-16">附录 B：核心链接（全部于 2026-10-19 实测可达）</a><ul></ul></li><li><a href="#sec-17">最后一句</a><ul></ul></li></ul><div class="toc-note">☑️ 清单里打勾会自动保存在本机浏览器<br>🖨️ 可直接打印 / 存为 PDF</div></details>
 <section class="week-card" id="week-card" aria-label="本周三件事">
   <div class="wk-top">
