@@ -1,5 +1,7 @@
 # 别收藏第 51 份路线图了
 
+<sub>[English](README.en.md) · **简体中文**</sub>
+
 > 一份能陪你走两年的计算机学习地图：从零基础，到能用 **Java** 做出 **AI 应用**。
 
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](LICENSE)

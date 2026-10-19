@@ -91,20 +91,33 @@
 
 ## 4. 核心：为什么这个顺序不能反
 
-```dep
-学习基建（工具 · AI · 信息渠道）
-        ↓
-Java 语言（表达力）
-        ↓   ← 算法并行轨从这里开始，跑到最后
-数据结构与算法（组织力）
-        ↓
-操作系统 → 计算机网络（结构力）
-        ↓
-数据库（持久力）        工程工具（协作力）
-        ↓                      ↓
-Spring 后端（能交付系统）
-        ↓
-AI 应用开发（智能力）
+```mermaid
+flowchart TD
+    P0["P0 学习基建<br/>工具 · AI · 信息渠道"]
+    P1["P1 Java 语言<br/>表达力"]
+    P2["P2 数据结构与算法<br/>组织力"]
+    P3["P3 操作系统 → 计算机网络<br/>结构力"]
+    P4["P4 数据库<br/>持久力"]
+    P5["P5 工程工具<br/>协作力"]
+    P6["P6 Spring 后端<br/>能交付系统"]
+    P7["P7 AI 应用开发<br/>智能力"]
+    ALG["P2 算法并行轨<br/>每天 30 分钟，跑到最后"]
+
+    P0 --> P1 --> P2 --> P3
+    P3 --> P4
+    P3 --> P5
+    P4 --> P6
+    P5 --> P6
+    P6 --> P7
+    P2 -.-> ALG
+    ALG -.-> P7
+
+    classDef key fill:#fdf1ef,stroke:#b3392b,stroke-width:2px,color:#1a1b1e
+    classDef goal fill:#fff8ec,stroke:#b45309,stroke-width:2px,color:#1a1b1e
+    classDef para fill:#eff4ff,stroke:#1d4ed8,stroke-dasharray:5 4,color:#1a1b1e
+    class P3,P6 key
+    class P7 goal
+    class ALG para
 ```
 
 ### 反例一：先学 Spring，再学网络
@@ -131,17 +144,23 @@ AI 应用开发（智能力）
 
 ## 5. 你需要多久（看这张图就行）
 
-```gantt
-月份   1    3    6    9   12   15   18   21   24
-P0 基建 ▓▓
-P1 Java      ▓▓▓▓▓▓
-P2 算法      ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  每天30–60分钟，跑到最后
-P3 系统            ▓▓▓▓▓▓▓▓
-P4 数据库                  ▓▓▓▓▓▓
-P5 工程        ░░░░░░░░░░░░░░░░  穿插
-P6 后端                      ▓▓▓▓▓▓▓▓▓
-P7 AI                                  ▓▓▓▓▓
-P8 项目                      ░░░░░░░░░░░░░░░░░░  与 P6/P7 并行
+```mermaid
+gantt
+    title 时间轴（起点示意，按你的实际开始时间整体平移）
+    dateFormat YYYY-MM-DD
+    axisFormat %m月
+    section 主线
+    P0 学习基建      :p0, 2026-01-05, 14d
+    P1 Java 语言     :p1, after p0, 70d
+    P3 操作系统      :os, after p1, 56d
+    P3 计算机网络    :net, after os, 42d
+    P4 数据库        :db, after net, 56d
+    P6 Spring 后端   :boot, after db, 112d
+    P7 AI 应用开发   :ai, after boot, 84d
+    section 并行轨
+    P2 算法 不中断   :alg, 2026-01-19, 546d
+    P5 工程工具 穿插 :eng, 2026-02-16, 308d
+    P8 项目 并行     :proj, after db, 280d
 ```
 
 **每周 8–12 小时怎么来的**：工作日晚 60–90 分钟 × 4–5 天 + 周末一次 3–4 小时整块。
@@ -582,14 +601,15 @@ Kubernetes 深入、Service Mesh、云原生全家桶。
 
 ## 9. 怎么算"真的学会了"（四级阶梯）
 
-```tree
-L4 改造 ── 能改代码、调参数、排故障、做取舍
-   ▲
-L3 迁移 ── 换个场景/换个技术，还能用
-   ▲
-L2 因果 ── 能回答"为什么这样设计？不这样会怎样？"
-   ▲
-L1 记忆 ── 能说出名词和步骤
+```mermaid
+flowchart BT
+    L1["L1 记忆<br/>能说出名词和步骤"]
+    L2["L2 因果<br/>能回答为什么、不这样会怎样"]
+    L3["L3 迁移<br/>换个场景或技术还能用"]
+    L4["L4 改造<br/>能改代码、排故障、做取舍"]
+    L1 --> L2 --> L3 --> L4
+    classDef top fill:#fdf1ef,stroke:#b3392b,stroke-width:2px,color:#1a1b1e
+    class L4 top
 ```
 
 举个具体的：
@@ -610,8 +630,10 @@ L1 记忆 ── 能说出名词和步骤
 
 ## 10. 每天 90 分钟，怎么过
 
-```loop
-复习 10 分钟 → 读 30 分钟 → 写代码 30 分钟 → 问 AI 15 分钟 → 复盘 5 分钟
+```mermaid
+flowchart LR
+    A["① 复习<br/>10 分钟"] --> B["② 读<br/>30 分钟"] --> C["③ 写代码<br/>30 分钟"] --> D["④ 问 AI<br/>15 分钟"] --> E["⑤ 复盘<br/>5 分钟"]
+    E -.->|第二天| A
 ```
 
 **关键顺序：读 → 写 → 问。不要读 → 问。**
