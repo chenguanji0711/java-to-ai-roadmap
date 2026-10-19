@@ -631,8 +631,9 @@ flowchart BT
 ## 10. 每天 90 分钟，怎么过
 
 ```mermaid
+%%{init: {"flowchart": {"nodeSpacing": 18, "rankSpacing": 28, "htmlLabels": true}} }%%
 flowchart LR
-    A["① 复习 10 分"] --> B["② 读 30 分"] --> C["③ 写代码 30 分"] --> D["④ 问 AI 15 分"] --> E["⑤ 复盘 5 分"]
+    A["① 复习 10分"] --> B["② 读 30分"] --> C["③ 写代码 30分"] --> D["④ 问AI 15分"] --> E["⑤ 复盘 5分"]
     E -.->|第二天| A
 ```
 
