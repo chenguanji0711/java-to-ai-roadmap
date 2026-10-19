@@ -146,19 +146,19 @@ flowchart TD
 
 ```mermaid
 gantt
-    title 时间轴（起点示意，按你的实际开始时间整体平移）
     dateFormat YYYY-MM-DD
-    axisFormat %m月
+    axisFormat %m
+    todayMarker off
     section 主线
-    P0 学习基建      :p0, 2026-01-05, 14d
-    P1 Java 语言     :p1, after p0, 70d
-    P3 操作系统      :os, after p1, 56d
-    P3 计算机网络    :net, after os, 42d
-    P4 数据库        :db, after net, 56d
-    P6 Spring 后端   :boot, after db, 112d
-    P7 AI 应用开发   :ai, after boot, 84d
+    P0 学习基建   :p0, 2026-01-05, 14d
+    P1 Java       :p1, after p0, 70d
+    P3 操作系统   :os, after p1, 56d
+    P3 计算机网络 :net, after os, 42d
+    P4 数据库     :db, after net, 56d
+    P6 Spring后端 :boot, after db, 112d
+    P7 AI 应用    :ai, after boot, 84d
     section 并行轨
-    P2 算法 不中断   :alg, 2026-01-19, 546d
+    P2 算法 每天30分 :alg, 2026-01-19, 546d
     P5 工程工具 穿插 :eng, 2026-02-16, 308d
     P8 项目 并行     :proj, after db, 280d
 ```
