@@ -153,3 +153,14 @@ That article is written from a **job-hunt sprint** perspective (3–6 months to 
 
 Copy, modify and redistribute freely (including commercially) — **keep attribution**.
 Third-party articles, docs and images remain the property of their original authors.
+
+---
+
+## If this helped you
+
+- ⭐ **Star the repo** — it helps other lost learners find it
+- 🔗 **Send it to one friend who needs it** — more useful than bookmarking
+- 🐛 **Found a dead link or outdated version?** Open an issue and I'll fix it
+- 📅 The checklists get updated when JDK / Spring Boot / Spring AI ship major versions
+
+> One person's learning path is often saved by someone else's roadmap.
