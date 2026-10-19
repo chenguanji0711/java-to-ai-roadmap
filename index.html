@@ -1,0 +1,1000 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#fbf9f4">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%97%BA%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<title>别收藏第 51 份路线图了 · 计算机学习地图（Java → AI 应用）</title>
+<meta name="description" content="一份能陪你走两年的计算机学习路径：从零基础到能用 Java 做 AI 应用。含依赖关系图、阶段验收标准、AI 对话模板、每日闭环与可勾选清单。">
+<style>
+:root{
+  --paper:#fbf9f4; --card:#ffffff; --ink:#1a1b1e; --ink-2:#3d4046; --muted:#6b7280;
+  --line:#e8e3d9; --line-2:#f0ece3;
+  --red:#b3392b; --red-soft:#fdf1ef;
+  --blue:#1d4ed8; --blue-soft:#eff4ff;
+  --green:#0f766e; --green-soft:#ecfdf5;
+  --amber:#b45309; --amber-soft:#fff8ec;
+  --purple:#6d28d9; --purple-soft:#f5f1ff;
+  --hl:#ffe9a8;
+  --shadow:0 1px 2px rgba(24,20,12,.04),0 10px 30px -18px rgba(24,20,12,.18);
+  --radius:14px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#131416; --card:#1b1d20; --ink:#e9e7e3; --ink-2:#c6c4bf; --muted:#9aa0a8;
+    --line:#2b2e33; --line-2:#24272b;
+    --red:#e8837a; --red-soft:#2a1c1a;
+    --blue:#93b4ff; --blue-soft:#18203a;
+    --green:#5eead4; --green-soft:#112622;
+    --amber:#f0b463; --amber-soft:#2a2116;
+    --purple:#c4b5fd; --purple-soft:#211a35;
+    --hl:#5a4a1c;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px -18px rgba(0,0,0,.8);
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",sans-serif;
+  font-size:17px;line-height:1.9;-webkit-font-smoothing:antialiased;
+}
+.progress{position:fixed;top:0;left:0;right:0;height:3px;background:transparent;z-index:99}
+.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--amber))}
+
+/* ---------- hero ---------- */
+.hero{
+  padding:72px 24px 40px;max-width:900px;margin:0 auto;text-align:left;
+  border-bottom:1px solid var(--line-2);
+}
+.kicker{display:inline-block;font-size:13px;letter-spacing:.18em;color:var(--red);
+  border:1px solid var(--red);border-radius:999px;padding:3px 12px;margin-bottom:22px}
+.hero h1{font-size:clamp(30px,5vw,52px);line-height:1.22;margin:0 0 14px;letter-spacing:-.02em;font-weight:800}
+.hero h1 em{font-style:normal;background:linear-gradient(transparent 62%,var(--hl) 62%)}
+.hero .sub{font-size:clamp(16px,2vw,20px);color:var(--ink-2);margin:0 0 26px;line-height:1.7}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.chip{font-size:13px;color:var(--muted);background:var(--card);border:1px solid var(--line);
+  border-radius:999px;padding:4px 12px;box-shadow:var(--shadow)}
+.hero blockquote{margin:0;padding:18px 22px;border-left:4px solid var(--red);
+  background:var(--red-soft);border-radius:0 var(--radius) var(--radius) 0;
+  font-family:Georgia,"Songti SC",serif;font-size:18px;color:var(--ink-2)}
+
+/* ---------- layout ---------- */
+.layout{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);gap:40px;padding:40px 24px 120px}
+@media(min-width:1080px){ .layout{grid-template-columns:230px minmax(0,760px);justify-content:center} }
+.toc{display:none}
+@media(min-width:1080px){
+  .toc{display:block;position:sticky;top:24px;align-self:start;max-height:calc(100vh - 48px);overflow:auto;
+    font-size:13.5px;line-height:1.65;padding-right:8px}
+}
+.toc-title{font-weight:700;font-size:12px;letter-spacing:.16em;color:var(--muted);
+  text-transform:uppercase;margin-bottom:12px}
+.toc-list,.toc-list ul{list-style:none;margin:0;padding:0}
+.toc-list ul{margin-left:10px;border-left:1px solid var(--line);padding-left:9px;display:block;font-size:12.5px;margin-top:2px;margin-bottom:6px}
+.toc-list li{margin:2px 0}
+.toc-list a{color:var(--muted);text-decoration:none;display:block;padding:2px 6px;border-radius:6px}
+.toc-list a:hover{color:var(--ink);background:var(--line-2)}
+.toc-list a.on{color:var(--red);font-weight:600;background:var(--red-soft)}
+
+/* ---------- content ---------- */
+.content{max-width:760px;min-width:0}
+.content h2{
+  font-size:clamp(23px,3vw,30px);line-height:1.35;margin:64px 0 18px;font-weight:800;letter-spacing:-.01em;
+  padding-top:22px;border-top:1px solid var(--line-2);scroll-margin-top:24px;
+}
+.content h2:first-of-type{border-top:0;margin-top:8px}
+.h2-num{color:var(--red);font-variant-numeric:tabular-nums;margin-right:.35em;font-weight:800}
+.content h3{font-size:20px;margin:38px 0 12px;font-weight:700;scroll-margin-top:24px}
+.content h4{font-size:17px;margin:26px 0 10px;color:var(--ink-2)}
+.content p{margin:0 0 18px;color:var(--ink-2)}
+.content strong{font-weight:700;color:var(--ink);background:linear-gradient(transparent 62%,var(--hl) 62%);padding:0 1px}
+.content em{font-style:normal;color:var(--red);font-weight:600}
+.content a{color:var(--blue);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--blue) 30%,transparent);overflow-wrap:break-word}
+.content a:hover{border-bottom-color:var(--blue)}
+.content ul,.content ol{margin:0 0 18px;padding-left:22px}
+.content li{margin:7px 0;color:var(--ink-2)}
+.content li::marker{color:var(--red)}
+.content hr{border:0;height:1px;background:var(--line-2);margin:40px 0}
+
+/* 阶段卡片 */
+.phase{margin:26px 0;padding:22px 24px 8px;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--radius);box-shadow:var(--shadow)}
+.phase h3{margin:0 0 14px;display:flex;align-items:center;gap:12px;font-size:21px}
+.p-badge{display:inline-flex;align-items:center;justify-content:center;min-width:52px;height:30px;padding:0 10px;
+  border-radius:8px;background:var(--red);color:#fff;font-size:14px;font-weight:800;letter-spacing:.04em}
+.phase ul{padding-left:20px}
+
+/* 引用 */
+blockquote.quote{margin:24px 0;padding:16px 20px;border-left:4px solid var(--line);
+  background:var(--line-2);border-radius:0 10px 10px 0;color:var(--ink-2);font-size:16px}
+blockquote.pullquote{margin:30px 0;padding:0 0 0 22px;border-left:5px solid var(--red);
+  font-family:Georgia,"Songti SC","Songti TC",serif;font-size:22px;line-height:1.6;color:var(--ink);font-weight:600}
+blockquote.pullquote strong{background:none}
+blockquote.ending{margin:28px 0 44px;padding:30px 32px;border:1px solid var(--line);
+  border-left:5px solid var(--red);border-radius:var(--radius);
+  background:linear-gradient(180deg,var(--red-soft),var(--card));
+  font-family:Georgia,"Songti SC","Songti TC",serif;font-size:19px;line-height:1.9;
+  color:var(--ink);box-shadow:var(--shadow)}
+blockquote.ending strong{background:none;font-size:22px;display:inline-block;margin-bottom:6px}
+
+/* 提示框 */
+.callout{display:flex;gap:14px;margin:22px 0;padding:16px 18px;border-radius:var(--radius);
+  border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow);align-items:flex-start}
+.callout .c-ico{font-size:20px;line-height:1.4}
+.callout .c-label{display:block;font-size:12px;letter-spacing:.12em;color:var(--muted);margin-bottom:2px}
+.callout.note{background:var(--blue-soft);border-color:color-mix(in srgb,var(--blue) 25%,var(--line))}
+.callout.tip{background:var(--green-soft);border-color:color-mix(in srgb,var(--green) 25%,var(--line))}
+.callout.imp{background:var(--purple-soft);border-color:color-mix(in srgb,var(--purple) 25%,var(--line))}
+.callout.warn{background:var(--amber-soft);border-color:color-mix(in srgb,var(--amber) 25%,var(--line))}
+.callout.danger{background:var(--red-soft);border-color:color-mix(in srgb,var(--red) 30%,var(--line))}
+
+/* 小标题 */
+.content h4.sub{font-size:15.5px;letter-spacing:.02em;font-weight:700;color:var(--ink);
+  margin:30px 0 10px;padding:2px 0 2px 11px;border-left:3px solid var(--red);line-height:1.5}
+.content h4.sub strong{background:none}
+
+/* 可打勾清单 */
+li.task{list-style:none;margin-left:-20px}
+li.task label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;user-select:none}
+li.task input{position:absolute;opacity:0;width:0;height:0}
+li.task .cbt{flex:0 0 18px;height:18px;margin-top:5px;border:1.6px solid var(--muted);
+  border-radius:5px;background:var(--card);position:relative;transition:.16s}
+li.task label:hover .cbt{border-color:var(--red)}
+li.task input:checked + .cbt{background:var(--red);border-color:var(--red)}
+li.task input:checked + .cbt::after{content:"";position:absolute;left:5px;top:1.5px;width:5px;height:9px;
+  border:solid #fff;border-width:0 2px 2px 0;transform:rotate(43deg)}
+li.task input:checked ~ .ctxt{color:var(--muted);text-decoration:line-through}
+.toc-note{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:11.5px;
+  color:var(--muted);line-height:1.6}
+
+/* 手机目录 */
+.toc-mobile{display:block;margin:0 0 10px}
+@media(min-width:1080px){.toc-mobile{display:none}}
+.toc-mobile summary{cursor:pointer;font-size:14px;color:var(--ink-2);padding:12px 16px;
+  border:1px solid var(--line);border-radius:12px;background:var(--card);box-shadow:var(--shadow)}
+.toc-mobile[open] summary{border-radius:12px 12px 0 0}
+.toc-mobile .toc-list{font-size:14px;padding:12px 16px 16px;border:1px solid var(--line);
+  border-top:0;border-radius:0 0 12px 12px;background:var(--card)}
+
+/* 表格 */
+.table-wrap{overflow-x:auto;margin:20px 0;border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--card);box-shadow:var(--shadow)}
+table.table{width:100%;border-collapse:collapse;font-size:15.5px}
+table.table th{background:var(--line-2);text-align:left;font-weight:700;padding:12px 14px;color:var(--ink);
+  border-bottom:1px solid var(--line);white-space:nowrap}
+table.table td{padding:11px 14px;border-bottom:1px solid var(--line-2);color:var(--ink-2);vertical-align:top}
+table.table td:first-child{white-space:nowrap}
+table.table tr:last-child td{border-bottom:0}
+table.table tbody tr:hover{background:color-mix(in srgb,var(--hl) 14%,transparent)}
+table.table-plain td:first-child{white-space:nowrap;color:var(--ink)}
+
+/* 复选框 */
+li.task{list-style:none;margin-left:-20px;display:flex;gap:10px;align-items:flex-start}
+li.task .cb{flex:0 0 16px;height:16px;margin-top:7px;border:1.5px solid var(--muted);border-radius:4px}
+
+/* 代码 */
+.codeblock{position:relative;margin:18px 0}
+.codeblock pre{margin:0;padding:18px 18px;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--radius);overflow-x:auto;box-shadow:var(--shadow)}
+.codeblock code{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:14px;line-height:1.75;
+  color:var(--ink-2);white-space:pre-wrap}
+.codeblock .copy{position:absolute;top:10px;right:10px;font-size:12px;padding:4px 10px;border-radius:8px;
+  border:1px solid var(--line);background:var(--paper);color:var(--muted);cursor:pointer;opacity:0;transition:.2s}
+.codeblock:hover .copy{opacity:1}
+.codeblock .copy:hover{color:var(--red);border-color:var(--red)}
+
+/* 图示 */
+.dgm-wrap{margin:26px 0;padding:24px 18px 14px;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--radius);box-shadow:var(--shadow);overflow-x:auto}
+.dgm{display:block;width:100%;height:auto;min-width:560px}
+.dgm .box{fill:var(--card);stroke:var(--line);stroke-width:1.5}
+.dgm .box-key{stroke:color-mix(in srgb,var(--red) 45%,var(--line));stroke-width:2;
+  fill:color-mix(in srgb,var(--red-soft) 60%,var(--card))}
+.dgm .box-goal{stroke:color-mix(in srgb,var(--amber) 60%,var(--line));stroke-width:2;
+  fill:color-mix(in srgb,var(--amber-soft) 65%,var(--card))}
+.dgm .box-dash{stroke:var(--muted);stroke-dasharray:5 4;fill:transparent}
+.dgm .t1{fill:var(--ink);font-size:14.5px;font-weight:600;text-anchor:middle;
+  font-family:-apple-system,"PingFang SC","Noto Sans SC",sans-serif}
+.dgm .t2{fill:var(--ink-2);font-size:13px;text-anchor:middle;font-family:-apple-system,"PingFang SC",sans-serif}
+.dgm .t3{fill:var(--muted);font-size:11.5px;text-anchor:middle;font-family:-apple-system,"PingFang SC",sans-serif}
+.dgm .arrow{stroke:var(--red);stroke-width:1.8;fill:none}
+.dgm .loopback{stroke:var(--muted);stroke-width:1.6;fill:none;stroke-dasharray:6 4}
+.dgm .dash{stroke:var(--muted);stroke-width:1.5;fill:none;stroke-dasharray:5 4}
+.dgm .arhead{fill:var(--red)}
+.dgm-wrap::after{content:"← 左右滑动可看全图 →";display:none;text-align:center;font-size:12px;color:var(--muted);margin-top:8px}
+@media(max-width:720px){.dgm-wrap::after{display:block}}
+.dgm-wrap figcaption{margin-top:14px;font-size:13.5px;color:var(--muted);text-align:center;line-height:1.7}
+.dgm-wrap figcaption b{color:var(--red)}
+
+/* gantt */
+.gantt{font-size:13px;min-width:560px}
+.g-head,.g-row{display:grid;grid-template-columns:92px 1fr;align-items:center;gap:10px}
+.g-head{margin-bottom:8px}
+.g-scale{display:grid;grid-template-columns:repeat(7,1fr);color:var(--muted);font-size:11px}
+.g-scale i{font-style:normal;text-align:left}
+.g-row{margin:5px 0}
+.g-label{color:var(--ink-2);font-size:12.5px;white-space:nowrap}
+.g-track{position:relative;height:20px;background:var(--line-2);border-radius:6px;
+  background-image:repeating-linear-gradient(90deg,var(--line) 0 1px,transparent 1px 16.66%)}
+.bar{position:absolute;top:0;height:20px;border-radius:6px;display:block}
+.bar-dash{background:repeating-linear-gradient(90deg,color-mix(in srgb,var(--blue) 35%,transparent) 0 6px,transparent 6px 11px);
+  outline:1px dashed color-mix(in srgb,var(--blue) 50%,transparent);outline-offset:-1px}
+.b0{background:var(--muted)}
+.b1{background:var(--green)}
+.b3{background:var(--amber)}
+.b4{background:var(--purple)}
+.b6{background:var(--blue)}
+.b7{background:var(--red)}
+
+/* ladder */
+.ladder{display:flex;flex-direction:column;align-items:center;gap:8px}
+.step{display:flex;align-items:baseline;gap:12px;padding:12px 16px;border-radius:10px;
+  border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow)}
+.step b{font-size:14px;color:var(--red);white-space:nowrap}
+.step span{font-size:13.5px;color:var(--ink-2)}
+.s4{width:56%}.s3{width:72%}.s2{width:88%}.s1{width:100%}
+.s1{background:color-mix(in srgb,var(--line-2) 70%,var(--card))}
+.s4{background:color-mix(in srgb,var(--red-soft) 70%,var(--card))}
+
+/* 回到顶部 */
+.totop{position:fixed;right:22px;bottom:22px;width:42px;height:42px;border-radius:50%;
+  border:1px solid var(--line);background:var(--card);color:var(--muted);cursor:pointer;
+  box-shadow:var(--shadow);font-size:18px;opacity:0;pointer-events:none;transition:.25s;z-index:50}
+.totop.on{opacity:1;pointer-events:auto}
+.totop:hover{color:var(--red);border-color:var(--red)}
+
+footer{max-width:760px;margin:0 auto;padding:0 24px 80px;color:var(--muted);font-size:13px;line-height:1.9}
+footer a{color:var(--muted)}
+
+@media print{
+  .toc,.toc-mobile,.totop,.progress,.copy,.toc-note{display:none!important}
+  body{background:#fff;font-size:12pt}
+  .layout{display:block;padding:0}
+  .phase,.dgm-wrap,.table-wrap,.callout{break-inside:avoid;box-shadow:none}
+  .content h2{break-after:avoid}
+}
+</style>
+</head>
+<body>
+<div class="progress"><div id="pbar"></div></div>
+
+<header class="hero">
+  <span class="kicker">计算机学习地图 · 2026 版</span>
+  <h1>别收藏<em>第 51 份</em>路线图了</h1>
+  <p class="sub">一份能陪你走两年的计算机学习路径：<br>从零基础，到能用 <b>Java</b> 做出 <b>AI 应用</b>。</p>
+  <div class="chips">
+    <span class="chip">📖 精读约 45 分钟</span>
+    <span class="chip">🎯 适合：零基础 · 自学 · 想转 AI 应用</span>
+    <span class="chip">🧭 路线：Java → 系统 → 数据库 → 后端 → AI</span>
+    <span class="chip">📅 更新于 2026-10-19</span>
+  </div>
+  <blockquote>写给和我一样的人：收藏夹里躺着几十个「从入门到精通」，一个都没走完。<br>
+  这篇只解决三件事——<b>为什么是这个顺序</b>、<b>什么时候算学会了</b>、<b>卡住了怎么办</b>。</blockquote>
+</header>
+
+<div class="layout">
+<aside class="toc"><div class="toc-title">目录</div><ul class="toc-list"><li><a href="#sec-1">0. 先别读，先对号入座</a><ul></ul></li><li><a href="#sec-2">1. 五分钟读完（真的只要五分钟）</a><ul></ul></li><li><a href="#sec-3">2. 先说清楚：这份东西是怎么来的</a><ul></ul></li><li><a href="#sec-4">3. 一个比喻，管住整篇文章：学计算机 = 盖一栋楼</a><ul></ul></li><li><a href="#sec-5">4. 核心：为什么这个顺序不能反</a><ul></ul></li><li><a href="#sec-6">5. 你需要多久（看这张图就行）</a><ul></ul></li><li><a href="#sec-7">6. 九个阶段，一页看完</a><ul><li><a href="#phase-p0">P0 · 学习基建（1–2 周）</a></li><li><a href="#phase-p1">P1 · Java 语言核心（8–10 周）</a></li><li><a href="#phase-p2">P2 · 数据结构与算法（第 3 周启动，跑到底）</a></li><li><a href="#phase-p3">P3 · 操作系统 → 计算机网络（8 周 + 6 周）</a></li><li><a href="#phase-p4">P4 · 数据库（8 周）</a></li><li><a href="#phase-p5">P5 · 软件工程与工程工具（4–6 周，穿插）</a></li><li><a href="#phase-p6">P6 · Java 企业级后端（12–16 周）</a></li><li><a href="#phase-p7">P7 · AI 应用开发（12 周 + 长期）</a></li><li><a href="#phase-p8">P8 · 项目与作品集（与 P6/P7 并行）</a></li></ul></li><li><a href="#sec-8">7. 名词人话表（看不懂术语时回来查）</a><ul></ul></li><li><a href="#sec-9">8. 怎么和 AI 学（这是全篇最值钱的一节）</a><ul></ul></li><li><a href="#sec-10">9. 怎么算"真的学会了"（四级阶梯）</a><ul></ul></li><li><a href="#sec-11">10. 每天 90 分钟，怎么过</a><ul></ul></li><li><a href="#sec-12">11. 三张清单</a><ul></ul></li><li><a href="#sec-13">12. 七个坑（都是我自己踩过的）</a><ul></ul></li><li><a href="#sec-14">13. 今天就能做的三件事</a><ul></ul></li><li><a href="#sec-15">附录 A：版本基线（2026-10 实测）</a><ul></ul></li><li><a href="#sec-16">附录 B：核心链接（全部于 2026-10-19 实测可达）</a><ul></ul></li><li><a href="#sec-17">最后一句</a><ul></ul></li></ul><div class="toc-note">☑️ 清单里打勾会自动保存在本机浏览器<br>🖨️ 可直接打印 / 存为 PDF</div></aside>
+<main class="content">
+<details class="toc-mobile"><summary>📑 目录（点开）</summary><div class="toc-title">目录</div><ul class="toc-list"><li><a href="#sec-1">0. 先别读，先对号入座</a><ul></ul></li><li><a href="#sec-2">1. 五分钟读完（真的只要五分钟）</a><ul></ul></li><li><a href="#sec-3">2. 先说清楚：这份东西是怎么来的</a><ul></ul></li><li><a href="#sec-4">3. 一个比喻，管住整篇文章：学计算机 = 盖一栋楼</a><ul></ul></li><li><a href="#sec-5">4. 核心：为什么这个顺序不能反</a><ul></ul></li><li><a href="#sec-6">5. 你需要多久（看这张图就行）</a><ul></ul></li><li><a href="#sec-7">6. 九个阶段，一页看完</a><ul><li><a href="#phase-p0">P0 · 学习基建（1–2 周）</a></li><li><a href="#phase-p1">P1 · Java 语言核心（8–10 周）</a></li><li><a href="#phase-p2">P2 · 数据结构与算法（第 3 周启动，跑到底）</a></li><li><a href="#phase-p3">P3 · 操作系统 → 计算机网络（8 周 + 6 周）</a></li><li><a href="#phase-p4">P4 · 数据库（8 周）</a></li><li><a href="#phase-p5">P5 · 软件工程与工程工具（4–6 周，穿插）</a></li><li><a href="#phase-p6">P6 · Java 企业级后端（12–16 周）</a></li><li><a href="#phase-p7">P7 · AI 应用开发（12 周 + 长期）</a></li><li><a href="#phase-p8">P8 · 项目与作品集（与 P6/P7 并行）</a></li></ul></li><li><a href="#sec-8">7. 名词人话表（看不懂术语时回来查）</a><ul></ul></li><li><a href="#sec-9">8. 怎么和 AI 学（这是全篇最值钱的一节）</a><ul></ul></li><li><a href="#sec-10">9. 怎么算"真的学会了"（四级阶梯）</a><ul></ul></li><li><a href="#sec-11">10. 每天 90 分钟，怎么过</a><ul></ul></li><li><a href="#sec-12">11. 三张清单</a><ul></ul></li><li><a href="#sec-13">12. 七个坑（都是我自己踩过的）</a><ul></ul></li><li><a href="#sec-14">13. 今天就能做的三件事</a><ul></ul></li><li><a href="#sec-15">附录 A：版本基线（2026-10 实测）</a><ul></ul></li><li><a href="#sec-16">附录 B：核心链接（全部于 2026-10-19 实测可达）</a><ul></ul></li><li><a href="#sec-17">最后一句</a><ul></ul></li></ul><div class="toc-note">☑️ 清单里打勾会自动保存在本机浏览器<br>🖨️ 可直接打印 / 存为 PDF</div></details>
+<h2 id="sec-1"><span class="h2-num"></span>0. 先别读，先对号入座</h2>
+<p>如果你中枪三条以上，这篇就是写给你的：</p>
+<ul>
+<li>收藏了几十个学习路线，但<strong>不知道从哪开始</strong></li>
+<li>学了 Java 语法，打开 Spring 教程像看天书</li>
+<li>背了很多八股，被问一句"<strong>为什么</strong>"就答不上来</li>
+<li>想做 AI 应用，一搜全是"微调""RAG""Agent"，越看越慌</li>
+<li>每次重新开始，都从"变量和数据类型"开始</li>
+</ul>
+<p><strong>不是你不够努力。</strong> 是绝大多数路线图只告诉你"学什么"，从不告诉你三件更重要的事：</p>
+<ol>
+<li><strong>为什么是这个顺序</strong>（所以你不知道能不能跳）</li>
+<li><strong>什么时候算学会了</strong>（所以永远觉得没准备好）</li>
+<li><strong>卡住了怎么办</strong>（所以一卡就断，一断就重来）</li>
+</ol>
+<p>这篇只解决这三件事。顺带把顺序、标准、资源、练法都落到能执行的程度。</p>
+<hr>
+<h2 id="sec-2"><span class="h2-num"></span>1. 五分钟读完（真的只要五分钟）</h2>
+<div class="table-wrap"><table class="table table-plain"><tbody><tr><td>🎯 <strong>终点</strong></td><td>能独立做出一个系统，并且能讲清每个设计决策的取舍（<strong>不是</strong>"学完计算机"）</td></tr><tr><td>🧭 <strong>路线</strong></td><td>语言 → 数据结构 → 操作系统 → 网络 → 数据库 → 工程 → Spring 后端 → AI 应用</td></tr><tr><td>⏱️ <strong>时间</strong></td><td>每周 8–12 小时，约 20–26 个月到"能独立交付 AI 应用"</td></tr><tr><td>🧪 <strong>验收</strong></td><td>每阶段都有"出门考"：做不出来，就不进下一阶段</td></tr><tr><td>⚔️ <strong>唯一必须并行的</strong></td><td>算法。第 3 周开始，跑到最后一天</td></tr><tr><td>☠️ <strong>最常见的死法</strong></td><td>跳过基础直接学框架——99% 的人死在这</td></tr></tbody></table></div>
+<div class="callout tip"><span class="c-ico">💡</span><div class="c-body"><b class="c-label">要点</b><strong>三种读法</strong>：① 只有 20 分钟 → 读第 1、2、4 节（终点 / 路线 / 为什么不能跳）；② 想马上动起来 → 直接跳到第 13 节「今天就能做的三件事」；③ 当手册用 → 从目录按阶段查，看不懂的名词去第 7 节。</div></div>
+<blockquote class="pullquote"><strong>一句话记住：每一层的"为什么"，都藏在下面那一层。</strong></blockquote>
+<hr>
+<h2 id="sec-3"><span class="h2-num"></span>2. 先说清楚：这份东西是怎么来的</h2>
+<p>它不是我凭空编的，主骨架来自一篇飞书文档——<strong>《后端学习路线》</strong>（作者「花绿青」，2026 年 7 月写于北京）。</p>
+<p>作者是个 9 本本科生，Java 主语言，写的时候在 TikTok 实习，同期拿了一堆 offer。所以他那份文档的视角是：<strong>3–6 个月冲刺大厂后端</strong>。</p>
+<p>我把它拆了，重新装了一遍。三件事必须坦白：</p>
+<p><strong>① 他的终点是"过面试"，我换成了"能独立做出并讲清一个系统"。</strong> 理由很现实：只盯着面试，最后一定滑向背八股；而"能讲清取舍"这个标准，天然包含面试能力，而且不会过期。</p>
+<p><strong>② 他的时间尺度是 3–6 个月，我拉长到 20 个月以上。</strong> 冲刺和长期是两种运动。冲刺靠爆发，长期靠不受伤。</p>
+<p><strong>③ 他文档末尾写着"未完待续：ai开发篇"——AI 那篇当时没发。</strong> 所以第 7 阶段（AI 应用开发）是我按他的方法论补的，<strong>不是原文内容</strong>。我在文里标了。</p>
+<p>我还<strong>明确不采纳</strong>他一句话：</p>
+<blockquote class="pullquote">❌ "没人在意你究竟做没做这个项目，只要能圆回来就都是你的。"</blockquote>
+<p>这是冲刺期的风险策略。你要长期做 AI 应用，面试官深挖两轮就露馅；更糟的是，这种心态会让你放弃真正动手——那恰好摧毁你的目标。</p>
+<hr>
+<h2 id="sec-4"><span class="h2-num"></span>3. 一个比喻，管住整篇文章：学计算机 = 盖一栋楼</h2>
+<p>后面你会看到很多"为什么不能跳"，用这个比喻看就通了：</p>
+<div class="table-wrap"><table class="table"><thead><tr><th>阶段</th><th>盖楼时你在干什么</th><th>一句话人话</th></tr></thead><tbody><tr><td>P0 学习基建</td><td>平场地、拉电线、请施工队</td><td>工具没搭好，后面每一步都在还债</td></tr><tr><td>P1 Java 语言</td><td>搬砖、和水泥</td><td>没有砖，谈什么设计</td></tr><tr><td>P2 数据结构与算法</td><td>结构力学</td><td>决定楼能盖多高，且<strong>决定后面所有楼层怎么受力</strong></td></tr><tr><td>P3 操作系统 + 网络</td><td>水电管线</td><td><strong>装完就看不见了</strong>，但决定这楼能不能住人</td></tr><tr><td>P4 数据库</td><td>仓库与档案室</td><td>东西存哪、怎么一秒找到</td></tr><tr><td>P5 工程工具</td><td>施工规范与监理</td><td>让第二个人能接手你的工地</td></tr><tr><td>P6 Spring 后端</td><td>装修交付</td><td>能住人了，可以开门迎客</td></tr><tr><td>P7 AI 应用</td><td>装智能家居</td><td>在能住的房子里加"会思考"的能力</td></tr><tr><td>P8 项目</td><td>样板间</td><td>让别人一眼看到你的水平</td></tr></tbody></table></div>
+<p>一句话：<strong>你可以不装智能家居，但不能没有水电。</strong></p>
+<hr>
+<h2 id="sec-5"><span class="h2-num"></span>4. 核心：为什么这个顺序不能反</h2>
+
+<figure class="dgm-wrap">
+<svg viewBox="0 0 720 672" class="dgm" role="img" aria-label="知识依赖关系图">
+<defs><marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto">
+<path d="M0,0 L8,4 L0,8 Z" class="arhead"/></marker></defs>
+
+<rect class="box" x="180" y="20" width="360" height="52" rx="12"/>
+<text class="t1" x="360" y="52">P0 学习基建 · 工具 · AI · 信息渠道</text>
+
+<rect class="box" x="180" y="112" width="360" height="52" rx="12"/>
+<text class="t1" x="360" y="144">P1 Java 语言 · 表达力</text>
+
+<rect class="box" x="180" y="204" width="360" height="52" rx="12"/>
+<text class="t1" x="360" y="236">P2 数据结构与算法 · 组织力</text>
+
+<rect class="box box-key" x="180" y="296" width="360" height="52" rx="12"/>
+<text class="t1" x="360" y="328">P3 操作系统 → 计算机网络 · 结构力</text>
+
+<rect class="box" x="90" y="388" width="250" height="52" rx="12"/>
+<text class="t1" x="215" y="420">P4 数据库 · 持久力</text>
+
+<rect class="box" x="380" y="388" width="250" height="52" rx="12"/>
+<text class="t1" x="505" y="420">P5 工程工具 · 协作力</text>
+
+<rect class="box box-key" x="180" y="480" width="360" height="52" rx="12"/>
+<text class="t1" x="360" y="512">P6 Spring 后端 · 能交付系统</text>
+
+<rect class="box box-goal" x="180" y="572" width="360" height="52" rx="12"/>
+<text class="t1" x="360" y="604">P7 AI 应用开发 · 智能力</text>
+
+<!-- 主链箭头 -->
+<line class="arrow" x1="360" y1="72" x2="360" y2="106" marker-end="url(#ar)"/>
+<line class="arrow" x1="360" y1="164" x2="360" y2="198" marker-end="url(#ar)"/>
+<line class="arrow" x1="360" y1="256" x2="360" y2="290" marker-end="url(#ar)"/>
+<path class="arrow" d="M360,348 V366 H215 V382" marker-end="url(#ar)"/>
+<path class="arrow" d="M360,348 V366 H505 V382" marker-end="url(#ar)"/>
+<path class="arrow" d="M215,440 V458 H360 V474" marker-end="url(#ar)"/>
+<path class="arrow" d="M505,440 V458 H360 V474" marker-end="url(#ar)"/>
+<line class="arrow" x1="360" y1="532" x2="360" y2="566" marker-end="url(#ar)"/>
+
+<!-- 算法平行轨 -->
+<rect class="box box-dash" x="556" y="204" width="144" height="52" rx="12"/>
+<text class="t2" x="628" y="227">P2 算法</text>
+<text class="t2" x="628" y="245">每天 30 分钟</text>
+<line class="dash" x1="540" y1="230" x2="552" y2="230" marker-end="url(#ar)"/>
+<line class="dash" x1="628" y1="256" x2="628" y2="628" marker-end="url(#ar)"/>
+<text class="t3" x="628" y="652">跑到最后一天</text>
+
+<!-- 说明 -->
+<text class="t3" x="470" y="348" ></text>
+</svg>
+<figcaption>↑ 箭头读作"建立在这之上"。这张图是全篇的骨架：<b>你不能在没装水电的房子里装智能家居。</b></figcaption>
+</figure>
+
+<h3 id="反例一-先学-spring-再学网络">反例一：先学 Spring，再学网络</h3>
+<p>你会变成"注解复读机"：<code>@RestController</code> 会写，但不知道 <code>Content-Type</code> 是什么、为什么超时要设、连接池为什么不够用。</p>
+<p><strong>网络是 Spring 的地基。</strong> 你写的每个接口，本质是"一个 HTTP 请求进来 → 一个线程处理 → 一个响应出去"。</p>
+<h3 id="反例二-先学-juc-并发-再学操作系统">反例二：先学 JUC（并发），再学操作系统</h3>
+<p>你会开始背八股："线程池有七个参数……"。但你说不出：为什么核心线程数要这么定？为什么 <code>volatile</code> 不能保证原子性？</p>
+<p>因为<strong>这些答案全在操作系统里</strong>：线程模型、调度、内存可见性。跳过 OS 学 JUC，等于背结论。</p>
+<h3 id="反例三-先学-ai-微调-再学工程">反例三：先学 AI 微调，再学工程</h3>
+<p>你会跑通一堆 demo，但做不出一个能给别人用的东西。</p>
+<p>因为<strong>AI 应用 90% 是软件工程</strong>：接口、并发、流式、存储、检索、评测、部署——这七件事里六件是后端。而 LLM 应用层<strong>几乎不需要</strong>数学和训练知识（你不需要会反向传播才能做 RAG）。</p>
+<blockquote class="pullquote">这就是为什么我把 AI 放在最后，而不是最前。<strong>先能造房子，再谈装智能家居。</strong></blockquote>
+<hr>
+<h2 id="sec-6"><span class="h2-num"></span>5. 你需要多久（看这张图就行）</h2>
+
+<figure class="dgm-wrap">
+<div class="gantt">
+  <div class="g-head"><span class="g-label"></span><span class="g-scale"><i>1</i><i>3</i><i>6</i><i>9</i><i>12</i><i>15</i><i>18</i></span></div>
+  <div class="g-row"><span class="g-label">P0 基建</span><span class="g-track"><b class="bar b0" style="left:0%;width:2.8%"></b></span></div>
+  <div class="g-row"><span class="g-label">P1 Java</span><span class="g-track"><b class="bar b1" style="left:2.8%;width:13.9%"></b></span></div>
+  <div class="g-row"><span class="g-label">P2 算法</span><span class="g-track"><b class="bar bar-dash" style="left:2.8%;width:97.2%"></b></span></div>
+  <div class="g-row"><span class="g-label">P3 OS</span><span class="g-track"><b class="bar b3" style="left:16.7%;width:11.1%"></b></span></div>
+  <div class="g-row"><span class="g-label">P3 网络</span><span class="g-track"><b class="bar b3" style="left:27.8%;width:8.3%"></b></span></div>
+  <div class="g-row"><span class="g-label">P4 数据库</span><span class="g-track"><b class="bar b4" style="left:36.1%;width:11.1%"></b></span></div>
+  <div class="g-row"><span class="g-label">P5 工程</span><span class="g-track"><b class="bar bar-dash" style="left:5.6%;width:66.7%"></b></span></div>
+  <div class="g-row"><span class="g-label">P6 后端</span><span class="g-track"><b class="bar b6" style="left:47.2%;width:25%"></b></span></div>
+  <div class="g-row"><span class="g-label">P7 AI</span><span class="g-track"><b class="bar b7" style="left:72.2%;width:19.4%"></b></span></div>
+  <div class="g-row"><span class="g-label">P8 项目</span><span class="g-track"><b class="bar bar-dash" style="left:47.2%;width:44.4%"></b></span></div>
+</div>
+<figcaption>↑ 横轴是"第几个月"（按每周 8–12 小时估）。<b>虚线 = 并行的轨</b>，实线 = 主线。</figcaption>
+</figure>
+
+<p><strong>每周 8–12 小时怎么来的</strong>：工作日晚 60–90 分钟 × 4–5 天 + 周末一次 3–4 小时整块。</p>
+<p><strong>想压缩？</strong> 可以。按 <code>P1 → P2 → P6 速通 → P7 最小可用 → 回头补 P3/P4</code> 压到 12 个月，牺牲的是"为什么"的深度。<strong>但 P1、P2 不能压</strong>——那是所有后续的地基。</p>
+<hr>
+<h2 id="sec-7"><span class="h2-num"></span>6. 九个阶段，一页看完</h2>
+<p>每个阶段固定六件事：<strong>为什么现在学 · 学什么 · 别碰什么 · 出门考 · 三个资源 · 一句真话</strong>。</p>
+<hr>
+<section class="phase" id="phase-p0"><h3><span class="p-badge">P0</span>学习基建（1–2 周）</h3>
+<p><strong>这一阶段结束时你能做到</strong>：从零建仓库、跑通第一个 Java 程序、让 AI 帮你定位一个真实报错。</p>
+<p><strong>为什么现在学</strong>：你选的路是"读文档 + 和 AI 对话"。这条路有三个隐藏前提——拿得到一手资料、代码跑得起来、能判断 AI 说的对不对。P0 就是修这三件事。它不是软技能，是硬前置。</p>
+<h4 class="sub">学什么</h4>
+<ul>
+<li>终端基础：<code>cd / ls / grep / find / 管道 / 权限 / 环境变量</code></li>
+<li>装 <strong>JDK 25（当前 LTS）</strong>，配好 <code>JAVA_HOME</code>，跑通 <code>javac</code> 和 <code>java</code></li>
+<li>IDE（IntelliJ IDEA 社区版），<strong>学会断点调试</strong>（90% 新手跳过，后面会痛）</li>
+<li>Git 四件事：提交、看历史、回滚、开分支；注册 GitHub</li>
+<li>一个 Markdown 笔记库，建"知识地图"页（每学一个概念挂一个节点）</li>
+<li>AI 工具链：1 个通用对话模型 + 1 个能读代码的 agent；学会喂"文件 + 报错 + 期望 + 我试过什么"</li>
+</ul>
+<h4 class="sub">🚫 别碰</h4>
+<p>追求"完美开发环境"超过两天；学 Vim 全套；囤 50 个工具。</p>
+<h4 class="sub">✅ 出门考</h4>
+<ul>
+<li class="task"><label><input type="checkbox" data-k="1"><span class="cbt"></span><span class="ctxt">5 分钟内建 GitHub 仓库，命令行提交，并<strong>回滚</strong>一次错误提交</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="2"><span class="cbt"></span><span class="ctxt">给 AI「文件 + 报错 + 期望」，它定位出 bug，<strong>你验证</strong>它说对了</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="3"><span class="cbt"></span><span class="ctxt">读完一篇英文官方文档，用中文写 5 行摘要</span></label></li>
+</ul>
+<h4 class="sub">📚 三个资源</h4>
+<ul>
+<li>Missing Semester 中文：<code>https://missing-semester-cn.github.io/</code></li>
+<li>Git Book 中文：<code>https://git-scm.com/book/zh/v2</code></li>
+<li>dev.java 官方入门：<code>https://dev.java/learn/</code></li>
+</ul>
+<p><strong>💡 我以为 vs 其实</strong> 我以为"环境装不好就先学着"，其实<strong>环境是学习的一部分</strong>：你调试环境的能力，就是以后调试线上故障的能力。</p>
+</section>
+<hr>
+<section class="phase" id="phase-p1"><h3><span class="p-badge">P1</span>Java 语言核心（8–10 周）</h3>
+<p><strong>这一阶段结束时你能做到</strong>：不查资料写出 200–400 行、能跑、能改的程序。</p>
+<p><strong>为什么现在学</strong>：语言是唯一的"表达工具"。没有它，后面所有科目你只能"读"，不能"做"。但也别泡在里面——原文有句话很准："基础不牢，地动山摇；可深陷语言泥沼，同样会打击积极性。"</p>
+<h4 class="sub">学什么（严格按这个顺序）</h4>
+<ol>
+<li>程序 = 数据 + 流程：类型、变量、分支、循环、数组、方法</li>
+<li>对象 = 数据 + 行为：类、对象、封装、继承、多态、接口、抽象类</li>
+<li>核心类库：<code>String</code>（不可变）、<code>StringBuilder</code>、包装类、枚举、<code>record</code></li>
+<li><strong>集合框架</strong>（这里第一次和数据结构接轨）：List / Set / Map 的选型与复杂度</li>
+<li>泛型（能读懂即可）+ 异常（checked / unchecked / <code>try-with-resources</code>）</li>
+<li>文件 IO：<code>Files</code> / <code>Path</code></li>
+<li>工程化：Maven、JUnit 5、日志</li>
+<li>函数式（会用就行）：lambda、Stream、Optional</li>
+</ol>
+<h4 class="sub">🚫 别碰</h4>
+<p>JUC、JVM、Spring、反射、设计模式大全。<strong>全部后置。</strong></p>
+<h4 class="sub">✅ 出门考</h4>
+<ul>
+<li class="task"><label><input type="checkbox" data-k="4"><span class="cbt"></span><span class="ctxt">不查资料写出"读 CSV → 统计 → 排序 → 输出 Top10"，含接口、异常、文件、测试</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="5"><span class="cbt"></span><span class="ctxt">能画图解释 <code>HashMap</code> 的 put 流程、<code>String</code> 为什么不可变、<code>==</code> 和 <code>equals</code> 的区别</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="6"><span class="cbt"></span><span class="ctxt">看到异常栈能自己定位到行和原因</span></label></li>
+</ul>
+<h4 class="sub">📚 三个资源</h4>
+<ul>
+<li>dev.java/learn（主线，官方，章节短）</li>
+<li>廖雪峰 Java 教程（中文，快速过一遍语法）</li>
+<li>JDK 25 API 文档（当字典查）</li>
+</ul>
+<p><strong>💡 我以为 vs 其实</strong> 我以为"精通 Java"是背下所有 API，其实是<strong>知道在什么场景下该选哪个</strong>——这恰好是 AI 能陪你练的。</p>
+</section>
+<hr>
+<section class="phase" id="phase-p2"><h3><span class="p-badge">P2</span>数据结构与算法（第 3 周启动，跑到底）</h3>
+<p><strong>这一阶段结束时你能做到</strong>：Hot 100 的 Easy 全过、Medium 过六成，且能白板手写核心模板。</p>
+<p><strong>为什么现在学</strong>：原文有两句话值得照抄——"算法和所有内容都解耦，理应从第一天就开始刷""刷题的核心在于<strong>集中大量 + 养成习惯</strong>"。</p>
+<p>但还有一条他没说、对你更重要的：<strong>数据结构是后面所有科目的公共语言。</strong></p>
+<ul>
+<li>数据库索引 = B+ 树</li>
+<li>Redis 的有序集合 = 跳表</li>
+<li><code>HashMap</code> = 哈希表 + 链表/红黑树</li>
+<li>操作系统页表 = 多级索引</li>
+<li>文件系统目录 = 树</li>
+</ul>
+<h4 class="sub">不学它，你学 OS 和数据库时只能背结论。</h4>
+<h4 class="sub">学什么（按模块，不按题号）</h4>
+<div class="table-wrap"><table class="table"><thead><tr><th>阶段</th><th>模块</th><th>母题</th></tr></thead><tbody><tr><td>A（4–6 周）</td><td>复杂度、数组、链表、栈、队列、哈希表、递归</td><td>两数之和、反转链表、环形链表、有效括号、LRU</td></tr><tr><td>B（6–8 周）</td><td>二叉树、BST、堆、排序、二分</td><td>最大深度、验证 BST、TopK、搜索旋转数组</td></tr><tr><td>C（8–12 周）</td><td>图、拓扑排序、并查集、回溯、贪心、DP、滑动窗口、前缀和</td><td>岛屿数量、课程表、全排列、打家劫舍、LIS</td></tr></tbody></table></div>
+<h4 class="sub">怎么刷（三遍法）</h4>
+<ul>
+<li><strong>第一遍</strong>：3 分钟没思路就看题解 → 收藏<strong>你能看懂</strong>的那个 → 写下"这题的关键识别特征"</li>
+<li><strong>第二遍</strong>：第二天重写，只搭框架往里填 → <strong>记下"为什么忘"</strong></li>
+<li><strong>第三遍</strong>：第三天独立 AC</li>
+<li><strong>集中大量</strong>：一天 5–10 题，不要一天 1 题；给某个上午整块时间</li>
+</ul>
+<p><strong>🚫 别做</strong>：上来刷 Hard；只看题解不动手；拿题量当 KPI。</p>
+<h4 class="sub">✅ 出门考</h4>
+<ul>
+<li class="task"><label><input type="checkbox" data-k="7"><span class="cbt"></span><span class="ctxt">白板手写：反转链表、二叉树三序+层序、快排、归并、TopK、二分、DFS/BFS</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="8"><span class="cbt"></span><span class="ctxt">任意一段代码，能说出时间/空间复杂度并解释</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="9"><span class="cbt"></span><span class="ctxt">能用算法语言解释"MySQL 索引为什么用 B+ 树"</span></label></li>
+</ul>
+<h4 class="sub">📚 三个资源</h4>
+<ul>
+<li>Hello 算法（免费、图解、有 Java 代码）<code>https://www.hello-algo.com/</code></li>
+<li>灵神题单（成体系，重母题延伸）</li>
+<li>LeetCode Hot 100</li>
+</ul>
+<p><strong>💡 我以为 vs 其实</strong> 我以为算法是"天赋"，其实是<strong>记忆 + 识别特征</strong>。看到题能想起"这像哪道母题"，比聪明有用得多。</p>
+</section>
+<hr>
+<section class="phase" id="phase-p3"><h3><span class="p-badge">P3</span>操作系统 → 计算机网络（8 周 + 6 周）</h3>
+<p><strong>这一阶段结束时你能做到</strong>：用 10 分钟讲透"在浏览器输入网址到页面返回"的全过程。</p>
+<p><strong>为什么现在学，而且 OS 要在网络前面</strong>：原文给的是"计网 → OS"，我反过来了。理由只有一条——<strong>你下一个大台阶的"为什么"全在 OS 里</strong>：</p>
+<ul>
+<li>JUC（线程池、锁、可见性）← OS 的线程模型与内存模型</li>
+<li>JVM（堆、GC、栈）← OS 的虚拟内存与分配器</li>
+<li>MySQL（缓冲池、页、磁盘 IO）← OS 的页缓存与 IO 模型</li>
+</ul>
+<p>而网络的"为什么"主要服务 Spring，晚两三个月学不影响。<strong>两者依赖很弱，先学哪个都不会错，关键是别同时学</strong>（会互相稀释）。</p>
+<h4 class="sub">学什么</h4>
+<p><em>操作系统</em>：进程 vs 线程 → 调度 → 同步互斥与死锁 → 虚拟内存/页表/缺页 → 文件系统与页缓存 → IO 模型（阻塞/非阻塞/epoll）</p>
+<p><em>计算机网络</em>：分层与封装 → TCP（握手、挥手、重传、拥塞控制）→ UDP/QUIC → IP/DNS → HTTP/1.1 → 2 → 3 → TLS → Socket → 抓包</p>
+<p><strong>怎么读</strong>：第一遍<strong>只读"为什么"和结论</strong>，跳过汇编和源码细节。遇到不懂的，先记住"它在这个环节起什么作用"，等 P6 遇到真实问题再回来下钻。</p>
+<h4 class="sub">🚫 别碰</h4>
+<p>一上来啃 CSAPP 全书；组成原理（放最后，选学）。</p>
+<h4 class="sub">✅ 出门考</h4>
+<ul>
+<li class="task"><label><input type="checkbox" data-k="10"><span class="cbt"></span><span class="ctxt">10 分钟讲透「输入 URL → 页面返回」，每层说出关键机制</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="11"><span class="cbt"></span><span class="ctxt">能解释：进程 vs 线程、死锁四条件、虚拟内存解决什么、epoll 比 select 好在哪、TCP 为什么三次握手</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="12"><span class="cbt"></span><span class="ctxt">手写一个 TCP echo server，并用 Wireshark 抓一次包</span></label></li>
+</ul>
+<h4 class="sub">📚 三个资源</h4>
+<ul>
+<li>OSTEP（免费教材，有中文）</li>
+<li>小林 coding（中文图解）</li>
+<li>Beej 网络编程指南（socket 实战）</li>
+</ul>
+<p><strong>💡 我以为 vs 其实</strong> 我以为 OS 是"理论课"，其实它是<strong>排查线上故障的手册</strong>。CPU 100%、内存泄漏、IO 卡顿，答案都在这。</p>
+</section>
+<hr>
+<section class="phase" id="phase-p4"><h3><span class="p-badge">P4</span>数据库（8 周）</h3>
+<p><strong>这一阶段结束时你能做到</strong>：为一个业务设计表结构和索引，并能解释每个索引为什么存在。</p>
+<p><strong>为什么在 P3 之后</strong>：SQL 语法三天就会，难点全在机制——索引依赖 B+ 树（P2），磁盘 IO 与缓冲池依赖操作系统（P3），事务的锁是 OS 锁的延伸。<strong>先 OS 再数据库是降维；反过来只能背口诀。</strong></p>
+<h4 class="sub">学什么</h4>
+<ol>
+<li>SQL：DDL/DML、join、group by、子查询、<strong>窗口函数</strong></li>
+<li>建模：范式与反范式、主外键</li>
+<li><strong>索引</strong>：B+ 树、聚簇 vs 二级索引、最左前缀、覆盖索引、回表</li>
+<li><strong>执行计划</strong>：<code>EXPLAIN</code>、慢查询定位</li>
+<li><strong>事务</strong>：ACID、隔离级别、MVCC、间隙锁</li>
+<li>日志：redo / undo / binlog</li>
+<li><strong>Redis</strong>：五种数据结构、缓存穿透/击穿/雪崩、缓存与数据库一致性</li>
+<li><strong>为 AI 铺路</strong>：PostgreSQL + pgvector（向量检索）</li>
+</ol>
+<h4 class="sub">🚫 别碰</h4>
+<p>分库分表、Redis 集群、复制原理（先了解，别深入）。</p>
+<h4 class="sub">✅ 出门考</h4>
+<ul>
+<li class="task"><label><input type="checkbox" data-k="13"><span class="cbt"></span><span class="ctxt">为 6–8 张表的业务设计模型 + 索引，并解释理由</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="14"><span class="cbt"></span><span class="ctxt">慢 SQL 用 <code>EXPLAIN</code> 分析并改写</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="15"><span class="cbt"></span><span class="ctxt">能解释：为什么用 B+ 树不用哈希、MVCC 怎么避免不可重复读、缓存三种一致性方案的取舍</span></label></li>
+</ul>
+<h4 class="sub">📚 三个资源</h4>
+<ul>
+<li>Use The Index, Luke（索引圣经，免费）</li>
+<li>MySQL 官方手册 / PostgreSQL 官方文档</li>
+<li>pgvector README</li>
+</ul>
+<p><strong>💡 我以为 vs 其实</strong> 我以为数据库是"写 SQL"，其实它是<strong>数据结构 + 操作系统的联合应用</strong>。会写 SQL 只是入门。</p>
+</section>
+<hr>
+<section class="phase" id="phase-p5"><h3><span class="p-badge">P5</span>软件工程与工程工具（4–6 周，穿插）</h3>
+<p><strong>这一阶段结束时你能做到</strong>：别人能按你的 README 把项目跑起来。</p>
+<p><strong>为什么不能单独学</strong>：原文说得很实在——"工作和开发的必要前提，不会这些可能会闯大祸……这集要动手实践，多用自然就熟练了。" 看教程十小时，不如在真实项目里踩三次坑。</p>
+<h4 class="sub">学什么（全部绑在项目上）</h4>
+<ul>
+<li>Git 进阶：分支模型、PR、rebase、冲突、commit 规范</li>
+<li>Linux：权限、进程、日志（<code>grep / awk / tail -f</code>）、ssh</li>
+<li>Docker：Dockerfile、容器、compose</li>
+<li>测试：JUnit 5 + Mockito、测试金字塔</li>
+<li>质量：重构手法、Code Review 清单</li>
+<li>交付：CI（GitHub Actions）、12-Factor</li>
+</ul>
+<h4 class="sub">🚫 别碰</h4>
+<p>Kubernetes 深入、Service Mesh、云原生全家桶。</p>
+<h4 class="sub">✅ 出门考</h4>
+<ul>
+<li class="task"><label><input type="checkbox" data-k="16"><span class="cbt"></span><span class="ctxt">项目能 <code>docker compose up</code> 起"服务 + 数据库"</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="17"><span class="cbt"></span><span class="ctxt">CI 自动跑测试，改坏代码会红</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="18"><span class="cbt"></span><span class="ctxt">在 Linux 上通过日志定位过一个 500 错误</span></label></li>
+</ul>
+<h4 class="sub">📚 三个资源</h4>
+<ul>
+<li>Git Book 中文</li>
+<li>Docker 官方 get-started</li>
+<li>12factor.net</li>
+</ul>
+<p><strong>💡 我以为 vs 其实</strong> 我以为这些是"运维的事"，其实<strong>它们是"你的代码能不能长大"的分水岭</strong>。项目到三千行，没有测试和 CI 就会崩。</p>
+</section>
+<hr>
+<section class="phase" id="phase-p6"><h3><span class="p-badge">P6</span>Java 企业级后端（12–16 周）</h3>
+<p><strong>这一阶段结束时你能做到</strong>：独立交付一个带认证、分页、事务、缓存、测试、文档的服务。</p>
+<p><strong>为什么现在学</strong>：这是"能做出被别人使用的系统"的门槛，也是 P7 的载体——<strong>你的 RAG 服务本身就是一个 Spring Boot 服务</strong>。</p>
+<h4 class="sub">学什么（按顺序）</h4>
+<ol>
+<li>Web 基础：HTTP 报文、状态码、Cookie/Session/JWT、REST、JSON</li>
+<li>Spring 核心：IoC/DI、Bean 生命周期、AOP、<strong>自动配置的入口在哪</strong></li>
+<li>Spring Boot：starter、配置、统一异常、参数校验、拦截器</li>
+<li>持久层：JDBC → 连接池 → MyBatis → MyBatis-Plus → <strong><code>@Transactional</code> 失效的五种场景</strong></li>
+<li>缓存与异步：Spring Cache + Redis、<code>@Async</code>、定时任务</li>
+<li>安全：认证 vs 授权、Spring Security、越权与注入</li>
+<li><strong>JUC（此时才学）</strong>：线程池七参数、锁、<code>volatile</code>、并发容器、虚拟线程</li>
+<li><strong>JVM（最后）</strong>：内存区域、GC、类加载、<code>jstack</code> / Arthas 排查</li>
+</ol>
+<h4 class="sub">🚫 别碰</h4>
+<p>微服务全家桶、Spring Cloud、DDD（都是选学）。</p>
+<h4 class="sub">✅ 出门考</h4>
+<ul>
+<li class="task"><label><input type="checkbox" data-k="19"><span class="cbt"></span><span class="ctxt">交付完整服务：JWT 登录 + CRUD + 分页 + 事务 + Redis + 统一异常 + 测试 + Docker + API 文档</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="20"><span class="cbt"></span><span class="ctxt">能解释：事务失效场景、循环依赖、线程池怎么定大小、<code>volatile</code> 保证什么</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="21"><span class="cbt"></span><span class="ctxt">用 Arthas 或 jstack 实际排查过一次 CPU 100%</span></label></li>
+</ul>
+<h4 class="sub">📚 三个资源</h4>
+<ul>
+<li>Spring 官方 Guides（边做边学）</li>
+<li>Spring Boot 参考文档</li>
+<li>Jenkov 并发教程 / Oracle 并发教程</li>
+</ul>
+<p><strong>💡 我以为 vs 其实</strong> 我以为框架是"背注解"，其实它是<strong>把设计模式用到了极致</strong>。看懂 IoC 和 AOP，等于看懂了半个 Java 生态。</p>
+</section>
+<hr>
+<section class="phase" id="phase-p7"><h3><span class="p-badge">P7</span>AI 应用开发（12 周 + 长期）</h3>
+<p><strong>这一阶段结束时你能做到</strong>：交付一个能用的 AI 应用，并且有评测数据证明它比基线好。</p>
+<p><strong>为什么放最后</strong>：AI 应用的七件事——API 调用、并发流式、存储、检索、评测、部署、安全——<strong>六件是软件工程</strong>。</p>
+<h4 class="sub">先建立正确认知（1 周，不可跳）</h4>
+<ul>
+<li>LLM 是"下一个词的概率机"：token、上下文窗口、温度、知识截止</li>
+<li><strong>幻觉是机制性的</strong>（概率生成 + 训练数据边界），不是"模型笨"</li>
+<li>成本与延迟模型：输入 token、输出 token、<strong>首 token 延迟</strong></li>
+<li><strong>什么时候不该用 LLM</strong>：规则、检索、SQL 能解决的就别用——这条决定你未来 80% 的架构</li>
+</ul>
+<h4 class="sub">四层，按顺序</h4>
+<ol>
+<li><strong>调用层</strong>：OpenAI 兼容协议、流式（SSE）、结构化输出、工具调用；先用 <code>RestClient</code> 手写一遍，再换框架</li>
+<li><strong>框架层</strong>：Spring AI（与 Boot 同生态，推荐）或 LangChain4j；另一个只读文档了解映射关系</li>
+<li><strong>RAG（重点）</strong>：文档解析 → 切分 → embedding → 向量库 → 检索（混合 + 重排）→ 生成 → 引用溯源；<strong>每一环都要有评测集</strong>，否则你在盲调</li>
+<li><strong>Agent 与工作流</strong>：工具调用、MCP、记忆、HITL；<strong>先 workflow，后 agent</strong></li>
+<li><strong>评测与运维</strong>：30–100 条用例、RAGAS、trace、成本计量、prompt 注入防护、容器化</li>
+</ol>
+<p><strong>🚫 暂不学</strong>：微调/LoRA、PyTorch、推理优化、多模态深入。这些是"模型侧"，是另一个职业方向。</p>
+<h4 class="sub">✅ 出门考</h4>
+<ul>
+<li class="task"><label><input type="checkbox" data-k="22"><span class="cbt"></span><span class="ctxt">交付"个人知识库问答"：上传、可配置切分、混合检索、引用溯源、流式输出</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="23"><span class="cbt"></span><span class="ctxt">有评测报告：基线 vs 优化后的指标 + 成本/延迟</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="24"><span class="cbt"></span><span class="ctxt">能回答"检索不到时你怎么发现、怎么改"</span></label></li>
+</ul>
+<h4 class="sub">📚 三个资源</h4>
+<ul>
+<li>Anthropic《Building Effective Agents》</li>
+<li>Spring AI 官方参考 + examples 仓库</li>
+<li>RAGAS 文档</li>
+</ul>
+<p><strong>💡 我以为 vs 其实</strong> 我以为做 AI 应用要懂模型，其实<strong>要懂的是检索和评测</strong>。90% 的效果差异来自"你喂给模型什么"，不是"你用了哪个模型"。</p>
+</section>
+<hr>
+<section class="phase" id="phase-p8"><h3><span class="p-badge">P8</span>项目与作品集（与 P6/P7 并行）</h3>
+<p><strong>这一阶段结束时你能做到</strong>：脱稿讲 5 分钟架构，并扛住 10 个"如果……怎么办"。</p>
+<h4 class="sub">两个项目，不要多</h4>
+<ul>
+<li><strong>项目 1（传统后端）</strong>：你自己真的会用的系统（学习追踪 / 文献管理 / 记账），不要外卖、不要商城</li>
+<li><strong>项目 2（AI 应用）</strong>：P7 的知识库问答</li>
+</ul>
+<h4 class="sub">好项目的四个维度（原文框架）</h4>
+<div class="table-wrap"><table class="table"><thead><tr><th>维度</th><th>自检问题</th></tr></thead><tbody><tr><td>出发点</td><td>谁会用？不用会怎样？（别"拿着锤子找钉子"）</td></tr><tr><td>完整性</td><td>别人能按 README 跑起来吗？测试覆盖边界了吗？</td></tr><tr><td>闪光点</td><td>能说出"在 X 场景下有 Y 问题，对比了 A/B，选了 C，优化后指标从 M 到 N"吗？</td></tr><tr><td>可沉淀性</td><td>换个项目还能复用吗？（沉淀成组件/SKILL）</td></tr></tbody></table></div>
+<p><strong>一句话标准</strong>：<strong>做出来系统不是亮点，在此之上的优化才是亮点。</strong></p>
+</section>
+<hr>
+<h2 id="sec-8"><span class="h2-num"></span>7. 名词人话表（看不懂术语时回来查）</h2>
+<div class="table-wrap"><table class="table"><thead><tr><th>术语</th><th>人话解释</th></tr></thead><tbody><tr><td><strong>JDK</strong></td><td>Java 的"施工工具包"，编译和运行 Java 都要它</td></tr><tr><td><strong>JVM</strong></td><td>Java 程序的"虚拟机"，让同一份代码在哪都能跑</td></tr><tr><td><strong>JUC</strong></td><td>Java 的并发工具箱，解决"多个线程抢一个东西"的问题</td></tr><tr><td><strong>Maven</strong></td><td>帮你下载依赖、打包项目的"快递 + 打包机"</td></tr><tr><td><strong>Spring Boot</strong></td><td>一套"开箱即用"的后端脚手架，省掉大量配置</td></tr><tr><td><strong>IoC / AOP</strong></td><td>IoC：对象由框架帮你创建；AOP：把日志、事务这类横切逻辑抽出来统一处理</td></tr><tr><td><strong>B+ 树</strong></td><td>一种"矮胖"的树，一层能放下很多分叉，所以查数据只需读几次磁盘</td></tr><tr><td><strong>MVCC</strong></td><td>让"读"和"写"不用互相等的一种机制（多版本并发控制）</td></tr><tr><td><strong>Redis</strong></td><td>把数据放在内存里的数据库，快，但断电会丢（可持久化）</td></tr><tr><td><strong>LLM</strong></td><td>大语言模型，本质是"预测下一个词"的模型</td></tr><tr><td><strong>token</strong></td><td>模型处理文本的最小单位，约等于 0.7 个汉字；计费和长度都按它算</td></tr><tr><td><strong>上下文窗口</strong></td><td>模型一次能"看见"多少内容，超出就忘</td></tr><tr><td><strong>幻觉</strong></td><td>模型一本正经地编造事实，因为它在"生成"而不是"查证"</td></tr><tr><td><strong>embedding</strong></td><td>把一段文字变成一串数字，让"意思相近"可以算距离</td></tr><tr><td><strong>向量数据库</strong></td><td>专门存 embedding 并快速找"最相近"的数据库</td></tr><tr><td><strong>RAG</strong></td><td>先检索资料再让模型回答，等于给模型开卷考试</td></tr><tr><td><strong>Agent</strong></td><td>让模型自己决定"调用什么工具、下一步做什么"</td></tr><tr><td><strong>MCP</strong></td><td>一个标准协议，让模型能接上外部工具和数据</td></tr><tr><td><strong>评测（eval）</strong></td><td>用一批固定用例和指标，量化"这次改动到底有没有变好"</td></tr><tr><td><strong>trace</strong></td><td>一次请求的完整链路记录，出问题时能回放</td></tr></tbody></table></div>
+<hr>
+<h2 id="sec-9"><span class="h2-num"></span>8. 怎么和 AI 学（这是全篇最值钱的一节）</h2>
+<p>原文有句话是全篇精髓：</p>
+<blockquote class="pullquote"><strong>"看文章和博客，然后和 AI 对话来学习，逐步用 AI 澄清自己对于知识的幻觉。"</strong></blockquote>
+<p>但"和 AI 聊天"有个陷阱：<strong>AI 天生迎合你</strong>。你说"我理解得对吗"，它永远说"对，而且很深刻"。</p>
+<p>所以要<strong>把 AI 从"讲师"改成"考官"</strong>。八个模板，直接复制：</p>
+<h4 class="sub">① 诊断式（最推荐，替代"帮我讲讲 X"）</h4>
+<div class="codeblock"><button class="copy" aria-label="复制">复制</button><pre><code>我刚读完 [章节]。请不要直接讲解。
+先问我 3 个由浅入深的问题，检查我是否真的理解 [概念]。
+我答完后只指出我错在哪、缺了哪一环，不要替我补全。</code></pre></div>
+<h4 class="sub">② 费曼式（你讲，它挑错）</h4>
+<div class="codeblock"><button class="copy" aria-label="复制">复制</button><pre><code>下面是我对 [概念] 的完整解释（没查资料）：
+&lt;把我的解释贴进来&gt;
+请：1) 标出 3 处不准确或含糊；2) 按&quot;必须修正/可更精确/无伤大雅&quot;分级；
+3) 每处反问我一个问题，让我自己改。</code></pre></div>
+<h4 class="sub">③ 反例式（找边界）</h4>
+<div class="codeblock"><button class="copy" aria-label="复制">复制</button><pre><code>我的结论是：[结论]。
+请构造 3 个让这个结论失效的具体场景，越具体越好。
+每个场景说明：为什么失效、这个结论的适用边界在哪。</code></pre></div>
+<h4 class="sub">④ 出题式（每周自测）</h4>
+<div class="codeblock"><button class="copy" aria-label="复制">复制</button><pre><code>就 [主题] 出 5 道题：2 道基础、2 道边界/陷阱、1 道系统设计。
+先只出题。我答完再评分，评分要说明&quot;我漏了哪个关键点&quot;。</code></pre></div>
+<h4 class="sub">⑤ 面试官式（阶段末）</h4>
+<div class="codeblock"><button class="copy" aria-label="复制">复制</button><pre><code>你扮演 [岗位] 面试官，就 [主题] 连续追问。
+规则：每轮只问一个问题；答得浅就挖深，答错就换角度；不要提示、不要替我回答。
+我说&quot;停&quot;时，给我评估：哪些是背的、哪些是真懂。</code></pre></div>
+<h4 class="sub">⑥ 迁移式（从 L2 到 L3）</h4>
+<div class="codeblock"><button class="copy" aria-label="复制">复制</button><pre><code>我已理解 [概念 A]（如 MySQL 的 B+ 树索引）。
+请引导我把它迁移到 [概念 B]（如 Redis 的跳表）。
+先让我说出&quot;这两个问题的共同结构&quot;，再指出我的类比在哪里不成立。</code></pre></div>
+<h4 class="sub">⑦ 工程 review 式（P6/P7 专用）</h4>
+<div class="codeblock"><button class="copy" aria-label="复制">复制</button><pre><code>这是我的设计：[方案 + 关键代码]。
+以资深工程师身份：1) 指出最可能线上出问题的 3 个地方；
+2) 每个问题反问我&quot;为什么不选 [替代方案]&quot;；3) 推演&quot;流量涨 10 倍&quot;会怎样。</code></pre></div>
+<h4 class="sub">⑧ 学习校准式（每月一次）</h4>
+<div class="codeblock"><button class="copy" aria-label="复制">复制</button><pre><code>这是我的学习记录和笔记大纲：&lt;贴进来&gt;
+请：1) 指出我知识图谱里缺失的节点；2) 指出我的依赖顺序错误；
+3) 给下个月最该补的 3 件事，按投入产出比排序。</code></pre></div>
+<h3 id="防-ai-胡说三条硬规则">防 AI 胡说三条硬规则</h3>
+<ol>
+<li><strong>一手来源优先</strong>：让 AI 给出处（官方文档章节 / 源码路径 / RFC）。说不出就标"不确定"。</li>
+<li><strong>交叉验证</strong>：同一个问题问两个模型，或换个问法问"反方观点是什么"。不一致的地方，就是你还没懂的地方。</li>
+<li><strong>反例优先</strong>：能举出反例，比"听起来合理"可靠得多。</li>
+</ol>
+<h3 id="四个陷阱">四个陷阱</h3>
+<div class="table-wrap"><table class="table"><thead><tr><th>陷阱</th><th>表现</th><th>破法</th></tr></thead><tbody><tr><td><strong>迎合</strong></td><td>永远夸你对</td><td>改问"请反驳我"</td></tr><tr><td><strong>幻觉 API</strong></td><td>编造不存在的方法名</td><td>代码必须编译运行，API 必查官方文档</td></tr><tr><td><strong>替代思考</strong></td><td>直接要答案</td><td>先自己想 5 分钟写下来，再问</td></tr><tr><td><strong>虚假完成感</strong></td><td>聊得很爽，写不出代码</td><td>每次对话必须产出一个可验证物</td></tr></tbody></table></div>
+<hr>
+<h2 id="sec-10"><span class="h2-num"></span>9. 怎么算"真的学会了"（四级阶梯）</h2>
+
+<figure class="dgm-wrap">
+<div class="ladder">
+  <div class="step s4"><b>L4 改造</b><span>能改代码、调参数、排故障、做取舍</span></div>
+  <div class="step s3"><b>L3 迁移</b><span>换个场景 / 换个技术，还能用</span></div>
+  <div class="step s2"><b>L2 因果</b><span>能回答"为什么这样设计？不这样会怎样？"</span></div>
+  <div class="step s1"><b>L1 记忆</b><span>能说出名词和步骤</span></div>
+</div>
+<figcaption>↑ 越往上越窄：<b>大多数人停在 L1，还以为自己到了 L4。</b></figcaption>
+</figure>
+
+<p>举个具体的：</p>
+<div class="table-wrap"><table class="table"><thead><tr><th>级别</th><th>关于"数据库索引"</th></tr></thead><tbody><tr><td>L1</td><td>"索引用 B+ 树"</td></tr><tr><td>L2</td><td>"因为磁盘按页读，B+ 树矮胖、扇出大、树高低，所以 IO 少；哈希做不了范围查询"</td></tr><tr><td>L3</td><td>"Redis 跳表和 B+ 树都在解决'有序 + 快速定位'，但一个在内存、一个在磁盘"</td></tr><tr><td>L4</td><td>"这个查询回表太多，我把联合索引顺序换掉，P99 从 800ms 降到 40ms"</td></tr></tbody></table></div>
+<h4 class="sub">三个自检动作（每周 5 分钟）</h4>
+<ol>
+<li><strong>白纸测试</strong>：关掉资料，画出结构图（比如 HashMap 的 put 流程）。画不出 → 只有 L1。</li>
+<li><strong>追问三层</strong>：它是什么 → 为什么这样 → 不这样会怎样。卡在第二层 → 只有 L1。</li>
+<li><strong>改一个变量</strong>：参数变了，结论还成立吗？答不上 → 没有 L3。</li>
+</ol>
+<hr>
+<h2 id="sec-11"><span class="h2-num"></span>10. 每天 90 分钟，怎么过</h2>
+
+<figure class="dgm-wrap">
+<svg viewBox="0 0 860 178" class="dgm" role="img" aria-label="每日 90 分钟学习闭环">
+<defs><marker id="ar2" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto">
+<path d="M0,0 L8,4 L0,8 Z" class="arhead"/></marker></defs>
+
+<text class="t3" x="95" y="16">10 分钟</text>
+<text class="t3" x="265" y="16">30 分钟</text>
+<text class="t3" x="435" y="16">30 分钟</text>
+<text class="t3" x="605" y="16">15 分钟</text>
+<text class="t3" x="775" y="16">5 分钟</text>
+
+<rect class="box" x="20" y="30" width="150" height="54" rx="12"/>
+<text class="t1" x="95" y="63">① 复习</text>
+<rect class="box box-key" x="190" y="30" width="150" height="54" rx="12"/>
+<text class="t1" x="265" y="63">② 读</text>
+<rect class="box box-key" x="360" y="30" width="150" height="54" rx="12"/>
+<text class="t1" x="435" y="63">③ 写代码</text>
+<rect class="box" x="530" y="30" width="150" height="54" rx="12"/>
+<text class="t1" x="605" y="63">④ 问 AI</text>
+<rect class="box" x="700" y="30" width="150" height="54" rx="12"/>
+<text class="t1" x="775" y="63">⑤ 复盘</text>
+
+<line class="arrow" x1="172" y1="57" x2="186" y2="57" marker-end="url(#ar2)"/>
+<line class="arrow" x1="342" y1="57" x2="356" y2="57" marker-end="url(#ar2)"/>
+<line class="arrow" x1="512" y1="57" x2="526" y2="57" marker-end="url(#ar2)"/>
+<line class="arrow" x1="682" y1="57" x2="696" y2="57" marker-end="url(#ar2)"/>
+
+<path class="loopback" d="M775,84 V140 H95 V90" marker-end="url(#ar2)"/>
+<text class="t2" x="435" y="134">第二天从「复习」接着来</text>
+</svg>
+<figcaption>↑ <b>顺序不能反：读 → 写 → 问。</b>先写代码，你的问题会具体十倍。</figcaption>
+</figure>
+
+<h4 class="sub">关键顺序：读 → 写 → 问。不要读 → 问。</h4>
+<p>先写代码，你的问题会变具体十倍："为什么这里编译不过" 远比 "讲讲多态" 有效。</p>
+<h3 id="每天-5-行日志-复制到笔记里">每天 5 行日志（复制到笔记里）</h3>
+<div class="codeblock"><button class="copy" aria-label="复制">复制</button><pre><code>1. 今天真正搞懂的一件事：
+2. 卡住的地方（具体到哪一步不行）：
+3. 明天第一个动作（具体到文件名/章节）：
+4. 一个可复用的结论：
+5. 一个待验证的假设（明天去验证）：</code></pre></div>
+<h3 id="周课-周末-3-4-小时">周课（周末 3–4 小时）</h3>
+<ol>
+<li>算法集中块（60–90 分钟，5–10 题）</li>
+<li>可交付小任务（90 分钟，<strong>必须 commit</strong>）</li>
+<li>周复盘（20 分钟）：本周新增几条"能讲清"的知识？卡点解决了吗？</li>
+<li><strong>输出</strong>（20 分钟）：写 300 字公开笔记。有观众才会认真。</li>
+</ol>
+<h3 id="月课-2-小时">月课（2 小时）</h3>
+<p>对照出门考打勾；更新知识地图；用模板⑧让 AI 校准；<strong>删掉 3 个"看起来该学但用不上"的东西</strong>。</p>
+<h3 id="断更恢复-长期坚持的真正关键">断更恢复（长期坚持的真正关键）</h3>
+<p>原文没提，但这是"长期"和"冲刺"最大的差别：</p>
+<ul>
+<li><strong>最小日课 15 分钟</strong>：状态差只做 3 道旧题 + 1 条日志，<strong>保持链条不断</strong></li>
+<li><strong>落下的不补</strong>：直接按今天走。补课会让雪球滚成雪崩</li>
+<li><strong>每 6–8 周留一个空周</strong>：只复习不推进</li>
+<li><strong>疲劳信号</strong>：连续 3 天不想打开编辑器 → 换任务类型，不要硬扛</li>
+</ul>
+<hr>
+<h2 id="sec-12"><span class="h2-num"></span>11. 三张清单</h2>
+<blockquote class="pullquote">每周只勾 3–5 项。<strong>一次全勾，是最常见的失败方式。</strong><br>打勾会自动存在你的浏览器里，关掉再打开还在。</blockquote>
+<h3 id="必学-不做等于地基缺失">★ 必学（不做等于地基缺失）</h3>
+<h4 class="sub">P0 学习基建</h4>
+<ul>
+<li class="task"><label><input type="checkbox" data-k="25"><span class="cbt"></span><span class="ctxt">终端基础命令（cd / ls / grep / find / 管道 / 权限）</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="26"><span class="cbt"></span><span class="ctxt">装 JDK 25，跑通 <code>javac</code> / <code>java</code>（含包结构）</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="27"><span class="cbt"></span><span class="ctxt">IDE + 学会断点调试</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="28"><span class="cbt"></span><span class="ctxt">Git 四项：提交、看历史、回滚、分支</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="29"><span class="cbt"></span><span class="ctxt">GitHub 账号 + SSH，能建仓库</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="30"><span class="cbt"></span><span class="ctxt">AI 对话工作流（会喂"文件 + 报错 + 期望"）</span></label></li>
+</ul>
+<h4 class="sub">P1 Java 语言</h4>
+<ul>
+<li class="task"><label><input type="checkbox" data-k="31"><span class="cbt"></span><span class="ctxt">语法与流程控制</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="32"><span class="cbt"></span><span class="ctxt">类 / 对象 / 封装 / 继承 / 多态 / 接口</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="33"><span class="cbt"></span><span class="ctxt">集合框架（List / Set / Map 的选型与复杂度）</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="34"><span class="cbt"></span><span class="ctxt">异常与 <code>try-with-resources</code></span></label></li>
+<li class="task"><label><input type="checkbox" data-k="35"><span class="cbt"></span><span class="ctxt">文件 IO（<code>Files</code> / <code>Path</code>）</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="36"><span class="cbt"></span><span class="ctxt">Maven + JUnit 5 + 日志</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="37"><span class="cbt"></span><span class="ctxt">lambda / Stream / Optional（会用）</span></label></li>
+</ul>
+<h4 class="sub">P2 数据结构与算法</h4>
+<ul>
+<li class="task"><label><input type="checkbox" data-k="38"><span class="cbt"></span><span class="ctxt">复杂度分析（能手算）</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="39"><span class="cbt"></span><span class="ctxt">数组 / 链表 / 栈 / 队列</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="40"><span class="cbt"></span><span class="ctxt">哈希表</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="41"><span class="cbt"></span><span class="ctxt">二叉树（遍历 / BST / 堆）</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="42"><span class="cbt"></span><span class="ctxt">排序（快排 / 归并 / 堆排）</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="43"><span class="cbt"></span><span class="ctxt">二分查找（含二分答案）</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="44"><span class="cbt"></span><span class="ctxt">图（BFS / DFS）</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="45"><span class="cbt"></span><span class="ctxt">回溯 + 动态规划</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="46"><span class="cbt"></span><span class="ctxt">Hot 100：Easy 100%</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="47"><span class="cbt"></span><span class="ctxt">Hot 100：Medium ≥60%</span></label></li>
+</ul>
+<h4 class="sub">P3 操作系统 / 网络</h4>
+<ul>
+<li class="task"><label><input type="checkbox" data-k="48"><span class="cbt"></span><span class="ctxt">进程 vs 线程 + 上下文切换</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="49"><span class="cbt"></span><span class="ctxt">同步互斥 + 死锁四条件</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="50"><span class="cbt"></span><span class="ctxt">虚拟内存 / 页表 / 缺页</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="51"><span class="cbt"></span><span class="ctxt">文件系统与页缓存</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="52"><span class="cbt"></span><span class="ctxt">IO 模型（阻塞 / 非阻塞 / epoll）</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="53"><span class="cbt"></span><span class="ctxt">TCP 握手挥手 + 拥塞控制</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="54"><span class="cbt"></span><span class="ctxt">HTTP/1.1 → 2 → 3 + TLS</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="55"><span class="cbt"></span><span class="ctxt">写一个 TCP server + 抓一次包</span></label></li>
+</ul>
+<h4 class="sub">P4 数据库</h4>
+<ul>
+<li class="task"><label><input type="checkbox" data-k="56"><span class="cbt"></span><span class="ctxt">SQL + join + 窗口函数</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="57"><span class="cbt"></span><span class="ctxt">索引原理（B+ 树 / 最左前缀 / 覆盖索引 / 回表）</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="58"><span class="cbt"></span><span class="ctxt"><code>EXPLAIN</code> 执行计划</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="59"><span class="cbt"></span><span class="ctxt">事务 + 隔离级别 + MVCC</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="60"><span class="cbt"></span><span class="ctxt">Redis 数据结构 + 缓存三兄弟</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="61"><span class="cbt"></span><span class="ctxt">PostgreSQL + pgvector（为 AI 铺路）</span></label></li>
+</ul>
+<h4 class="sub">P5 工程工具</h4>
+<ul>
+<li class="task"><label><input type="checkbox" data-k="62"><span class="cbt"></span><span class="ctxt">Git 分支 / PR / 冲突解决</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="63"><span class="cbt"></span><span class="ctxt">Linux 常用命令 + 看日志</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="64"><span class="cbt"></span><span class="ctxt">Docker + Dockerfile + compose</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="65"><span class="cbt"></span><span class="ctxt">JUnit 5 + Mockito</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="66"><span class="cbt"></span><span class="ctxt">CI（GitHub Actions）</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="67"><span class="cbt"></span><span class="ctxt">12-Factor 概念</span></label></li>
+</ul>
+<h4 class="sub">P6 Java 后端</h4>
+<ul>
+<li class="task"><label><input type="checkbox" data-k="68"><span class="cbt"></span><span class="ctxt">HTTP / REST 基础</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="69"><span class="cbt"></span><span class="ctxt">Spring IoC / AOP + 自动配置入口</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="70"><span class="cbt"></span><span class="ctxt">Spring Boot 启动流程 + 统一异常 + 参数校验</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="71"><span class="cbt"></span><span class="ctxt">MyBatis / MyBatis-Plus</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="72"><span class="cbt"></span><span class="ctxt"><code>@Transactional</code> 与失效场景</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="73"><span class="cbt"></span><span class="ctxt">Redis 缓存集成</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="74"><span class="cbt"></span><span class="ctxt">Spring Security + JWT</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="75"><span class="cbt"></span><span class="ctxt">线程池七参数 / <code>volatile</code> / 并发容器</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="76"><span class="cbt"></span><span class="ctxt">JVM 内存结构 + GC 基础</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="77"><span class="cbt"></span><span class="ctxt">Arthas 或 jstack 排查一次</span></label></li>
+</ul>
+<h4 class="sub">P7 AI 应用</h4>
+<ul>
+<li class="task"><label><input type="checkbox" data-k="78"><span class="cbt"></span><span class="ctxt">LLM 认知（token / 上下文 / 温度 / 幻觉 / 成本）</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="79"><span class="cbt"></span><span class="ctxt">API 调用 + 流式 + 结构化输出 + 工具调用</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="80"><span class="cbt"></span><span class="ctxt">Spring AI 或 LangChain4j 跑通第一个调用</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="81"><span class="cbt"></span><span class="ctxt">RAG 全链路（解析 → 切分 → 检索 → 生成 → 溯源）</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="82"><span class="cbt"></span><span class="ctxt">混合检索 / rerank（至少理解）</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="83"><span class="cbt"></span><span class="ctxt">评测集 + 指标（基线 vs 优化后）</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="84"><span class="cbt"></span><span class="ctxt">trace + token 计量</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="85"><span class="cbt"></span><span class="ctxt">prompt 注入防护</span></label></li>
+</ul>
+<h4 class="sub">P8 项目</h4>
+<ul>
+<li class="task"><label><input type="checkbox" data-k="86"><span class="cbt"></span><span class="ctxt">项目 1：传统后端（含 1 个非功能优化 + 数据）</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="87"><span class="cbt"></span><span class="ctxt">项目 2：AI 应用（含评测报告）</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="88"><span class="cbt"></span><span class="ctxt">两个项目都能脱稿讲 5 分钟</span></label></li>
+</ul>
+<h3 id="选学-有余力再说-优先级已排好">☆ 选学（有余力再说，优先级已排好）</h3>
+<ul>
+<li class="task"><label><input type="checkbox" data-k="89"><span class="cbt"></span><span class="ctxt">组成原理（CPU / 缓存 / 流水线）</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="90"><span class="cbt"></span><span class="ctxt">CSAPP 精读（第 1 / 3 / 6 / 9 章）</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="91"><span class="cbt"></span><span class="ctxt">MIT 6.1810 lab</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="92"><span class="cbt"></span><span class="ctxt">CS144 TCP lab</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="93"><span class="cbt"></span><span class="ctxt">JUC 源码（AQS / 线程池）</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="94"><span class="cbt"></span><span class="ctxt">JVM 调优实战</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="95"><span class="cbt"></span><span class="ctxt">设计模式全部（先学 Spring 用到的 7 个）</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="96"><span class="cbt"></span><span class="ctxt">DDD</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="97"><span class="cbt"></span><span class="ctxt">微服务（Nacos / Spring Cloud Gateway）</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="98"><span class="cbt"></span><span class="ctxt">消息队列（RocketMQ / Kafka）</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="99"><span class="cbt"></span><span class="ctxt">Elasticsearch</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="100"><span class="cbt"></span><span class="ctxt">分库分表 / 读写分离</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="101"><span class="cbt"></span><span class="ctxt">Netty</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="102"><span class="cbt"></span><span class="ctxt">分布式系统（MIT 6.824）</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="103"><span class="cbt"></span><span class="ctxt">机器学习基础 / Karpathy 课程</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="104"><span class="cbt"></span><span class="ctxt">微调 / LoRA（有真实需求再学）</span></label></li>
+<li class="task"><label><input type="checkbox" data-k="105"><span class="cbt"></span><span class="ctxt">Go（第二语言）</span></label></li>
+</ul>
+<h3 id="暂时不必学-明确划掉-减少焦虑">✗ 暂时不必学（明确划掉，减少焦虑）</h3>
+<ul>
+<li>深度学习理论 / 反向传播 / 手写神经网络</li>
+<li>PyTorch / TensorFlow</li>
+<li>模型训练 / 推理引擎（vLLM / TensorRT）</li>
+<li>CUDA / 算子开发</li>
+<li>C / C++ / Rust（除非为读某个库源码）</li>
+<li>前端框架（够看懂接口即可）</li>
+<li>Kubernetes 深入 / Service Mesh</li>
+<li>大数据（Hadoop / Spark / Flink）</li>
+<li>区块链 / Web3</li>
+<li>算法竞赛 / 编译原理 / OS 内核实现</li>
+<li>各类"AI 全栈速成课"</li>
+<li>再收藏第 51 个路线图</li>
+</ul>
+<blockquote class="pullquote"><strong>为什么敢划掉这么多</strong>：终点决定取舍。上面每一项，只有当它成为你某个具体项目的瓶颈时才值得学。在那之前学了也会忘，等于没学。</blockquote>
+<h2 id="sec-13"><span class="h2-num"></span>12. 七个坑（都是我自己踩过的）</h2>
+<div class="table-wrap"><table class="table"><thead><tr><th>坑</th><th>表现</th><th>自救</th></tr></thead><tbody><tr><td><strong>囤资料代替学习</strong></td><td>收藏 200 个链接，一个没读</td><td>每周最多新增 3 个，读完才能加</td></tr><tr><td><strong>完美主义卡第一章</strong></td><td>读 OS 第一章读了三周</td><td>只读"为什么"，先跑完全书</td></tr><tr><td><strong>只看不写</strong></td><td>能讲概念，写不出代码</td><td>每个概念配一个 ≤50 行的 demo</td></tr><tr><td><strong>AI 依赖</strong></td><td>一有问题就问</td><td>先写 5 分钟自己的假设</td></tr><tr><td><strong>算法断档</strong></td><td>停两周全忘</td><td>最小日课 15 分钟，只做旧题</td></tr><tr><td><strong>追新不追深</strong></td><td>每年换一个技术栈</td><td>12 个月内不换主语言</td></tr><tr><td><strong>过早做大项目</strong></td><td>Spring 没学完想做微服务</td><td>项目规模 = 已学能力 × 1.2</td></tr></tbody></table></div>
+<hr>
+<h2 id="sec-14"><span class="h2-num"></span>13. 今天就能做的三件事</h2>
+<ol>
+<li><strong>今天</strong>：装 JDK 25，建一个 GitHub 仓库，把你的"知识地图"空页面提交上去。</li>
+<li><strong>本周</strong>：读完 dev.java 第一章，写 3 个 demo，然后用模板①让 AI 诊断你一次。</li>
+<li><strong>下周起</strong>：固定 90 分钟日课；第 3 周给算法单开 30 分钟时段，雷打不动。</li>
+</ol>
+<hr>
+<h2 id="sec-15"><span class="h2-num"></span>附录 A：版本基线（2026-10 实测）</h2>
+<div class="table-wrap"><table class="table"><thead><tr><th>组件</th><th>版本</th><th>注意</th></tr></thead><tbody><tr><td>JDK</td><td><strong>25（LTS）</strong></td><td>最新 GA 是 27，但<strong>非 LTS</strong>；下一个 LTS 是 29（2027-09）</td></tr><tr><td>Spring Boot</td><td><strong>4.1.x</strong></td><td>配 Spring Framework 7.x</td></tr><tr><td>Spring AI</td><td><strong>2.0.x</strong></td><td>官方写明支持 Boot 4.0.x / 4.1.x</td></tr><tr><td>LangChain4j</td><td><strong>1.22.x</strong></td><td>迭代快</td></tr><tr><td>MySQL</td><td>8.4 LTS / 9.x</td><td>教程最多的是 8.x</td></tr><tr><td>PostgreSQL</td><td>17/18 + pgvector</td><td>AI 应用首选</td></tr></tbody></table></div>
+<div class="callout warn"><span class="c-ico">⚠️</span><div class="c-body"><b class="c-label">注意</b><strong>版本错配是自学最大的隐形坑</strong>：大量中文教程还是 <strong>Java 8 + Spring Boot 2.x</strong>。两个致命差异——① Boot 3 起 <code>javax.*</code> 全迁到 <code>jakarta.*</code>；② Spring AI 1.x → 2.x 有 API 变动。<br><strong>规则：以官方文档 + 官方 examples 为准，博客只看思路。</strong></div></div>
+<hr>
+<h2 id="sec-16"><span class="h2-num"></span>附录 B：核心链接（全部于 2026-10-19 实测可达）</h2>
+<div class="table-wrap"><table class="table"><thead><tr><th>类别</th><th>资源</th></tr></thead><tbody><tr><td><strong>Java</strong></td><td><a href="https://dev.java/learn/">dev.java 官方</a> · <a href="https://docs.oracle.com/en/java/javase/25/docs/api/index.html">JDK 25 API</a> · <a href="https://jenkov.com/tutorials/java/index.html">Jenkov</a> · <a href="https://liaoxuefeng.com/books/java/introduction/index.html">廖雪峰</a> · <a href="https://javaguide.cn/">JavaGuide</a> · <a href="https://inside.java/">Inside.java</a></td></tr><tr><td><strong>算法</strong></td><td><a href="https://www.hello-algo.com/">Hello 算法</a> · <a href="https://leetcode.cn/discuss/post/3141566/ru-he-ke-xue-shua-ti-by-endlesscheng-q3yd/">灵神题单</a> · <a href="https://leetcode.cn/problem-list/2cktkvj/">Hot 100</a> · <a href="https://codetop.cc/home">codeTop</a> · <a href="https://programmercarl.com/">代码随想录</a> · <a href="https://labuladong.online/">labuladong</a> · <a href="https://visualgo.net/en">VisuAlgo</a></td></tr><tr><td><strong>系统</strong></td><td><a href="https://pages.cs.wisc.edu/~remzi/OSTEP/">OSTEP</a> · <a href="https://github.com/remzi-arpacidusseau/ostep-translations/tree/master/chinese">OSTEP 中文</a> · <a href="https://xiaolincoding.com/">小林 coding</a> · <a href="https://csapp.cs.cmu.edu/">CSAPP</a> · <a href="https://pdos.csail.mit.edu/6.1810/2024/schedule.html">MIT 6.1810</a> · <a href="https://gaia.cs.umass.edu/kurose_ross/index.php">Kurose</a> · <a href="https://beej.us/guide/bgnet/">Beej</a> · <a href="https://cs144.github.io/">CS144</a> · <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP">MDN HTTP</a></td></tr><tr><td><strong>数据库</strong></td><td><a href="https://use-the-index-luke.com/">Use The Index Luke</a> · <a href="https://dev.mysql.com/doc/refman/8.4/en/">MySQL 8.4 手册</a> · <a href="https://www.postgresql.org/docs/current/">PostgreSQL</a> · <a href="https://github.com/pgvector/pgvector">pgvector</a> · <a href="https://redis.io/docs/latest/">Redis</a></td></tr><tr><td><strong>工程</strong></td><td><a href="https://git-scm.com/book/zh/v2">Git Book 中文</a> · <a href="https://docs.docker.com/get-started/">Docker 入门</a> · <a href="https://12factor.net/">12-Factor</a> · <a href="https://refactoringguru.cn/design-patterns">设计模式中文</a> · <a href="https://docs.github.com/en/actions">GitHub Actions</a> · <a href="https://www.conventionalcommits.org/">Conventional Commits</a></td></tr><tr><td><strong>后端</strong></td><td><a href="https://spring.io/guides">Spring Guides</a> · <a href="https://docs.spring.io/spring-boot/reference/index.html">Spring Boot 参考</a> · <a href="https://docs.spring.io/spring-framework/reference/">Spring Framework</a> · <a href="https://mybatis.org/mybatis-3/zh_CN/index.html">MyBatis 中文</a> · <a href="https://baomidou.com/">MyBatis-Plus</a> · <a href="https://docs.spring.io/spring-security/reference/">Spring Security</a> · <a href="https://jenkov.com/tutorials/java-concurrency/index.html">Jenkov 并发</a> · <a href="https://docs.oracle.com/javase/tutorial/essential/concurrency/">Oracle 并发</a> · <a href="https://openjdk.org/jeps/444">JEP 444</a> · <a href="https://openjdk.org/jeps/0">JEP 索引</a> · <a href="https://arthas.aliyun.com/">Arthas</a></td></tr><tr><td><strong>AI</strong></td><td><a href="https://www.anthropic.com/engineering/building-effective-agents">Building Effective Agents</a> · <a href="https://docs.anthropic.com/">Anthropic 文档</a> · <a href="https://docs.spring.io/spring-ai/reference/">Spring AI 参考</a> · <a href="https://docs.spring.io/spring-ai/reference/getting-started.html">Spring AI 入门</a> · <a href="https://github.com/spring-projects/spring-ai-examples">spring-ai-examples</a> · <a href="https://docs.langchain4j.dev/">LangChain4j</a> · <a href="https://docs.ragas.io/">RAGAS</a> · <a href="https://docs.langchain.com/langsmith">LangSmith</a> · <a href="https://opentelemetry.io/docs/specs/semconv/registry/attributes/gen-ai/">OTel GenAI</a> · <a href="https://modelcontextprotocol.io/">MCP</a> · <a href="https://developers.openai.com/api/docs">OpenAI 文档</a> · <a href="https://cookbook.openai.com/">OpenAI Cookbook</a> · <a href="https://www.promptingguide.ai/">Prompting Guide</a></td></tr><tr><td><strong>元学习</strong></td><td><a href="https://www.coursera.org/learn/learning-how-to-learn">Learning How to Learn</a> · <a href="https://fs.blog/feynman-technique/">费曼技巧</a> · <a href="https://missing-semester-cn.github.io/">Missing Semester 中文</a></td></tr></tbody></table></div>
+<blockquote class="quote">说明：<code>dev.mysql.com</code> 与 <code>baeldung.com</code> 对脚本请求返回 403（Cloudflare 拦截），浏览器可正常打开；Hello 算法偶发 429 限流，稍等即可。</blockquote>
+<h2 id="sec-17"><span class="h2-num"></span>最后一句</h2>
+<blockquote class="ending"><strong>先明确我们要的是什么，才能走得踏实。</strong><br>你要的不是"学完计算机"，而是"能独立做出并讲清一个系统"。<br>所有取舍，都以这句话为准。</blockquote>
+<hr>
+<hr>
+<p><strong>关于这份文档</strong>：本文基于飞书《后端学习路线》（花绿青，2026-07）的理念框架重写，针对「零基础 / Java 主线 / 长期自学 / 文档 + AI 对话」四个约束做了结构调整。原文未覆盖的 AI 应用开发部分（P7）为方法论外推，已在文中标注。完整版参考手册见同目录 <code>handbook.md</code>。</p>
+</main>
+</div>
+<button class="totop" aria-label="回到顶部">↑</button>
+<script>
+const pbar=document.getElementById('pbar');
+const totop=document.querySelector('.totop');
+function onScroll(){
+  const h=document.documentElement;
+  const p=h.scrollTop/(h.scrollHeight-h.clientHeight);
+  pbar.style.width=(p*100)+'%';
+  totop.classList.toggle('on',h.scrollTop>600);
+  let cur=null;
+  document.querySelectorAll('.content h2[id]').forEach(el=>{
+    if(el.getBoundingClientRect().top<120) cur=el.id;
+  });
+  document.querySelectorAll('.toc-list a').forEach(a=>{
+    a.classList.toggle('on',a.getAttribute('href')==='#'+cur);
+  });
+}
+document.addEventListener('scroll',onScroll,{passive:true});onScroll();
+totop.onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
+const KEY='cs-roadmap-checks';
+let saved={};
+try{saved=JSON.parse(localStorage.getItem(KEY)||'{}');}catch(e){saved={};}
+const boxes=[...document.querySelectorAll('li.task input[data-k]')];
+boxes.forEach(cb=>{
+  const k=cb.dataset.k;
+  if(saved[k]) cb.checked=true;
+  cb.addEventListener('change',()=>{
+    saved[k]=cb.checked;
+    try{localStorage.setItem(KEY,JSON.stringify(saved));}catch(e){}
+  });
+});
+document.querySelectorAll('.codeblock').forEach(box=>{
+  const btn=box.querySelector('.copy');
+  btn.onclick=async()=>{
+    const t=box.querySelector('code').innerText;
+    try{await navigator.clipboard.writeText(t);btn.textContent='✓ 已复制';}
+    catch(e){btn.textContent='复制失败';}
+    setTimeout(()=>btn.textContent='复制',1600);
+  };
+});
+</script>
+</body>
+</html>
