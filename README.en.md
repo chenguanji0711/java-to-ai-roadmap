@@ -94,6 +94,8 @@ The one line to remember: **each layer's "why" lives in the layer beneath it.**
 | **Print / offline / iPad** | [`roadmap.pdf`](roadmap.pdf) (38 pages) |
 | **Look up details** | [`handbook.md`](handbook.md) — the denser reference manual |
 
+> Bottom-right has a **🧠 AI templates** button: eight prompt templates for talking to an AI, with a keyword field that fills the placeholders, one-click copy, and a memory of the last one you used.
+>
 > The page opens with a **"this week: three things"** card — it picks the next three unfinished items of your current stage, swaps them in as you tick, and counts how many weeks you've kept going.
 >
 > `index.html` is a **single file with zero external dependencies**: CSS, JS and SVG are all inlined, so it works offline.

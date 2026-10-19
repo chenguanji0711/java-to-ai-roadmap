@@ -223,6 +223,8 @@ while start < len(src) and not src[start].startswith("## "):
 lines = src[start:]
 
 out, toc = [], []
+prompts = []
+last_sub_text = ""
 i = 0
 ul_open = ol_open = False
 h2_n = 0
@@ -264,7 +266,11 @@ while i < len(lines):
             buf.append(lines[i])
             i += 1
         i += 1
-        out.append(code_block(lang, "\n".join(buf)))
+        _code = "\n".join(buf)
+        _pm = re.match(r"^([\u2460-\u2467])\s*(.*)$", last_sub_text.strip())
+        if lang == "" and _pm:
+            prompts.append({"n": _pm.group(1), "title": last_sub_text.strip(), "code": _code})
+        out.append(code_block(lang, _code))
         continue
 
     # 标题
@@ -381,6 +387,7 @@ while i < len(lines):
     if para.startswith("<"):
         out.append(para)
     elif re.match(r"^\*\*[^*]+\*\*$", para):
+        last_sub_text = para[2:-2]
         out.append(f'<h4 class="sub">{inline(para[2:-2])}</h4>')
     else:
         out.append(f"<p>{inline(para)}</p>")
@@ -407,6 +414,26 @@ TOOLBAR = """<div class="ck-tools" id="ck-tools">
 _m = re.search(r'<h2 id="sec-\d+">(?:(?!</h2>).)*三张清单(?:(?!</h2>).)*</h2>', body, re.S)
 if _m:
     body = body[:_m.end()] + TOOLBAR + body[_m.end():]
+
+# ---- 提示词抽屉 ----
+def _render_prompts(ps):
+    if not ps:
+        return ""
+    cards = []
+    for idx, p in enumerate(ps):
+        t = html.escape(p["title"])
+        code = html.escape(p["code"])
+        cards.append(
+            '<article class="p-card" data-n="%s">'
+            '<div class="p-card-h"><span class="p-num">%s</span>'
+            '<span class="p-title">%s</span>'
+            '<button type="button" class="p-copy">复制</button></div>'
+            '<input class="p-topic" type="text" placeholder="可选：填个具体对象（如 HashMap），自动套进模板">'
+            '<textarea class="p-body" rows="3" spellcheck="false">%s</textarea>'
+            '</article>' % (p["n"], p["n"], t, code)
+        )
+    return (PROMPT_FAB + PROMPT_DIALOG_HEAD + "".join(cards) + PROMPT_DIALOG_TAIL)
+
 
 # TOC
 toc_html = ['<div class="toc-title">目录</div><ul class="toc-list">']
@@ -693,6 +720,40 @@ body{padding-bottom:env(safe-area-inset-bottom)}
   .codeblock .copy{opacity:1}
 }
 
+/* ---------- 提示词抽屉 ---------- */
+.prompt-fab{position:fixed;right:22px;bottom:76px;z-index:60;display:flex;align-items:center;gap:6px;
+  padding:10px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);
+  color:var(--ink-2);font-size:13px;cursor:pointer;box-shadow:var(--shadow);transition:.2s}
+.prompt-fab:hover{color:var(--red);border-color:var(--red);transform:translateY(-1px)}
+.prompt-fab span{font-weight:600}
+.p-dialog{width:min(760px,94vw);max-height:86vh;padding:0;border:1px solid var(--line);border-radius:16px;
+  background:var(--paper);color:var(--ink);box-shadow:0 24px 70px -20px rgba(0,0,0,.35)}
+.p-dialog::backdrop{background:rgba(20,16,12,.45)}
+.p-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;
+  padding:18px 22px 14px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--paper);z-index:2}
+.p-head b{font-size:16px}
+.p-last{font-size:12px;color:var(--muted);margin-top:4px}
+.p-close{border:0;background:transparent;color:var(--muted);font-size:18px;cursor:pointer;padding:2px 6px;border-radius:6px}
+.p-close:hover{color:var(--red);background:var(--line-2)}
+.p-close:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.p-dialog:focus{outline:none}
+.p-list{padding:14px 22px 6px;overflow-y:auto;max-height:calc(86vh - 140px)}
+.p-card{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:12px;background:var(--card)}
+.p-card-h{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.p-num{width:22px;height:22px;flex:0 0 22px;border-radius:50%;background:var(--red);color:#fff;
+  font-size:12px;display:flex;align-items:center;justify-content:center;font-weight:700}
+.p-title{font-size:14px;font-weight:600;color:var(--ink);line-height:1.45}
+.p-copy{margin-left:auto;font-size:12px;padding:4px 11px;border-radius:7px;border:1px solid var(--line);
+  background:var(--paper);color:var(--muted);cursor:pointer;flex:0 0 auto}
+.p-copy:hover{color:var(--red);border-color:var(--red)}
+.p-topic{width:100%;font-size:12.5px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;
+  background:var(--paper);color:var(--ink);margin-bottom:8px;font-family:inherit}
+.p-topic:focus{outline:none;border-color:var(--red)}
+.p-body{width:100%;overflow:hidden;font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;line-height:1.7;
+  padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink-2);
+  resize:vertical;min-height:74px}
+.p-foot{padding:10px 22px 16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+
 /* ---------- 本周三件事 ---------- */
 .week-card{margin:0 0 34px;padding:20px 22px 16px;border:1px solid var(--line);border-radius:var(--radius);
   background:linear-gradient(180deg,var(--red-soft),var(--card) 55%);box-shadow:var(--shadow)}
@@ -740,7 +801,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
   .layout{display:block;padding:0}
   .phase,.dgm-wrap,.table-wrap,.callout{break-inside:avoid;box-shadow:none}
   .content h2,.content h3,.content h4{break-after:avoid-page}
-  .ck-tools,.week-card{display:none!important}
+  .ck-tools,.week-card,.prompt-fab,.p-dialog{display:none!important}
   figure,.codeblock,.callout,.table-section{break-inside:avoid}
 }
 """
@@ -763,6 +824,62 @@ function onScroll(){
 }
 document.addEventListener('scroll',onScroll,{passive:true});onScroll();
 totop.onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
+/* ---------- 提示词抽屉 ---------- */
+(function(){
+  var dlg=document.getElementById('prompt-dialog'); if(!dlg) return;
+  var fab=document.getElementById('prompt-fab');
+  var cards=[].slice.call(dlg.querySelectorAll('.p-card'));
+  var orig={};
+  cards.forEach(function(c,i){ orig[i]=c.querySelector('.p-body').value; });
+  var PH=/\[(章节|概念 A|概念 B|概念|主题|结论)\]/g;
+  var lastEl=document.getElementById('p-last');
+
+  function updateLast(){
+    if(!lastEl) return;
+    try{
+      var d=JSON.parse(localStorage.getItem('cs-roadmap-prompt')||'null');
+      if(!d){ lastEl.textContent='点任意卡片的「复制」就能开始，会记住你上次用的模板。'; return; }
+      var days=Math.floor((Date.now()-new Date(d.at).getTime())/86400000);
+      lastEl.textContent='上次使用：'+d.title+'（'+(days<=0?'今天':days+' 天前')+'）';
+    }catch(e){}
+  }
+  updateLast();
+
+  if(fab) fab.addEventListener('click',function(){
+    if(dlg.showModal) dlg.showModal(); else dlg.setAttribute('open','');
+    requestAnimationFrame(function(){
+      cards.forEach(function(c){ fit(c.querySelector('.p-body')); });
+    });
+  });
+  var closeBtn=dlg.querySelector('.p-close');
+  if(closeBtn) closeBtn.addEventListener('click',function(){ dlg.close(); });
+  dlg.addEventListener('click',function(e){ if(e.target===dlg) dlg.close(); });
+
+  function fit(ta){ ta.style.height='auto'; ta.style.height=(ta.scrollHeight+2)+'px'; }
+
+  cards.forEach(function(c,i){
+    var topic=c.querySelector('.p-topic'), ta=c.querySelector('.p-body'), btn=c.querySelector('.p-copy');
+    fit(ta);
+    topic.addEventListener('input',function(){
+      var t=topic.value.trim();
+      ta.value = t ? orig[i].replace(PH,t) : orig[i];
+      fit(ta);
+    });
+    btn.addEventListener('click',function(){
+      var done=function(){
+        try{ localStorage.setItem('cs-roadmap-prompt', JSON.stringify({
+          n:c.dataset.n, title:c.querySelector('.p-title').textContent, at:new Date().toISOString()
+        })); }catch(e){}
+        btn.textContent='已复制 ✓'; updateLast();
+        setTimeout(function(){ btn.textContent='复制'; },1500);
+      };
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(ta.value).then(done, function(){ ta.select(); document.execCommand('copy'); done(); });
+      }else{ ta.select(); document.execCommand('copy'); done(); }
+    });
+  });
+})();
+
 /* ---------- 本周三件事 ---------- */
 (function(){
   var card=document.getElementById('week-card'); if(!card) return;
@@ -940,6 +1057,19 @@ if(expBtn){
 }
 """
 
+PROMPT_FAB = """<button class="prompt-fab" id="prompt-fab" type="button" aria-label="打开 AI 对话模板" title="AI 对话模板（8 个）">🧠<span>AI 模板</span></button>"""
+
+PROMPT_DIALOG_HEAD = """<dialog class="p-dialog" id="prompt-dialog" aria-label="AI 对话模板">
+  <div class="p-head">
+    <div class="p-head-l"><b>🧠 AI 对话模板</b><div class="p-last" id="p-last"></div></div>
+    <button type="button" class="p-close" aria-label="关闭">✕</button>
+  </div>
+  <div class="p-list">"""
+
+PROMPT_DIALOG_TAIL = """  </div>
+  <div class="p-foot">复制后粘进任意 AI 对话即可。填了「具体对象」的话，模板里的占位符会自动替换。</div>
+</dialog>"""
+
 WEEK_CARD = """<section class="week-card" id="week-card" aria-label="本周三件事">
   <div class="wk-top">
     <span class="wk-badge" id="wk-week">第 1 周</span>
@@ -970,6 +1100,8 @@ HERO = """
 </header>
 """
 
+PROMPTS_HTML = _render_prompts(prompts)
+
 doc = f"""<!doctype html>
 <html lang="zh-CN">
 <head>
@@ -992,6 +1124,7 @@ doc = f"""<!doctype html>
 {body}
 </main>
 </div>
+{PROMPTS_HTML}
 <button class="totop" aria-label="回到顶部">↑</button>
 <script>{JS}</script>
 </body>
