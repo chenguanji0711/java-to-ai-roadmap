@@ -878,5 +878,5 @@ flowchart TD
 
 - 🌐 在线阅读：https://chenguanji0711.github.io/java-to-ai-roadmap/
 - 💻 源仓库（欢迎纠错 / 提 PR）：https://github.com/chenguanji0711/java-to-ai-roadmap
-- 📖 更密的参考手册：仓库内 [handbook.md](handbook.md)
+- 📖 更密的参考手册：仓库内 [handbook.md](https://github.com/chenguanji0711/java-to-ai-roadmap/blob/main/handbook.md)
 - 📄 许可：CC BY 4.0 —— 保留署名即可自由转载、修改、商用

@@ -158,6 +158,20 @@
 
 ---
 
+## 二次开发 / 自己改一份
+
+`index.html` 是**生成**出来的，不要手改。改内容请改 `roadmap.md`，然后：
+
+```bash
+python3 tools/build_html.py     # roadmap.md  ->  index.html
+```
+
+- 脚本只依赖 Python 标准库，`mermaid` 代码块会被替换成项目自带的内联 SVG（保证单文件离线可用）
+- PDF 用浏览器打印：打开 `index.html` → 文件 → 打印 → 存为 PDF（打印样式已适配，会隐藏目录与按钮）
+- 想加新图：在 `tools/build_html.py` 的 `code_block()` 里加一条分支，同时保证 GitHub 上 Mermaid 也能渲染
+
+---
+
 ## 如果它帮到了你
 
 - ⭐ **点个 Star** —— 能让更多正在迷路的人搜到它
