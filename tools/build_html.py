@@ -693,6 +693,32 @@ body{padding-bottom:env(safe-area-inset-bottom)}
   .codeblock .copy{opacity:1}
 }
 
+/* ---------- 本周三件事 ---------- */
+.week-card{margin:0 0 34px;padding:20px 22px 16px;border:1px solid var(--line);border-radius:var(--radius);
+  background:linear-gradient(180deg,var(--red-soft),var(--card) 55%);box-shadow:var(--shadow)}
+.wk-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.wk-badge{font-size:12px;font-weight:700;letter-spacing:.06em;color:#fff;background:var(--red);
+  border-radius:999px;padding:3px 10px}
+.wk-phase{font-size:14px;font-weight:700;color:var(--ink)}
+.wk-btn{margin-left:auto;font-size:12px;padding:5px 12px;border-radius:8px;border:1px solid var(--line);
+  background:var(--card);color:var(--muted);cursor:pointer}
+.wk-btn:hover{color:var(--red);border-color:var(--red)}
+.wk-tip{font-size:12.5px;color:var(--muted);margin-bottom:12px}
+.wk-list{list-style:none;margin:0 0 12px;padding:0}
+.wk-list li{margin:9px 0}
+.wk-list li label{display:flex;gap:11px;align-items:flex-start;cursor:pointer;font-size:16px;color:var(--ink)}
+.wk-list li input{position:absolute;opacity:0;width:0;height:0}
+.wk-list .cbt{flex:0 0 20px;height:20px;margin-top:2px;border:1.7px solid var(--muted);border-radius:5px;
+  background:var(--card);position:relative;transition:.16s}
+.wk-list label:hover .cbt{border-color:var(--red)}
+.wk-list input:checked + .cbt{background:var(--red);border-color:var(--red)}
+.wk-list input:checked + .cbt::after{content:"";position:absolute;left:6px;top:2px;width:5px;height:9px;
+  border:solid #fff;border-width:0 2px 2px 0;transform:rotate(43deg)}
+.wk-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding-top:12px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+.wk-foot a{color:var(--blue);text-decoration:none}
+.wk-done{font-size:15px;color:var(--ink);font-weight:600}
+
 /* ---------- 进度工具条 ---------- */
 .ck-tools{margin:22px 0 26px;padding:18px 20px;border:1px solid var(--line);border-radius:var(--radius);
   background:var(--card);box-shadow:var(--shadow)}
@@ -714,7 +740,7 @@ body{padding-bottom:env(safe-area-inset-bottom)}
   .layout{display:block;padding:0}
   .phase,.dgm-wrap,.table-wrap,.callout{break-inside:avoid;box-shadow:none}
   .content h2,.content h3,.content h4{break-after:avoid-page}
-  .ck-tools{display:none!important}
+  .ck-tools,.week-card{display:none!important}
   figure,.codeblock,.callout,.table-section{break-inside:avoid}
 }
 """
@@ -737,6 +763,101 @@ function onScroll(){
 }
 document.addEventListener('scroll',onScroll,{passive:true});onScroll();
 totop.onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
+/* ---------- 本周三件事 ---------- */
+(function(){
+  var card=document.getElementById('week-card'); if(!card) return;
+  var listEl=document.getElementById('wk-list');
+  var phaseEl=document.getElementById('wk-phase');
+  var weekEl=document.getElementById('wk-week');
+  var progEl=document.getElementById('wk-progress');
+  var tipEl=document.getElementById('wk-tip');
+  var startBtn=document.getElementById('wk-start');
+  var PLAN_KEY='cs-roadmap-plan';
+  var plan={};
+  try{ plan=JSON.parse(localStorage.getItem(PLAN_KEY)||'{}')||{}; }catch(e){ plan={}; }
+
+  function savePlan(){ try{ localStorage.setItem(PLAN_KEY, JSON.stringify(plan)); }catch(e){} }
+
+  // 收集「清单里的各阶段」：h4.sub 以 P0/P1… 开头，后面跟若干 li.task
+  function collectPhases(){
+    var out=[];
+    document.querySelectorAll('.content h4.sub').forEach(function(h){
+      var t=(h.textContent||'').trim();
+      if(!/^P\d/.test(t)) return;
+      var ins=[], n=h.nextElementSibling;
+      while(n && !/^H[234]$/.test(n.tagName)){
+        if(n.tagName==='UL'){
+          var f=n.querySelectorAll('li.task input[data-k]');
+          for(var i=0;i<f.length;i++) ins.push(f[i]);
+        }
+        n=n.nextElementSibling;
+      }
+      if(ins.length) out.push({name:t, inputs:ins});
+    });
+    return out;
+  }
+
+  function weekNumber(){
+    if(!plan.startedAt) return null;
+    var d=Date.now()-new Date(plan.startedAt).getTime();
+    return Math.max(1, Math.floor(d/604800000)+1);
+  }
+
+  function render(){
+    var phases=collectPhases();
+    var cur=null;
+    for(var i=0;i<phases.length;i++){
+      if(phases[i].inputs.some(function(x){return !x.checked;})){ cur=phases[i]; break; }
+    }
+    if(!phases.length){ phaseEl.textContent='（清单未找到）'; return; }
+
+    var wk=weekNumber();
+    weekEl.textContent = wk ? ('第 '+wk+' 周') : '尚未开始';
+    startBtn.textContent = wk ? '重新开始' : '开始记录';
+
+    if(!cur){
+      phaseEl.textContent='全部完成 🎉';
+      tipEl.textContent='105 项全过了。接下来只剩一件事：把它们变成两个能讲清楚的项目。';
+      listEl.innerHTML='<li class="wk-done">你已走完全部清单</li>';
+      progEl.textContent='';
+      return;
+    }
+    phaseEl.textContent=cur.name;
+    tipEl.textContent = wk ? '本周只做这三件。做完自动换下一批。'
+                           : '点「开始记录」，之后每次打开都会告诉你第几周、这周做什么。';
+
+    var pending=cur.inputs.filter(function(x){return !x.checked;}).slice(0,3);
+    listEl.innerHTML='';
+    pending.forEach(function(src){
+      var lab=src.closest('label');
+      var txt=lab? (lab.querySelector('.ctxt')||{}).textContent||'' : '';
+      var li=document.createElement('li');
+      li.className='task';
+      li.innerHTML='<label><input type="checkbox"><span class="cbt"></span><span class="ctxt"></span></label>';
+      li.querySelector('.ctxt').textContent=txt;
+      li.querySelector('input').addEventListener('change',function(e){
+        src.checked=e.target.checked;
+        src.dispatchEvent(new Event('change',{bubbles:true}));
+        render();
+      });
+      listEl.appendChild(li);
+    });
+    var done=cur.inputs.filter(function(x){return x.checked;}).length;
+    progEl.textContent='本阶段 '+done+' / '+cur.inputs.length+' 项';
+  }
+
+  startBtn.addEventListener('click',function(){
+    if(plan.startedAt && !confirm('重新开始会重置"第 N 周"的计数（勾选进度不受影响），确定吗？')) return;
+    plan.startedAt=new Date().toISOString(); plan.version=1; savePlan(); render();
+  });
+
+  document.addEventListener('change',function(e){
+    if(e.target && e.target.matches && e.target.matches('li.task input[data-k]')) render();
+  });
+
+  render();
+})();
+
 /* 仅在内容真正溢出时显示横滑提示 */
 function markScrollable(){
   document.querySelectorAll('.table-wrap, .dgm-wrap').forEach(function(w){
@@ -819,6 +940,20 @@ if(expBtn){
 }
 """
 
+WEEK_CARD = """<section class="week-card" id="week-card" aria-label="本周三件事">
+  <div class="wk-top">
+    <span class="wk-badge" id="wk-week">第 1 周</span>
+    <span class="wk-phase" id="wk-phase">正在读取你的进度…</span>
+    <button type="button" class="wk-btn" id="wk-start">开始记录</button>
+  </div>
+  <div class="wk-tip" id="wk-tip">打开只看这三件。做完，自动换上下一批。</div>
+  <ul class="wk-list" id="wk-list"></ul>
+  <div class="wk-foot">
+    <span id="wk-progress"></span>
+    <a href="#sec-12">完整清单 →</a>
+  </div>
+</section>"""
+
 HERO = """
 <header class="hero">
   <span class="kicker">计算机学习地图 · 2026 版</span>
@@ -853,6 +988,7 @@ doc = f"""<!doctype html>
 <aside class="toc">{toc_html}</aside>
 <main class="content">
 {toc_mobile}
+{WEEK_CARD}
 {body}
 </main>
 </div>
